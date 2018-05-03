@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.t_thinkpad.projectpetsapp">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/projectpets_icon"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/projectpets_icon_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".MainMenu"
+            android:label="ProjectPets">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MyPetsActivity"
+            android:label="MyPets"
+            android:parentActivityName=".MainMenu" />
+        <activity
+            android:name=".MyProfileActivity"
+            android:label="My Profile"
+            android:parentActivityName=".MainMenu" />
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".MainMenu" />
+        <activity
+            android:name=".SearchPetsActivity"
+            android:label="Search Pets"
+            android:parentActivityName=".MainMenu" />
+        <activity android:name=".NotificationsActivity"
+            android:parentActivityName=".SettingsActivity"
+            android:label="Notifications"></activity>
+    </application>
+    <!--<uses-permission android:name="android.permission.VIBRATE"/>-->
+
+</manifest>
