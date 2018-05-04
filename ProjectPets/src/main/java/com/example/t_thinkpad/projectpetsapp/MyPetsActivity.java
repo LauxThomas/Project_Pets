@@ -53,6 +53,32 @@ public class MyPetsActivity extends AppCompatActivity {
         pets.add(p4);
         Entries p5 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
         pets.add(p5);
+        //Tests für Scrollview: funktioniert auch btw!
+//        Entries p6 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p6);
+//        Entries p7 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p7);
+//        Entries p8 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p8);
+//        Entries p9 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p9);
+//        Entries p10 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p10);
+//        Entries p11 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p11);
+//        Entries p12 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p12);
+//        Entries p13 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p13);
+//        Entries p14 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p14);
+//        Entries p15 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p15);
+//        Entries p16 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p16);
+//        Entries p17 = new Entries("Miffi", "Rabbit", "dwarf rabbit", 3.2, false, "Mettlach");
+//        pets.add(p17);
+
     }
 
     public void ADDMULTIPLEVIEWSFORTESTING(){
