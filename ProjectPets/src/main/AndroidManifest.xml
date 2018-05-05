@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.t_thinkpad.projectpetsapp">
+    <!-- <uses-permission android:name="android.permission.VIBRATE"/> -->
 
     <application
         android:allowBackup="true"
@@ -34,10 +35,14 @@
             android:name=".SearchPetsActivity"
             android:label="Search Pets"
             android:parentActivityName=".MainMenu" />
-        <activity android:name=".NotificationsActivity"
-            android:parentActivityName=".SettingsActivity"
-            android:label="Notifications"></activity>
+        <activity
+            android:name=".NotificationsActivity"
+            android:label="Notifications"
+            android:parentActivityName=".SettingsActivity" />
+        <activity
+            android:name=".DetailActivity"
+            android:label="Detailed view"
+            android:parentActivityName=".MyPetsActivity"></activity>
     </application>
-    <!--<uses-permission android:name="android.permission.VIBRATE"/>-->
 
 </manifest>
