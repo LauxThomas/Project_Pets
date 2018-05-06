@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="97" />
+                                                <entry key="scalingPercent" value="74" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -36,11 +36,11 @@
                                     <map>
                                       <entry key="backgroundAssetType" value="COLOR" />
                                       <entry key="backgroundColor" value="126748" />
-                                      <entry key="backgroundLayerName" value="ic_launcher_background" />
-                                      <entry key="foregroundImage" value="C:\Users\T-ThinkPad\Desktop\dog.png" />
-                                      <entry key="foregroundLayerName" value="ic_projectpets_launcher" />
+                                      <entry key="backgroundImage" value="C:\Users\T-ThinkPad\Google Drive\Studium\ProjectPets\wallpaper.jpg" />
+                                      <entry key="foregroundImage" value="C:\Users\T-ThinkPad\Google Drive\Studium\ProjectPets\Images\dog.png" />
+                                      <entry key="foregroundLayerName" value="ic_launcher_icon" />
                                       <entry key="legacyIconShape" value="CIRCLE" />
-                                      <entry key="outputName" value="projectpets_icon" />
+                                      <entry key="previewDensity" value="XXXHIGH" />
                                     </map>
                                   </option>
                                 </PersistentState>

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class DetailActivity extends AppCompatActivity {
     public ImageView pictureImageView;
-    public TextView labelNameTextView, labelFamilyTextView, labelRaceTextView, labelAgeTextView, labelSexTextView, labelLocationTextView, labelSizeTextView, labelNumberOfPreviousOwnersTextView, labelCurrentOwnerTextView, attributeNameTextView, attributeFamilyTextView, attributeRaceTextView, attributeAgeTextView, attributeSexTextView, attributeLocationTextView, attributeSizeTextView, attributeNumberOfPreviousOwnersTextView, attributeCurrentOwnerTextView, labelDescriptionTextView, attributeDescriptionTextView, labelChipIdTextView, attributeChipIdTextView, labelDiseasesTextView, attributeDiseasesTextView;
+    public TextView labelNameTextView, labelFamilyTextView, labelRaceTextView, labelAgeTextView, labelSexTextView, labelLocationTextView, labelSizeTextView, labelNumberOfPreviousOwnersTextView, labelCurrentOwnerTextView, attributeNameTextView, attributeFamilyTextView, attributeRaceTextView, attributeAgeTextView, attributeSexTextView, attributeLocationTextView, attributeSizeTextView, attributeNumberOfPreviousOwnersTextView, attributeCurrentOwnerTextView, labelDescriptionTextView, attributeDescriptionTextView, labelChipIdTextView, attributeChipIdTextView, labelDisordersTextView, attributeDisordersTextView;
     int index;
     public ArrayList<Pets> pets;
 
@@ -50,8 +50,8 @@ public class DetailActivity extends AppCompatActivity {
         attributeDescriptionTextView = findViewById(R.id.attributeDescriptionTextView);
         labelChipIdTextView = findViewById(R.id.labelChipIdTextView);
         attributeChipIdTextView = findViewById(R.id.attributeChipIdTextView);
-        labelDiseasesTextView = findViewById(R.id.labelDiseasesTextView);
-        attributeDiseasesTextView = findViewById(R.id.attributeDiseasesTextView);
+        labelDisordersTextView = findViewById(R.id.labelDisordersTextView);
+        attributeDisordersTextView = findViewById(R.id.attributeDisordersTextView);
     }
 
     public void handleIntent() {
@@ -62,32 +62,67 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     public void setViews() {
-//        pictureImageView.setImageDrawable(getD);
+        //TODO: Alle zugehörigen TextViews in ein horizontales LinearLayout packen, damit die Alignments richtig sind.
+        //TODO: BILDER EINFÜGEN!
+        //pictureImageView.setImageDrawable(getD);
         labelNameTextView.setText("Name: ");
-        labelFamilyTextView.setText("Family: ");
-        labelRaceTextView.setText("Race: ");
-        labelAgeTextView.setText("Age: ");
-        labelSexTextView.setText("Sex: ");
-        labelLocationTextView.setText("Location: ");
-        labelSizeTextView.setText("Size: ");
-        labelNumberOfPreviousOwnersTextView.setText("Number of previous owners: ");
-        labelCurrentOwnerTextView.setText("Current owner: ");
         attributeNameTextView.setText(pets.get(index).getName());
+        labelFamilyTextView.setText("Family: ");
         attributeFamilyTextView.setText(pets.get(index).getFamily());
+        labelRaceTextView.setText("Race: ");
         attributeRaceTextView.setText(pets.get(index).getRace());
+        labelAgeTextView.setText("Age: ");
         attributeAgeTextView.setText(pets.get(index).getAge() + "");
+        labelSexTextView.setText("Sex: ");
         attributeSexTextView.setText(pets.get(index).getSex());
+        labelLocationTextView.setText("Location: ");
         attributeLocationTextView.setText(pets.get(index).getLocation());
-        attributeSizeTextView.setText(pets.get(index).getSize());
-        attributeNumberOfPreviousOwnersTextView.setText(pets.get(index).getNumberOfPreviousOwners() + "");
+        labelCurrentOwnerTextView.setText("Current owner: ");
         attributeCurrentOwnerTextView.setText(pets.get(index).getCurrentOwner());
-        labelDescriptionTextView.setText("Description: ");
-        attributeDescriptionTextView.setText(pets.get(index).getDescription());
-        labelChipIdTextView.setText("Chip ID: ");
-        attributeChipIdTextView.setText(pets.get(index).getChipId()+"");
-        labelDiseasesTextView.setText("Diseases: ");
-        attributeDiseasesTextView.setText(pets.get(index).getDisorders());
 
+        setOptionalViews();
 
+    }
+
+    public void setOptionalViews() {
+        if (!(pets.get(index).getSize() == "")) {
+            labelSizeTextView.setText("Size: ");
+            attributeSizeTextView.setText(pets.get(index).getSize());
+        } else {
+            labelSizeTextView.setText("");
+            attributeSizeTextView.setText("");
+        }
+
+        if (pets.get(index).getNumberOfPreviousOwners() != -1) {
+            labelNumberOfPreviousOwnersTextView.setText("Number of previous owners: ");
+            attributeNumberOfPreviousOwnersTextView.setText(pets.get(index).getNumberOfPreviousOwners() + "");
+        } else {
+            labelNumberOfPreviousOwnersTextView.setText("");
+            attributeNumberOfPreviousOwnersTextView.setText("");
+        }
+
+        if (!(pets.get(index).getDescription() == "")) {
+            labelDescriptionTextView.setText("Description: ");
+            attributeDescriptionTextView.setText(pets.get(index).getDescription());
+        } else {
+            labelDescriptionTextView.setText("");
+            attributeDescriptionTextView.setText("");
+        }
+
+        if (pets.get(index).getChipId() != -1) {
+            labelChipIdTextView.setText("Chip ID: ");
+            attributeChipIdTextView.setText(pets.get(index).getChipId() + "");
+        } else {
+            labelChipIdTextView.setText("");
+            attributeChipIdTextView.setText("");
+        }
+
+        if (!(pets.get(index).getDisorders() == "")) {
+            labelDisordersTextView.setText("Disorders: ");
+            attributeDisordersTextView.setText(pets.get(index).getDisorders());
+        } else {
+            labelDisordersTextView.setText("");
+            attributeDisordersTextView.setText("");
+        }
     }
 }

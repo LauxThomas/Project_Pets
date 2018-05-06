@@ -5,27 +5,27 @@ import android.media.Image;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Pets implements Serializable{
+public class Pets implements Serializable {
 
-
+    //Essentials:
     public Image image = null;
-    public String name = "default";
-    public String family = "default";
-    public String race = "default";
+    public String name = "";
+    public String family = "";
+    public String race = "";
     public double age = -1;
-    public boolean sex = true;
-    public String location = "default";
-    public String size = "default";
-    public int numberOfPreviousOwners=-1;
+    public boolean sex = true;          //Uhh look at this! sex = true means male¯\_(ツ)_/¯
+    public String location = "";
+    public String currentOwner = "";
 
+    //optional:
+    public String size = "";
+    public int numberOfPreviousOwners = -1;
+    public String description = "";
+    public int chipId = -1;
+    public String disorders = "";
 
-
-    public String currentOwner = "default";
-    public String description = "default";
-    public int chipId=-1;
-    public String disorders = "default";
-
-    public Pets(Image image, String name, String family, String race, double age, boolean sex, String location) {
+    //Bare essentials:
+    public Pets(Image image, String name, String family, String race, double age, boolean sex, String location, String currentOwner) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -33,18 +33,29 @@ public class Pets implements Serializable{
         this.age = age;
         this.sex = sex;
         this.location = location;
+        this.currentOwner = currentOwner;
     }
 
-    public Pets(String name, String family, String race, double age, boolean sex, String location) {
+    //Full boom
+    public Pets(Image image, String name, String family, String race, double age, boolean sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
+        this.image = image;
         this.name = name;
         this.family = family;
         this.race = race;
         this.age = age;
         this.sex = sex;
         this.location = location;
+        this.currentOwner = currentOwner;
+
+        this.size = size;
+        this.numberOfPreviousOwners = numberOfPreviousOwners;
+        this.description = description;
+        this.chipId = chipId;
+        this.disorders = disorders;
     }
 
-    public Pets(Image image, String name, String family, String race, double age, boolean sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId, String disorders) {
+    //+size,numberOfPreviousOwners,currentOwner,description,chipId
+    public Pets(Image image, String name, String family, String race, double age, boolean sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -57,7 +68,6 @@ public class Pets implements Serializable{
         this.currentOwner = currentOwner;
         this.description = description;
         this.chipId = chipId;
-        this.disorders = disorders;
     }
 
     public Image getImage() {
@@ -119,6 +129,7 @@ public class Pets implements Serializable{
     public void setLocation(String location) {
         this.location = location;
     }
+
     public String getSize() {
         return size;
     }
