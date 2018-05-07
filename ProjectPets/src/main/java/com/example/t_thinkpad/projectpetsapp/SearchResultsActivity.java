@@ -1,5 +1,6 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -7,18 +8,26 @@ import android.widget.Toast;
 import java.util.HashMap;
 
 public class SearchResultsActivity extends AppCompatActivity {
-    HashMap hashMap = new HashMap();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
-        Bundle bundle = this.getIntent().getExtras();
+        findViews();
+        handleIntent();
+        searchThroughDatabase();
 
-//        if(bundle != null) {
-        hashMap = (HashMap) bundle.getSerializable("HashMap");
-//        }
-        //TODO:
-        Toast.makeText(this, hashMap.get("general").toString(), Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void findViews(){
+
+    }
+    public void handleIntent(){
+        Intent intent = getIntent();
+        HashMap hashMap = (HashMap)intent.getSerializableExtra("HashMap");
+    }
+    public void searchThroughDatabase(){
+        //TODO: RETURNT EVTL ARRAY MIT PASSENDEN TIEREN
     }
 }

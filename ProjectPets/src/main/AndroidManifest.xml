@@ -43,7 +43,10 @@
             android:name=".DetailActivity"
             android:label="Detailed view"
             android:parentActivityName=".MyPetsActivity" />
-        <activity android:name=".SearchResultsActivity"></activity>
+        <activity
+            android:name=".SearchResultsActivity"
+            android:label="Search results"
+            android:parentActivityName=".SearchPetsActivity"></activity>
     </application>
 
 </manifest>

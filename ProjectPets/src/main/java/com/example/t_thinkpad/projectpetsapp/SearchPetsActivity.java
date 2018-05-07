@@ -84,8 +84,12 @@ public class SearchPetsActivity extends AppCompatActivity {
         //Do stuff
 //        getAllInputs(); //returns a HashMap with all SearchView Queries
         Intent intent = new Intent(this,SearchResultsActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("HashMap",getAllInputs());
+//        Bundle bundle = new Bundle();
+        HashMap hashMap = new HashMap();
+        hashMap = getAllInputs();
+//        bundle.putSerializable("HashMap",hashMap);
+//        intent
+        intent.putExtra("HashMap",hashMap);
         startActivity(intent);
     }
     public HashMap getAllInputs(){
