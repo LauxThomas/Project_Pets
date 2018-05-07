@@ -8,7 +8,7 @@ import android.widget.Toast;
 import java.util.HashMap;
 
 public class SearchResultsActivity extends AppCompatActivity {
-
+    HashMap hashMap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,14 +20,16 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     }
 
-    public void findViews(){
+    public void findViews() {
 
     }
-    public void handleIntent(){
+
+    public void handleIntent() {
         Intent intent = getIntent();
-        HashMap hashMap = (HashMap)intent.getSerializableExtra("HashMap");
+        HashMap hashMap = (HashMap) intent.getSerializableExtra("HashMap");
     }
-    public void searchThroughDatabase(){
+
+    public void searchThroughDatabase() {
         //TODO: RETURNT EVTL ARRAY MIT PASSENDEN TIEREN
     }
 }
