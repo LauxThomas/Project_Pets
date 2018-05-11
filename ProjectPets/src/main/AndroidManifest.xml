@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.t_thinkpad.projectpetsapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <!-- <uses-permission android:name="android.permission.VIBRATE"/> -->
     <application
         android:allowBackup="true"
@@ -12,13 +14,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainMenu"
-            android:label="ProjectPets">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="ProjectPets"
+            android:parentActivityName=".LoginActivity"></activity>
         <activity
             android:name=".MyPetsActivity"
             android:label="MyPets"
@@ -46,7 +43,20 @@
         <activity
             android:name=".SearchResultsActivity"
             android:label="Search results"
-            android:parentActivityName=".SearchPetsActivity"></activity>
+            android:parentActivityName=".SearchPetsActivity" />
+        <activity
+            android:name=".LoginActivity"
+            android:label="ProjectPets Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".secondLoginActivity"
+            android:label="signUp"
+            android:parentActivityName=".LoginActivity"></activity>
     </application>
 
 </manifest>

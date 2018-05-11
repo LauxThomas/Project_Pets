@@ -1,6 +1,8 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -9,10 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class MyProfileActivity extends AppCompatActivity {
     ImageView wallpaperImageView, historyImageView, profilepictureImageView, favoritesImageView, badge1, badge2, badge3, badge4;
-    EditText usernameEditText, locationEditText, lookingForEditText;
-    TextView locationTextView, lookingForTextView, badgesTextView;
+    EditText  locationEditText, lookingForEditText;
+    TextView usernameTextView,locationTextView, lookingForTextView, badgesTextView;
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +37,27 @@ public class MyProfileActivity extends AppCompatActivity {
         badge2 = findViewById(R.id.badge2);
         badge3 = findViewById(R.id.badge3);
         badge4 = findViewById(R.id.badge4);
-        usernameEditText = findViewById(R.id.usernameEditText);
+        usernameTextView = findViewById(R.id.usernameEditText);
         locationEditText = findViewById(R.id.locationEditText);
         lookingForEditText = findViewById(R.id.lookingForEditText);
         locationTextView = findViewById(R.id.locationTextView);
         lookingForTextView = findViewById(R.id.lookingForTextView);
         badgesTextView = findViewById(R.id.badgesTextView);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() == null){
+            startLoginActivity();
+        }
+
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        usernameTextView.setText(user.getEmail().toString());
+
     }
+    public void startLoginActivity(){
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
+    }
+
     public void setListeners(){
         //TODO: Funktionen implementieren!
         wallpaperImageView.setOnClickListener(new View.OnClickListener() {
@@ -46,6 +66,7 @@ public class MyProfileActivity extends AppCompatActivity {
                 Toast.makeText(MyProfileActivity.this, "Wallpaper Clicked", Toast.LENGTH_SHORT).show();
             }
         });
+
         historyImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,4 +114,5 @@ public class MyProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(this,MyPetsActivity.class);
         startActivity(intent);
     }
+
 }

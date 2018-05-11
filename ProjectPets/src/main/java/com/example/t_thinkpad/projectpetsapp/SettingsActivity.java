@@ -10,25 +10,38 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class SettingsActivity extends AppCompatActivity {
     public TextView notificationsTextView, deleteSearchHistoryTextView, logoutTextView, emailTextView;
     public LinearLayout logoutLayout;
     public boolean isLoggedIn = true;
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        findViews();
+        findViewsAndInitializeStuff();
         setListeners();
     }
 
-    public void findViews() {
+    public void findViewsAndInitializeStuff() {
         notificationsTextView = findViewById(R.id.notificationsTextView);
         deleteSearchHistoryTextView = findViewById(R.id.deleteSearchHistoryTextView);
         logoutTextView = findViewById(R.id.logoutTextView);
         emailTextView = findViewById(R.id.emailTextView);
         logoutLayout = findViewById(R.id.logoutLayout);
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() == null) {
+            startLoginActivity();
+        }
+    }
+
+    public void startLoginActivity() {
+        startActivity(new Intent(this, LoginActivity.class));
+        finish();
     }
 
     public void setListeners() {
@@ -41,7 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
         logoutLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showLogoutAlert();
+                logOutAlert();
             }
         });
         deleteSearchHistoryTextView.setOnClickListener(new View.OnClickListener() {
@@ -57,46 +70,31 @@ public class SettingsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void logInAndOut() {
-        isLoggedIn = !isLoggedIn;
-        if (isLoggedIn) {
-            logOut();
-            emailTextView.setText("lauxt@fh-trier.de");
-        } else {
-            logIn();
-            emailTextView.setText("");
-        }
+
+    //call lagOutAlert(); from listener on Button or sth
+    public void logOutAlert() {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Logout")
+                .setMessage("Are you sure you want to log out?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        logOut();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     public void logOut() {
-        //TODO: Log out the user
-    }
-
-    public void logIn() {
-        //TODO: Log the user in, am besten wohl via Alert, oder sowas
-    }
-
-    public void showLogoutAlert() {
-        if (isLoggedIn) {
-            AlertDialog.Builder builder;
-            builder = new AlertDialog.Builder(this);
-            builder.setTitle("Logout")
-                    .setMessage("Are you sure you want to log out?")
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            logInAndOut();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // do nothing
-                        }
-                    })
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .show();
-        } else{
-            logInAndOut();
-        }
+        firebaseAuth.signOut();
+        finish();
+        startActivity(new Intent(this, LoginActivity.class));
     }
 
     public void showDeleteHistoryAlert() {

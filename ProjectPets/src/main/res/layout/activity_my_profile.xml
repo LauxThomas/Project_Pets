@@ -47,7 +47,7 @@
                     android:layout_weight="1"
                     app:srcCompat="@mipmap/background_textuser_img" />
 
-                <EditText
+                <TextView
                     android:id="@+id/usernameEditText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

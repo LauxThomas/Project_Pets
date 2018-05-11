@@ -5,7 +5,7 @@ import android.media.Image;
 import java.io.Serializable;
 import java.util.Date;
 
-public class Pets implements Serializable {
+public class                                                                                                                                                                                                                                                                     Pets implements Serializable {
 
     //Essentials:
     public Image image = null;
