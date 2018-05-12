@@ -15,7 +15,6 @@ import com.google.firebase.auth.FirebaseAuth;
 public class SettingsActivity extends AppCompatActivity {
     public TextView notificationsTextView, deleteSearchHistoryTextView, logoutTextView, emailTextView;
     public LinearLayout logoutLayout;
-    public boolean isLoggedIn = true;
     FirebaseAuth firebaseAuth;
 
     @Override
@@ -37,6 +36,8 @@ public class SettingsActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() == null) {
             startLoginActivity();
         }
+        emailTextView.setText(firebaseAuth.getCurrentUser().getEmail());
+
     }
 
     public void startLoginActivity() {

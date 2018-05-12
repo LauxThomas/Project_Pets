@@ -1,24 +1,36 @@
 package com.example.t_thinkpad.projectpetsapp;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MyProfileActivity extends AppCompatActivity {
     ImageView wallpaperImageView, historyImageView, profilepictureImageView, favoritesImageView, badge1, badge2, badge3, badge4;
-    EditText  locationEditText, lookingForEditText;
-    TextView usernameTextView,locationTextView, lookingForTextView, badgesTextView;
+    EditText locationEditText, nameEditText, lookingForEditText;
+    TextView mailTextView, locationTextView, lookingForTextView, badgesTextView;
     private FirebaseAuth firebaseAuth;
+    private DatabaseReference databaseReference;
+    private DatabaseReference ref;
+    private boolean isLoaded = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,28 +49,75 @@ public class MyProfileActivity extends AppCompatActivity {
         badge2 = findViewById(R.id.badge2);
         badge3 = findViewById(R.id.badge3);
         badge4 = findViewById(R.id.badge4);
-        usernameTextView = findViewById(R.id.usernameEditText);
+        mailTextView = findViewById(R.id.mailTextView);
+        nameEditText = findViewById(R.id.nameEditText);
         locationEditText = findViewById(R.id.locationEditText);
         lookingForEditText = findViewById(R.id.lookingForEditText);
         locationTextView = findViewById(R.id.locationTextView);
         lookingForTextView = findViewById(R.id.lookingForTextView);
         badgesTextView = findViewById(R.id.badgesTextView);
-
         firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() == null){
+        if (firebaseAuth.getCurrentUser() == null) {
             startLoginActivity();
         }
-
+        databaseReference = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        usernameTextView.setText(user.getEmail().toString());
+        ref = databaseReference.child("users");
+        mailTextView.setText(user.getEmail().toString());
+        isLoaded = false;
 
     }
-    public void startLoginActivity(){
+
+    public void startLoginActivity() {
         startActivity(new Intent(this, LoginActivity.class));
         finish();
     }
 
-    public void setListeners(){
+    public void setListeners() {
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //TODO: set locationedittext und nameedittext here:
+                if (firebaseAuth.getCurrentUser() != null) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    String name = dataSnapshot.child(user.getUid()).child("name").getValue().toString();
+                    nameEditText.setText(name);
+                    String location = dataSnapshot.child(user.getUid()).child("location").getValue().toString();
+                    locationEditText.setText(location);
+                    isLoaded = true;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(MyProfileActivity.this, "Whoopsie, something went wrong!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        locationEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (isLoaded) {
+                    saveUserInformation();
+                }
+            }
+        });
+        nameEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (isLoaded) {
+                    saveUserInformation();
+                }
+            }
+        });
+
+        favoritesImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startMyPetsActivity();
+            }
+        });
         //TODO: Funktionen implementieren!
         wallpaperImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,12 +136,6 @@ public class MyProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MyProfileActivity.this, "profilepicture clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
-        favoritesImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startMyPetsActivity();
             }
         });
         badge1.setOnClickListener(new View.OnClickListener() {
@@ -110,9 +163,26 @@ public class MyProfileActivity extends AppCompatActivity {
             }
         });
     }
-    public void startMyPetsActivity(){
-        Intent intent = new Intent(this,MyPetsActivity.class);
+
+
+
+    public void startMyPetsActivity() {
+        Intent intent = new Intent(this, MyPetsActivity.class);
         startActivity(intent);
+        finish();
+    }
+
+    public void saveUserInformation() {
+        String name = nameEditText.getText().toString().trim();
+        String location = locationEditText.getText().toString().trim();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        UserInformation userInformation = new UserInformation(name, location, user.getEmail());
+        databaseReference.child("users").child(user.getUid()).setValue(userInformation); //sollte eignentlich unter root/user/<userid> einen neuen Eintrag mit Name und Adresse erzeugen
+
+
+        //DEBUGLOGGING:
+//        Log.e("LOGG USER: ",databaseReference.child("hunde").getDatabase().getReference().toString());
+//        Toast.makeText(this, "Information Saved...!", Toast.LENGTH_SHORT).show();
     }
 
 }
