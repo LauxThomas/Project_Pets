@@ -4,9 +4,12 @@ import android.media.Image;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
 public class Pets implements Serializable {
 
+
+    public static int petId;    //TODO: der Counter muss irgendwie global gesetzt werden
     //Essentials:
     public Image image = null;
     public String name = "";
@@ -35,6 +38,7 @@ public class Pets implements Serializable {
         this.sex = sex;
         this.location = location;
         this.currentOwner = currentOwner;
+        petId++;
     }
 
     //Full boom
@@ -53,6 +57,7 @@ public class Pets implements Serializable {
         this.description = description;
         this.chipId = chipId;
         this.disorders = disorders;
+        petId++;
     }
 
     //+size,numberOfPreviousOwners,currentOwner,description,chipId
@@ -69,6 +74,7 @@ public class Pets implements Serializable {
         this.currentOwner = currentOwner;
         this.description = description;
         this.chipId = chipId;
+        petId++;
     }
 
     public String getEmailOfCreator() {
@@ -187,5 +193,13 @@ public class Pets implements Serializable {
         this.disorders = disorders;
     }
 
+    public static int getPetId() {
+        return petId;
+    }
+
+    public String getRandomUUID() {
+        String uuid = UUID.randomUUID().toString();
+        return uuid;
+    }
 
 }
