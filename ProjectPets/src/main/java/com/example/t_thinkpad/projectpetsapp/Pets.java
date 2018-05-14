@@ -1,5 +1,6 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.graphics.Bitmap;
 import android.media.Image;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ public class Pets implements Serializable {
 
     public static int petId;    //TODO: der Counter muss irgendwie global gesetzt werden
     //Essentials:
-    public Image image = null;
+    public Bitmap image = null;
     public String name = "";
     public String family = "";
     public String race = "";
@@ -29,7 +30,7 @@ public class Pets implements Serializable {
     public String disorders = "";
 
     //Bare essentials:
-    public Pets(Image image, String name, String family, String race, double age, boolean sex, String location, String currentOwner) {
+    public Pets(Bitmap image, String name, String family, String race, double age, boolean sex, String location, String currentOwner) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -42,7 +43,7 @@ public class Pets implements Serializable {
     }
 
     //Full boom
-    public Pets(Image image, String name, String family, String race, double age, boolean sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
+    public Pets(Bitmap image, String name, String family, String race, double age, boolean sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -61,7 +62,7 @@ public class Pets implements Serializable {
     }
 
     //+size,numberOfPreviousOwners,currentOwner,description,chipId
-    public Pets(Image image, String name, String family, String race, double age, boolean sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
+    public Pets(Bitmap image, String name, String family, String race, double age, boolean sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -85,11 +86,11 @@ public class Pets implements Serializable {
         this.emailOfCreator = emailOfCreator;
     }
 
-    public Image getImage() {
+    public Bitmap getImage() {
         return image;
     }
 
-    public void setImage(Image image) {
+    public void setImage(Bitmap image) {
         this.image = image;
     }
 

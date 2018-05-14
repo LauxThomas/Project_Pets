@@ -1,6 +1,10 @@
 package com.example.t_thinkpad.projectpetsapp;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.UUID;
 
 public class AddPetsActivity extends AppCompatActivity {
@@ -25,6 +31,8 @@ public class AddPetsActivity extends AppCompatActivity {
             sexEditText, locationEditText, currentOwnerEditText, sizeEditText,
             numberOfPreviousOwnersEditText, descriptionEditText, chipIdEditText, disordersEditText;
     Button addPetButton;
+    private static int RESULT_LOAD_IMAGE = 1;
+    Bitmap selectedImage;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference ref;
@@ -51,6 +59,39 @@ public class AddPetsActivity extends AppCompatActivity {
                 createNewPet();
             }
         });
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectImage();
+            }
+        });
+    }
+
+    private void selectImage() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, RESULT_LOAD_IMAGE);
+    }
+
+    @Override
+    protected void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                selectedImage = BitmapFactory.decodeStream(imageStream);
+                imageView.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        } else {
+            Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void createNewPet() {
@@ -59,7 +100,12 @@ public class AddPetsActivity extends AppCompatActivity {
         String family = familyEditText.getText().toString();
         String race = raceEditText.getText().toString();
         //TODO: check if ageEditText is ""
-        double age = Double.parseDouble(ageEditText.getText().toString());
+        double age;
+        if (ageEditText.getText().toString().equals("")) {
+            age = 0;
+        } else {
+            age = Double.parseDouble(ageEditText.getText().toString());
+        }
         //TODO: Das kann man bestimmt eleganter machen...
         Boolean sex;
         if (sexEditText.getText().toString().contains("män")
@@ -92,7 +138,7 @@ public class AddPetsActivity extends AppCompatActivity {
             chipId = Integer.parseInt(chipIdEditText.getText().toString());
         }
         String disorders = disordersEditText.getText().toString();
-        Pets newPet = new Pets(/*image*/ null, name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
+        Pets newPet = new Pets(/*image*/ selectedImage, name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
         //füge Optionals hinzu:
         if (!size.equals("")) {
             newPet.setSize(size);
@@ -109,8 +155,7 @@ public class AddPetsActivity extends AppCompatActivity {
         if (!disorders.equals("")) {
             newPet.setDisorders(disorders);
         }
-        ref.child(newPet.getRandomUUID()).setValue(newPet);
-
+        ref.child(newPet.getName()).setValue(newPet);
 
 
     }
