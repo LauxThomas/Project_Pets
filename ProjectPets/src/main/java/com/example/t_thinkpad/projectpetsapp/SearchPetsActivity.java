@@ -31,7 +31,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search_pets);
         findViews();
         setListeners();
-        animateThis.setTranslationY(5000);
+        animateThis.setTranslationX(-2500);
     }
 
     public void findViews() {
@@ -60,10 +60,10 @@ public class SearchPetsActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (check) {
-                    animateThis.animate().translationY(5000);
+                    animateThis.animate().translationX(-2500);
                     showMoreButton.setText("more");
                 } else {
-                    animateThis.animate().translationY(0);
+                    animateThis.animate().translationX(0);
                     showMoreButton.setText("less");
                 }
                 check = !check;

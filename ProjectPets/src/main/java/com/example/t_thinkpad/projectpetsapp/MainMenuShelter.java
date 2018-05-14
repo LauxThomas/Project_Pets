@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class MainMenuShelter extends AppCompatActivity {
+public class MainMenuShelter extends AppCompatActivity{
 
-    Button settingsButton;
+    Button addPetsButton, myProfileButton, myPetsButton, settingsButton;
 
 
     @Override
@@ -18,12 +18,36 @@ public class MainMenuShelter extends AppCompatActivity {
         findViewsAndInitializeStuff();
         setListeners();
     }
-    public void findViewsAndInitializeStuff(){
+
+    public void findViewsAndInitializeStuff() {
+        addPetsButton = findViewById(R.id.addPetsButton);
+        myProfileButton = findViewById(R.id.myProfileButton);
+        myPetsButton = findViewById(R.id.myPetsButton);
         settingsButton = findViewById(R.id.settingsButton);
     }
 
-
     public void setListeners(){
+        addPetsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startAddPetsActivity();
+            }
+        });
+
+        myProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startMyProfileActivity();
+            }
+        });
+
+        myPetsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startMyPetsActivity();
+            }
+        });
+
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -32,9 +56,23 @@ public class MainMenuShelter extends AppCompatActivity {
         });
     }
 
-    public void startSettingsActivity(){
-        startActivity(new Intent(this,SettingsActivity.class));
+    private void startMyPetsActivity() {
+        startActivity(new Intent(this,MyPetsActivity.class));
+    }
+
+
+    private void startMyProfileActivity() {
+        startActivity(new Intent(this,MyProfileActivity.class));
+    }
+
+    private void startAddPetsActivity() {
+        startActivity(new Intent(this,AddPetsActivity.class));
+    }
+
+    public void startSettingsActivity() {
+        startActivity(new Intent(this, SettingsActivity.class));
         finish();
     }
+
 
 }

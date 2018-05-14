@@ -5,7 +5,7 @@ import android.media.Image;
 import java.io.Serializable;
 import java.util.Date;
 
-public class                                                                                                                                                                                                                                                                     Pets implements Serializable {
+public class Pets implements Serializable {
 
     //Essentials:
     public Image image = null;
@@ -13,9 +13,10 @@ public class                                                                    
     public String family = "";
     public String race = "";
     public double age = -1;
-    public boolean sex = true;          //Uhh look at this! sex = true means male¯\_(ツ)_/¯
+    public boolean sex = true;          //Uhh look at this! sex = true means male ¯\_(ツ)_/¯
     public String location = "";
     public String currentOwner = "";
+    public String emailOfCreator;
 
     //optional:
     public String size = "";
@@ -68,6 +69,14 @@ public class                                                                    
         this.currentOwner = currentOwner;
         this.description = description;
         this.chipId = chipId;
+    }
+
+    public String getEmailOfCreator() {
+        return emailOfCreator;
+    }
+
+    public void setEmailOfCreator(String emailOfCreator) {
+        this.emailOfCreator = emailOfCreator;
     }
 
     public Image getImage() {

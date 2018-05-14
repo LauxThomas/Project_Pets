@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddPetsActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Pets"
+        android:textAlignment="center" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="125dp"
+                android:contentDescription="Picture"
+                app:srcCompat="@android:drawable/ic_menu_camera" />
+
+            <EditText
+                android:id="@+id/nameEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <EditText
+                android:id="@+id/familyEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Family e.g. Dogs, Cats, ..."
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <EditText
+                android:id="@+id/raceEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Race e.g. German Shepperd"
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <EditText
+                android:id="@+id/ageEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Age in years e.g. 3.5"
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <EditText
+                android:id="@+id/sexEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="sex"
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <EditText
+                android:id="@+id/locationEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="location e.g. munich"
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <EditText
+                android:id="@+id/currentOwnerEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Current owner e.g. your shelter address"
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:background="?android:attr/listDivider"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/sizeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="size e.g. medium or 45cm"
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <EditText
+                android:id="@+id/numberOfPreviousOwnersEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="number of previous owners e.g. 1"
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <EditText
+                android:id="@+id/descriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Description of this pet"
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <EditText
+                android:id="@+id/chipIdEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="e.g. 13370815"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/disordersEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Disorders e.g. Hip Dysplasia"
+                android:inputType="textPersonName"
+                android:singleLine="false" />
+
+            <Button
+                android:id="@+id/addPetButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="send" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
