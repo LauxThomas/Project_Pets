@@ -40,6 +40,7 @@ public class MyProfileActivity extends AppCompatActivity {
         setListeners();
     }
 
+
     public void findViews() {
         wallpaperImageView = findViewById(R.id.wallpaperImageView);
         historyImageView = findViewById(R.id.historyImageView);
@@ -77,13 +78,20 @@ public class MyProfileActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //TODO: set locationedittext und nameedittext here:
+                //TODO: funktioniert zwar, ist aber nicht wirklich schön. ÄNDERN! //edit: doch, sieht gut aus^^
                 if (firebaseAuth.getCurrentUser() != null) {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
-                    String name = dataSnapshot.child(user.getUid()).child("name").getValue().toString();
-                    nameEditText.setText(name);
-                    String location = dataSnapshot.child(user.getUid()).child("location").getValue().toString();
-                    locationEditText.setText(location);
+                    //TODO: IF NOT NULL
+                    if (dataSnapshot.child(user.getUid()).child("name").getValue() != null &&
+                            dataSnapshot.child(user.getUid()).child("location").getValue() != null &&
+                            dataSnapshot.child(user.getUid()).child("isLookingFor").getValue() != null) {
+                        String name = dataSnapshot.child(user.getUid()).child("name").getValue().toString();
+                        nameEditText.setText(name);
+                        String location = dataSnapshot.child(user.getUid()).child("location").getValue().toString();
+                        locationEditText.setText(location);
+                        String isLookingFor = dataSnapshot.child(user.getUid()).child("isLookingFor").getValue().toString();
+                        lookingForEditText.setText(isLookingFor);
+                    }
                     isLoaded = true;
                 }
 
@@ -95,6 +103,8 @@ public class MyProfileActivity extends AppCompatActivity {
             }
         });
 
+
+        //<editor-fold desc="TODO: Werte ändern sich nur beim focuschange, sollte auch beim klick auf den Back button funzen">
         locationEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -111,6 +121,15 @@ public class MyProfileActivity extends AppCompatActivity {
                 }
             }
         });
+        lookingForEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (isLoaded) {
+                    saveUserInformation();
+                }
+            }
+        });
+        //</editor-fold>
 
         favoritesImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,7 +184,6 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
 
-
     public void startMyPetsActivity() {
         Intent intent = new Intent(this, MyPetsActivity.class);
         startActivity(intent);
@@ -175,9 +193,10 @@ public class MyProfileActivity extends AppCompatActivity {
     public void saveUserInformation() {
         String name = nameEditText.getText().toString().trim();
         String location = locationEditText.getText().toString().trim();
+        String isLookingFor = lookingForEditText.getText().toString().trim();
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        UserInformation userInformation = new UserInformation(name, location, user.getEmail());
-        databaseReference.child("users").child(user.getUid()).setValue(userInformation); //sollte eignentlich unter root/user/<userid> einen neuen Eintrag mit Name und Adresse erzeugen
+        UserInformation userInformation = new UserInformation(name, location, user.getEmail(), isLookingFor);
+        databaseReference.child("users").child(user.getUid()).setValue(userInformation); //sollte eignentlich unter root/user/<userid> einen neuen Eintrag mit jeweiligen Attributen für die Getter vorh sind erzeugen
 
 
         //DEBUGLOGGING:

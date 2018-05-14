@@ -15,7 +15,7 @@
         <activity
             android:name=".MainMenu"
             android:label="ProjectPets"
-            android:parentActivityName=".LoginActivity"></activity>
+            android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".MyPetsActivity"
             android:label="MyPets"
@@ -56,7 +56,10 @@
         <activity
             android:name=".secondLoginActivity"
             android:label="signUp"
-            android:parentActivityName=".LoginActivity"></activity>
+            android:parentActivityName=".LoginActivity" />
+        <activity
+            android:name=".MainMenuShelter"
+            android:label="ShelterMainMenu"></activity>
     </application>
 
 </manifest>

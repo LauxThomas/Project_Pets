@@ -16,6 +16,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class secondLoginActivity extends AppCompatActivity {
     Button signinButton;
@@ -23,6 +26,9 @@ public class secondLoginActivity extends AppCompatActivity {
     TextView userLogin, textViewSignUp;
     FirebaseAuth firebaseAuth;
     ProgressDialog progressDialog;
+    DatabaseReference databaseReference;
+
+    private boolean isAnimalShelter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +45,7 @@ public class secondLoginActivity extends AppCompatActivity {
         textViewSignUp = findViewById(R.id.textViewSignUp);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() != null){
+        if (firebaseAuth.getCurrentUser() != null) {
             startMainMenuActivity();
         }
         progressDialog = new ProgressDialog(this);
@@ -83,7 +89,7 @@ public class secondLoginActivity extends AppCompatActivity {
         progressDialog.setMessage("Registerung User...");
         progressDialog.show();
 
-        firebaseAuth.signInWithEmailAndPassword(email,password)
+        firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -91,12 +97,16 @@ public class secondLoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             startMainMenuActivity();
                         } else {
+                            Toast.makeText(secondLoginActivity.this, "oh, something went wrong!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
-    public void startMainMenuActivity(){
+
+    public void startMainMenuActivity() {
+        //TESTWEISE ISTS DIE PROFILE ACTIVITY
+        startActivity(new Intent(getApplicationContext(), MainMenu.class));
+//        startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
         finish();
-        startActivity(new Intent(getApplicationContext(),MainMenu.class));
     }
 }

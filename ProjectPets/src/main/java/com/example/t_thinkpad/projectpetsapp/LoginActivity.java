@@ -16,22 +16,26 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
     EditText mailEditText, passwordEditText;
     Button registerButton;
     TextView textViewSignin;
 
     private ProgressDialog progressDialog;
-
     private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
         findViewsAndInitializeStuff();
         setListeners();
     }
@@ -39,8 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     public void findViewsAndInitializeStuff() {
 
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() != null){
+        if (firebaseAuth.getCurrentUser() != null) {
             startMainMenuActivity();
         }
 
@@ -99,12 +102,15 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    public void startSecondLoginActivity(){
-        startActivity(new Intent(this,secondLoginActivity.class));
+    public void startSecondLoginActivity() {
+        startActivity(new Intent(this, secondLoginActivity.class));
         finish();
     }
-    public void startMainMenuActivity(){
+
+    public void startMainMenuActivity() {
+        //TESTWEISE ISTS DIE PROFILE ACTIVITY
+        startActivity(new Intent(getApplicationContext(), MainMenu.class));
+//        startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
         finish();
-        startActivity(new Intent(getApplicationContext(),MainMenu.class));
     }
 }
