@@ -1,23 +1,32 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
@@ -30,13 +39,13 @@ public class AddPetsActivity extends AppCompatActivity {
             numberOfPreviousOwnersEditText, descriptionEditText, chipIdEditText, disordersEditText;
     Button addPetButton;
     private static int RESULT_LOAD_IMAGE = 1;
-    Bitmap selectedImage;
-    Uri file,mImageUri;
+    Uri file, mImageUri;
     private static final int PICK_IMAGE_REQUEST = 1;
-    private ProgressBar progressBar;
+
 
     private FirebaseAuth firebaseAuth;
-    private DatabaseReference ref;
+    private DatabaseReference ref, mDatabaseRef;
+    private StorageTask mUploadTask;
     private StorageReference mStorageRef;
 
     @Override
@@ -49,7 +58,8 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
     private void initializeStuff() {
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        mStorageRef = FirebaseStorage.getInstance().getReference("pictureReferences");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("pictureReferences");
         firebaseAuth = FirebaseAuth.getInstance();
         ref = FirebaseDatabase.getInstance().getReference().child("pets");  //petsreferenz
     }
@@ -95,8 +105,63 @@ public class AddPetsActivity extends AppCompatActivity {
             mImageUri = data.getData();
 
             Picasso.with(this).load(mImageUri).into(imageView);
+
+            if (mUploadTask!=null && mUploadTask.isInProgress()){
+                Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
+            }else{
+                uploadFile();
+            }
         }
 
+    }
+
+    private String getFileExtention(Uri uri) {
+        ContentResolver cR = getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+    private void uploadFile() {
+        if (mImageUri != null) {
+            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+                    + "." + getFileExtention(mImageUri));
+
+
+            mUploadTask = fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+//                                    progressBar.setProgress(0);
+                                }
+                            }, 2000);
+
+                            Toast.makeText(AddPetsActivity.this, "Imageupload successful", Toast.LENGTH_SHORT).show();
+                            Upload upload = new Upload(firebaseAuth.getCurrentUser().getEmail(),
+                                    taskSnapshot.getDownloadUrl().toString());
+                            String uploadId = mDatabaseRef.push().getKey();
+                            mDatabaseRef.child(uploadId).setValue(upload);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(AddPetsActivity.this, "Imageupload failed!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+
+                        }
+                    });
+        } else {
+            Toast.makeText(this, "no Image selected!", Toast.LENGTH_SHORT).show();
+        }
     }
 
 

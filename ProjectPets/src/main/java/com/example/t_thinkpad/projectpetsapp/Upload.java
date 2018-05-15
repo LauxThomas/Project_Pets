@@ -1,33 +1,33 @@
 package com.example.t_thinkpad.projectpetsapp;
 
 public class Upload {
-    private String mName,mImageUrl;
+    private String uploader, imageUrl;
 
     public Upload(){
-
+        //NEEDED!
     }
 
-    public Upload(String name, String imageUrl) {
-        if (name.trim().equals("")){
-            name = "No Name";
+    public Upload(String uploader, String imageUrl) {
+        if (uploader.trim().equals("")){
+            uploader = "No Name";
         }
-        this.mName = name;
-        this.mImageUrl = imageUrl;
+        this.uploader = uploader;
+        this.imageUrl = imageUrl;
     }
 
-    public String getmName() {
-        return mName;
+    public String getUploader() {
+        return uploader;
     }
 
-    public void setmName(String mName) {
-        this.mName = mName;
+    public void setUploader(String uploader) {
+        this.uploader = uploader;
     }
 
-    public String getmImageUrl() {
-        return mImageUrl;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setmImageUrl(String mImageUrl) {
-        this.mImageUrl = mImageUrl;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
