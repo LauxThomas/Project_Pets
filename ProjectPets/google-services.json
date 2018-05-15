@@ -1,0 +1,107 @@
+{
+  "project_info": {
+    "project_number": "952423253585",
+    "firebase_url": "https://projectpets-23864.firebaseio.com",
+    "project_id": "projectpets-23864",
+    "storage_bucket": "projectpets-23864.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952423253585:android:69cbaef0264b2df8",
+        "android_client_info": {
+          "package_name": "com.example.t_thinkpad.projectpets"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "952423253585-eeu1riiqoghavi1ebjch3fc16kiiqksg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.t_thinkpad.projectpets",
+            "certificate_hash": "8a11ff76faa1856dcbc8296e4ac0d3a8f3891df3"
+          }
+        },
+        {
+          "client_id": "952423253585-od9th557vmvfeb05o0jqvlncutkuu6vm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeFYececWVmsBJj7iCMVPKCqQoBlKc-mI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "952423253585-od9th557vmvfeb05o0jqvlncutkuu6vm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:952423253585:android:36dc1b9924351f20",
+        "android_client_info": {
+          "package_name": "com.example.t_thinkpad.projectpetsapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "952423253585-l9hpod9f4f044t8db6dm76v5ar64spd5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.t_thinkpad.projectpetsapp",
+            "certificate_hash": "d1b3328c4aff7205f9768c97fa801f54b4772171"
+          }
+        },
+        {
+          "client_id": "952423253585-e74r6n416tvdg7sfq48hsnfo53gs0bpi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.t_thinkpad.projectpetsapp",
+            "certificate_hash": "8a11ff76faa1856dcbc8296e4ac0d3a8f3891df3"
+          }
+        },
+        {
+          "client_id": "952423253585-od9th557vmvfeb05o0jqvlncutkuu6vm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeFYececWVmsBJj7iCMVPKCqQoBlKc-mI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "952423253585-od9th557vmvfeb05o0jqvlncutkuu6vm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

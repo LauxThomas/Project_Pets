@@ -227,6 +227,8 @@ public class AddPetsActivity extends AppCompatActivity {
             newPet.setDisorders(disorders);
         }
         ref.child(newPet.getName()).setValue(newPet);
+        Toast.makeText(this, name.toString()+" angelegt!", Toast.LENGTH_SHORT).show();
+        finish();
 
 
     }
