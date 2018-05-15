@@ -3,27 +3,25 @@ package com.example.t_thinkpad.projectpetsapp;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.UUID;
 
 public class AddPetsActivity extends AppCompatActivity {
     ImageView imageView;
@@ -33,9 +31,13 @@ public class AddPetsActivity extends AppCompatActivity {
     Button addPetButton;
     private static int RESULT_LOAD_IMAGE = 1;
     Bitmap selectedImage;
+    Uri file,mImageUri;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private ProgressBar progressBar;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference ref;
+    private StorageReference mStorageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +49,7 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
     private void initializeStuff() {
+        mStorageRef = FirebaseStorage.getInstance().getReference();
         firebaseAuth = FirebaseAuth.getInstance();
         ref = FirebaseDatabase.getInstance().getReference().child("pets");  //petsreferenz
     }
@@ -62,37 +65,40 @@ public class AddPetsActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectImage();
+                handleImageStuff();
             }
         });
     }
 
-    private void selectImage() {
+    private void handleImageStuff() {
+
+//        //Auswählen aus Gallery:
+//        Intent intent = new Intent();
+//        intent.setType("image/*");
+//        intent.setAction(Intent.ACTION_GET_CONTENT);
+//        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+
+
+        //Auswählen mit Kamera;
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, RESULT_LOAD_IMAGE);
     }
 
+
     @Override
     protected void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
 
+        if (reqCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null) {
+            mImageUri = data.getData();
 
-        if (resultCode == RESULT_OK) {
-            try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getContentResolver().openInputStream(imageUri);
-                selectedImage = BitmapFactory.decodeStream(imageStream);
-                imageView.setImageBitmap(selectedImage);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show();
-            }
-
-        } else {
-            Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+            Picasso.with(this).load(mImageUri).into(imageView);
         }
+
     }
+
 
     private void createNewPet() {
         //TODO: Image aus Gallery oder Camera
@@ -138,7 +144,7 @@ public class AddPetsActivity extends AppCompatActivity {
             chipId = Integer.parseInt(chipIdEditText.getText().toString());
         }
         String disorders = disordersEditText.getText().toString();
-        Pets newPet = new Pets(/*image*/ selectedImage, name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
+        Pets newPet = new Pets(/*image*/ file, name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
         //füge Optionals hinzu:
         if (!size.equals("")) {
             newPet.setSize(size);
