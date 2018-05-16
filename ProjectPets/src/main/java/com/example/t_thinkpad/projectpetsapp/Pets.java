@@ -61,7 +61,9 @@ public class Pets implements Serializable {
         this.disorders = disorders;
         petId++;
     }
-
+    public Pets(){
+        //wird zur Abfrage benötigt
+    }
     //+size,numberOfPreviousOwners,currentOwner,description,chipId
     public Pets(String image, String name, String family, String race, double age, boolean sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
         this.image = image;

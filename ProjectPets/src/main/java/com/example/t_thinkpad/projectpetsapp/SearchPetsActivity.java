@@ -66,18 +66,20 @@ public class SearchPetsActivity extends AppCompatActivity {
     }
 
     public void setListeners() {
-
-        petsRef.addValueEventListener(new ValueEventListener() {
+//TODO: Für jedes Kind in dataSnapshot, guck, ob die Eingaben richtige ergebnisse liefert
+        //TODO: Also iteriere durch jedes Kind von jedem Kind von petsRef und checke die Eingaben: (name||family||race|...)
+        //TODO: Dann liefere Anzahl Ergebnisse zurück, bzw überschreibe lokale Variable
+        petsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //TODO: Für jedes Kind in dataSnapshot, guck, ob die Eingaben richtige ergebnisse liefert
-                //TODO: Also iteriere durch jedes Kind von jedem Kind von petsRef und checke die Eingaben: (name||family||race|...)
-                //TODO: Dann liefere Anzahl Ergebnisse zurück, bzw überschreibe lokale Variable
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Pets pet = snapshot.getValue(Pets.class);
+                    System.out.println("TESTTHATSHIT: " + pet.getName());
+                }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
 
