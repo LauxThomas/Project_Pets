@@ -31,6 +31,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class AddPetsActivity extends AppCompatActivity {
     ImageView imageView;
@@ -39,7 +40,8 @@ public class AddPetsActivity extends AppCompatActivity {
             numberOfPreviousOwnersEditText, descriptionEditText, chipIdEditText, disordersEditText;
     Button addPetButton;
     private static int RESULT_LOAD_IMAGE = 1;
-    Uri file, mImageUri;
+//    Uri file;
+    Uri mImageUri;
     private static final int PICK_IMAGE_REQUEST = 1;
 
 
@@ -106,9 +108,9 @@ public class AddPetsActivity extends AppCompatActivity {
 
             Picasso.with(this).load(mImageUri).into(imageView);
 
-            if (mUploadTask!=null && mUploadTask.isInProgress()){
+            if (mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 uploadFile();
             }
         }
@@ -140,8 +142,8 @@ public class AddPetsActivity extends AppCompatActivity {
                             }, 2000);
 
                             Toast.makeText(AddPetsActivity.this, "Imageupload successful", Toast.LENGTH_SHORT).show();
-                            Upload upload = new Upload(firebaseAuth.getCurrentUser().getEmail(),
-                                    taskSnapshot.getDownloadUrl().toString());
+                            Upload upload = new Upload(Objects.requireNonNull(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail()),
+                                    Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getDownloadUrl()).toString()));
                             String uploadId = mDatabaseRef.push().getKey();
                             mDatabaseRef.child(uploadId).setValue(upload);
                         }
@@ -209,7 +211,7 @@ public class AddPetsActivity extends AppCompatActivity {
             chipId = Integer.parseInt(chipIdEditText.getText().toString());
         }
         String disorders = disordersEditText.getText().toString();
-        Pets newPet = new Pets(/*image*/ file, name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
+        Pets newPet = new Pets(/*image*/ mImageUri, name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
         //füge Optionals hinzu:
         if (!size.equals("")) {
             newPet.setSize(size);
@@ -227,7 +229,7 @@ public class AddPetsActivity extends AppCompatActivity {
             newPet.setDisorders(disorders);
         }
         ref.child(newPet.getName()).setValue(newPet);
-        Toast.makeText(this, name.toString()+" angelegt!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, name.toString() + " angelegt!", Toast.LENGTH_SHORT).show();
         finish();
 
 
