@@ -86,7 +86,7 @@ public class secondLoginActivity extends AppCompatActivity {
             return;
         }
 
-        progressDialog.setMessage("Registerung User...");
+        progressDialog.setMessage("logging in...");
         progressDialog.show();
 
         firebaseAuth.signInWithEmailAndPassword(email, password)

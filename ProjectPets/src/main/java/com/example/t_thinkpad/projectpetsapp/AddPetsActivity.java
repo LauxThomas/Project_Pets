@@ -211,7 +211,7 @@ public class AddPetsActivity extends AppCompatActivity {
             chipId = Integer.parseInt(chipIdEditText.getText().toString());
         }
         String disorders = disordersEditText.getText().toString();
-        Pets newPet = new Pets(/*image*/ mImageUri, name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
+        Pets newPet = new Pets(/*image*/ mStorageRef.toString(), name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
         //füge Optionals hinzu:
         if (!size.equals("")) {
             newPet.setSize(size);
@@ -228,7 +228,7 @@ public class AddPetsActivity extends AppCompatActivity {
         if (!disorders.equals("")) {
             newPet.setDisorders(disorders);
         }
-        ref.child(newPet.getName()).setValue(newPet);
+        ref.child(newPet.getName()+" @ "+newPet.getRandomUUID()).setValue(newPet);
         Toast.makeText(this, name.toString() + " angelegt!", Toast.LENGTH_SHORT).show();
         finish();
 

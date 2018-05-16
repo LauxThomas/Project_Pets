@@ -13,7 +13,7 @@ public class Pets implements Serializable {
 
     public static int petId;    //TODO: der Counter muss irgendwie global gesetzt werden
     //Essentials:
-    public Uri image = null;
+    public String image = "";
     public String name = "";
     public String family = "";
     public String race = "";
@@ -31,7 +31,7 @@ public class Pets implements Serializable {
     public String disorders = "";
 
     //Bare essentials:
-    public Pets(Uri image, String name, String family, String race, double age, boolean sex, String location, String currentOwner) {
+    public Pets(String image, String name, String family, String race, double age, boolean sex, String location, String currentOwner) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -44,7 +44,7 @@ public class Pets implements Serializable {
     }
 
     //Full boom
-    public Pets(Uri image, String name, String family, String race, double age, boolean sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
+    public Pets(String image, String name, String family, String race, double age, boolean sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -63,7 +63,7 @@ public class Pets implements Serializable {
     }
 
     //+size,numberOfPreviousOwners,currentOwner,description,chipId
-    public Pets(Uri image, String name, String family, String race, double age, boolean sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
+    public Pets(String image, String name, String family, String race, double age, boolean sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -87,11 +87,11 @@ public class Pets implements Serializable {
         this.emailOfCreator = emailOfCreator;
     }
 
-    public Uri getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Uri image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
