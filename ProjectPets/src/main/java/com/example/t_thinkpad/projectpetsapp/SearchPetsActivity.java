@@ -124,6 +124,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         HashMap hashMap = new HashMap();
 
         //TODO: Das ist nicht schön gemacht!:
+
         if (isNotEmpty(generalSearchTextView.getText().toString())) {
             hashMap.put("general", generalSearchView.getQuery());
         }
