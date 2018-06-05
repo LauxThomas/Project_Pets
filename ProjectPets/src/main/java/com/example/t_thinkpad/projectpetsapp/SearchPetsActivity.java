@@ -1,8 +1,10 @@
 package com.example.t_thinkpad.projectpetsapp;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -16,6 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -66,22 +69,12 @@ public class SearchPetsActivity extends AppCompatActivity {
     }
 
     public void setListeners() {
-//TODO: Für jedes Kind in dataSnapshot, guck, ob die Eingaben richtige ergebnisse liefert
+//TODO: SUCHEN BUTTON: Für jedes Kind in dataSnapshot, guck, ob die Eingaben richtige ergebnisse liefert
         //TODO: Also iteriere durch jedes Kind von jedem Kind von petsRef und checke die Eingaben: (name||family||race|...)
         //TODO: Dann liefere Anzahl Ergebnisse zurück, bzw überschreibe lokale Variable
-        petsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Pets pet = snapshot.getValue(Pets.class);
-                    System.out.println("TESTTHATSHIT: " + pet.getName());
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
+
+
 
         showMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
