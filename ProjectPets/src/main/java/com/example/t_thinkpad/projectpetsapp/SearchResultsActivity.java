@@ -5,6 +5,8 @@ import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -23,18 +25,17 @@ import java.util.Map;
 import java.util.Objects;
 
 public class SearchResultsActivity extends AppCompatActivity {
-    HashMap hashMap;
     private DatabaseReference usersRef;
     private DatabaseReference petsRef;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
         findViews();
-        initializeStuff();
         handleIntent();
-        searchThroughDatabase();
+//        searchThroughDatabase();
 
 
     }
@@ -51,20 +52,26 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     public void findViews() {
+        listView = findViewById(R.id.ListView);
 
     }
 
     public void handleIntent() {
         Intent intent = getIntent();
-        HashMap hashMap = (HashMap) intent.getSerializableExtra("HashMap");
-//        Toast.makeText(this, hashMap.toString(), Toast.LENGTH_SHORT).show();
+    ArrayList listItems = intent.getParcelableArrayListExtra("arraylist");
+        System.out.println("LOGTHATSHIT2: " + listItems);
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1,
+                listItems);
+        listView.setAdapter(adapter);
+
     }
 
     public void searchThroughDatabase() {
 
-        System.out.println("LOG THAT SHIT " + petsRef.orderByChild("name").equalTo("Unicorn"));
-        System.out.println("LOG THAT SHIT " + petsRef.orderByChild("name").equalTo("black"));
-//        petsRef.orderByChild("name").equalTo("Unicorn")
+//        System.out.println("LOG THAT SHIT " + petsRef.orderByChild("name").equalTo("Unicorn"));
+//        System.out.println("LOG THAT SHIT " + petsRef.orderByChild("name").equalTo("black"));
+////        petsRef.orderByChild("name").equalTo("Unicorn")
 
         //in sharedPreferences speichern// UPDATE: Firebase macht das automatisch!
         // Read from the database
@@ -73,21 +80,21 @@ public class SearchResultsActivity extends AppCompatActivity {
 //            public void onDataChange(DataSnapshot dataSnapshot) { //is triggered once when the listener is attached and again every time the data changes, including the children.
 //
 //
-//                HashMap<String, Object> value = (HashMap<String, Object>) dataSnapshot.getValue();
-//                assert value != null;
-//                for (Object t : value.values()) {
-//
-//                    List<String> list = Arrays.asList(t.toString().split(","));
-//                    for (int i = 0; i < list.size(); i++) {
-//                        if (list.get(i).contains("name=")) {
-//                            System.out.println("LOG THAT SHIT: " + list.get(i).substring(6, list.get(i).length()));
-//                        }
-//                    }
-//
-//                }
+////                HashMap<String, Object> value = (HashMap<String, Object>) dataSnapshot.getValue();
+////                assert value != null;
+////                for (Object t : value.values()) {
+////
+////                    List<String> list = Arrays.asList(t.toString().split(","));
+////                    for (int i = 0; i < list.size(); i++) {
+////                        if (list.get(i).contains("name=")) {
+////                            System.out.println("LOG THAT SHIT: " + list.get(i).substring(6, list.get(i).length()));
+////                        }
+////                    }
+////
+////                }
 //
 //            }
-
+//
 //            @Override
 //            public void onCancelled(DatabaseError error) {
 //                // Failed to read value

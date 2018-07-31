@@ -24,11 +24,11 @@ public class Pets implements Serializable {
     public String emailOfCreator;
 
     //optional:
-    public String size = "";
+    public String size = "0";
     public int numberOfPreviousOwners = -1;
-    public String description = "";
+    public String description = "none";
     public int chipId = -1;
-    public String disorders = "";
+    public String disorders = "none";
 
     //Bare essentials:
     public Pets(String image, String name, String family, String race, double age, boolean sex, String location, String currentOwner) {

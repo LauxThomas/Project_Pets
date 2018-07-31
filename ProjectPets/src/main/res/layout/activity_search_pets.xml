@@ -29,8 +29,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="I'm looking for:  " />
+            android:gravity="center" />
 
         <SearchView
             android:id="@+id/generalSearchSearchView"

@@ -1,16 +1,13 @@
 package com.example.t_thinkpad.projectpetsapp;
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,10 +15,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 //TODO: Floating Action Button mit Anzahl der Suchergebnisse in realtime.
 //TODO: Beim Klick auf den button sortiert nach Entfernung die zutreffenden Tiere anzeigen
@@ -35,19 +33,29 @@ public class SearchPetsActivity extends AppCompatActivity {
     public LinearLayout animateThis;
     public Button showMoreButton, searchButton;
     boolean check = false;
-    private DatabaseReference petsRef;
+    ArrayList arrayList = new ArrayList();
+
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_pets);
         findViews();
+        initiateDatabase();
         setListeners();
         animateThis.setTranslationX(-2500);
     }
 
+    private void initiateDatabase() {
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference().child("pets");
+    }
+
+
     public void findViews() {
-        petsRef = FirebaseDatabase.getInstance().getReference().child("pets");  //Referenz auf pets
+//        petsRef = FirebaseDatabase.getInstance().getReference().child("pets");  //Referenz auf pets
         generalSearchTextView = findViewById(R.id.generalSearchTextView);
         nameTextView = findViewById(R.id.nameTextView);
         animateThis = findViewById(R.id.animateThis);
@@ -74,8 +82,6 @@ public class SearchPetsActivity extends AppCompatActivity {
         //TODO: Dann liefere Anzahl Ergebnisse zurück, bzw überschreibe lokale Variable
 
 
-
-
         showMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,78 +99,66 @@ public class SearchPetsActivity extends AppCompatActivity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showResults();
+                searchDatabase();
+
+            }
+        });
+    }
+
+    private void showData(DataSnapshot dataSnapshot) throws JSONException {
+        String lookupString = generalSearchView.getQuery().toString();
+
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            String replace = ds.getValue().toString().replace("=", ":");
+            replace.replace("/", ":");
+            JSONObject jsonObject = new JSONObject(replace);
+
+            //TODO: search through every child for lookupString
+            if (jsonObject.get("age").toString().contains(lookupString)
+                    || jsonObject.get("chipId").toString().contains(lookupString)
+                    || jsonObject.get("currentOwner").toString().contains(lookupString)
+                    || jsonObject.get("description").toString().contains(lookupString)
+                    || jsonObject.get("disorders").toString().contains(lookupString)
+                    || jsonObject.get("family").toString().contains(lookupString)
+                    || jsonObject.get("location").toString().contains(lookupString)
+                    || jsonObject.get("name").toString().contains(lookupString)
+                    || jsonObject.get("numberOfPreviousOwners").toString().contains(lookupString)
+                    || jsonObject.get("race").toString().contains(lookupString)
+                    || jsonObject.get("sex").toString().contains(lookupString)
+                    || jsonObject.get("size").toString().contains(lookupString)
+                    ) {
+                arrayList.add(jsonObject);
+            }
+            System.out.println("LOGTHATSHiT0: " + arrayList.toString());
+
+        }
+        startNextActivity();
+    }
+
+    public void startNextActivity() {
+        //TODO: Intent + Suchergebnisse
+        Intent intent = new Intent(this, SearchResultsActivity.class);
+        intent.putParcelableArrayListExtra("arrayList", arrayList);
+        startActivity(intent);
+    }
+
+    private void searchDatabase() {
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    showData(dataSnapshot);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
 
     }
 
-    public void showResults() {
-        //TODO: Intent + Suchergebnisse
-        //Do stuff
-//        getAllInputs(); //returns a HashMap with all SearchView Queries
-        Intent intent = new Intent(this, SearchResultsActivity.class);
-//        Bundle bundle = new Bundle();
-        HashMap hashMap = new HashMap();
-        hashMap = getAllInputs();
-//        bundle.putSerializable("HashMap",hashMap);
-//        intent
-        intent.putExtra("HashMap", hashMap);
-        startActivity(intent);
-    }
-
-    public HashMap getAllInputs() {
-        HashMap hashMap = new HashMap();
-
-        //TODO: Das ist nicht schön gemacht!:
-
-        if (isNotEmpty(generalSearchTextView.getText().toString())) {
-            hashMap.put("general", generalSearchView.getQuery());
-        }
-        if (isNotEmpty(nameSeachView.getQuery().toString())) {
-            hashMap.put("name", nameSeachView.getQuery());
-        }
-        if (isNotEmpty(familySearchView.getQuery().toString())) {
-            hashMap.put("family", familySearchView.getQuery());
-        }
-        if (isNotEmpty(raceSearchView.getQuery().toString())) {
-            hashMap.put("race", raceSearchView.getQuery());
-        }
-        if (isNotEmpty(ageSearchView.getQuery().toString())) {
-            hashMap.put("age", ageSearchView.getQuery());
-        }
-        if (isNotEmpty(sexSearchView.getQuery().toString())) {
-            hashMap.put("sex", sexSearchView.getQuery());
-        }
-        if (isNotEmpty(locationSearchView.getQuery().toString())) {
-            hashMap.put("location", locationSearchView.getQuery());
-        }
-        if (isNotEmpty(currentOwnerSearchView.getQuery().toString())) {
-            hashMap.put("currentOwner", currentOwnerSearchView.getQuery());
-        }
-        if (isNotEmpty(sizeSearchView.getQuery().toString())) {
-            hashMap.put("size", sizeSearchView.getQuery());
-        }
-        if (isNotEmpty(numberOfPreviousOwnersSearchView.getQuery().toString())) {
-            hashMap.put("numberOfPreviousOwners", numberOfPreviousOwnersSearchView.getQuery());
-        }
-        if (isNotEmpty(descriptionSearchView.getQuery().toString())) {
-            hashMap.put("description", descriptionSearchView.getQuery());
-        }
-        if (isNotEmpty(chipIdSearchView.getQuery().toString())) {
-            hashMap.put("chipId", chipIdSearchView.getQuery());
-        }
-        if (isNotEmpty(disordersSearchView.getQuery().toString())) {
-            hashMap.put("disorders", disordersSearchView.getQuery());
-        }
-        return hashMap;
-    }
-
-    private boolean isNotEmpty(String content) {
-        if (content.trim().equals("")) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 }
