@@ -1,11 +1,6 @@
 package com.example.t_thinkpad.projectpetsapp;
 
-import android.graphics.Bitmap;
-import android.media.Image;
-import android.net.Uri;
-
 import java.io.Serializable;
-import java.util.Date;
 import java.util.UUID;
 
 public class Pets implements Serializable {
@@ -61,9 +56,11 @@ public class Pets implements Serializable {
         this.disorders = disorders;
         petId++;
     }
-    public Pets(){
+
+    public Pets() {
         //wird zur Abfrage benötigt
     }
+
     //+size,numberOfPreviousOwners,currentOwner,description,chipId
     public Pets(String image, String name, String family, String race, double age, boolean sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
         this.image = image;
@@ -79,6 +76,9 @@ public class Pets implements Serializable {
         this.description = description;
         this.chipId = chipId;
         petId++;
+    }
+
+    public Pets(Object o) {
     }
 
     public String getEmailOfCreator() {
@@ -204,6 +204,12 @@ public class Pets implements Serializable {
     public String getRandomUUID() {
         String uuid = UUID.randomUUID().toString();
         return uuid;
+    }
+
+    public String getWholePet() {
+        String petString = new String();
+        petString = "name: " + getName() + "\nfamily: " + getFamily() + "\nrace: " + getRace() + "\nage: " + getAge() + "\nsize: " + getSize() + "\nsex: " + getSex() + "\ndescription: " + getDescription();
+        return petString;
     }
 
 }

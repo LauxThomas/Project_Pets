@@ -12,7 +12,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -71,10 +70,14 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private void fillAdapter(LinkedHashMap value) throws JSONException {
         ArrayList resultArray = new ArrayList();
-        resultArray.addAll(value.values());
+        resultArray.addAll(value.entrySet());
+        System.out.println("RESULTARRAY:" + resultArray.get(1).getClass());
+        Pets newPet = new Pets(resultArray.get(0));
+        System.out.println("NEWPET: " + newPet.getName());
 
         //TODO: extract names from resultArrayfor just showing those in the listView
-
+        //GETKEY?
+        Object[] objectArray = value.entrySet().toArray();
         ArrayAdapter adapter;
         adapter = new
 
@@ -87,11 +90,12 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     public void readData(final String lookupString, final MyCallback myCallback) {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            int index = 0;
+
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 LinkedHashMap<String, Object> value = new LinkedHashMap<>();
+                int index = 0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                     String replace = ds.getValue().toString().replace("=", ":");
@@ -110,7 +114,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                             || replace.contains(lookupString)
                             || replace.contains(lookupString)
                             ) {
-                        value.put(Integer.toString(index), ds.getValue());
+                        value.put(Integer.toString(index), createNewPet(ds));
                         index++;
                     }
                 }
@@ -122,6 +126,81 @@ public class SearchResultsActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    private Pets createNewPet(DataSnapshot ds) {
+        Pets newPet = new Pets();
+        String backUpString = ds.toString();
+        String s;
+
+        System.out.println("BACKUPSTRING: " + backUpString);
+
+        //age:
+        s = backUpString.substring(backUpString.indexOf(" age=") + 5);
+        s = s.substring(0, s.indexOf("}"));
+        newPet.setAge(Double.parseDouble(s));
+
+        //chipId:
+        s = backUpString.substring(backUpString.indexOf(" chipId=") + 8);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setChipId(Integer.parseInt(s));
+
+        //currentOwner:
+        s = backUpString.substring(backUpString.indexOf(" currentOwner=") + 14);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setCurrentOwner(s);
+
+        //description:
+        s = backUpString.substring(backUpString.indexOf(" description=") + 13);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setDescription(s);
+
+        //disorders:
+        s = backUpString.substring(backUpString.indexOf(" disorders=") + 11);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setDisorders(s);
+
+        //family:
+        s = backUpString.substring(backUpString.indexOf(" family=") + 8);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setFamily(s);
+
+        //image:
+        s = backUpString.substring(backUpString.indexOf(" image=") + 7);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setCurrentOwner(s);
+
+        //location:
+        s = backUpString.substring(backUpString.indexOf(" location=") + 10);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setCurrentOwner(s);
+
+        //name:
+        s = backUpString.substring(backUpString.indexOf(" name=") + 6);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setName(s);
+
+        //numberOfPreviousOwners:
+        s = backUpString.substring(backUpString.indexOf(" numberOfPreviousOwners=") + 24);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setNumberOfPreviousOwners(Integer.parseInt(s));
+
+        //race:
+        s = backUpString.substring(backUpString.indexOf(" race=") + 6);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setRace(s);
+
+        //sex:
+        s = backUpString.substring(backUpString.indexOf(" sex=") + 5);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setCurrentOwner(s);
+
+        //size:
+        s = backUpString.substring(backUpString.indexOf(" size=") + 6);
+        s = s.substring(0, s.indexOf(","));
+        newPet.setCurrentOwner(s);
+
+        return newPet;
     }
 }
 
