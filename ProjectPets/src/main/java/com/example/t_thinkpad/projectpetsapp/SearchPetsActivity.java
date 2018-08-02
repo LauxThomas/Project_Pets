@@ -19,7 +19,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Objects;
 
 //TODO: Floating Action Button mit Anzahl der Suchergebnisse in realtime.
 //TODO: Beim Klick auf den button sortiert nach Entfernung die zutreffenden Tiere anzeigen
@@ -132,14 +134,25 @@ public class SearchPetsActivity extends AppCompatActivity {
             System.out.println("LOGTHATSHiT0: " + arrayList.toString());
 
         }
-        startNextActivity();
+        startNextActivity(lookupString);
     }
 
-    public void startNextActivity() {
+    public void startNextActivity(String lookupString) {
         //TODO: Intent + Suchergebnisse
         Intent intent = new Intent(this, SearchResultsActivity.class);
-        intent.putParcelableArrayListExtra("arrayList", arrayList);
+        String arrayString = createArrayString(arrayList);
+        intent.putExtra("lookupString", lookupString);
+        intent.putExtra("arrayString", arrayString);
         startActivity(intent);
+    }
+
+    private String createArrayString(ArrayList arrayList) {
+        StringBuilder sb = new StringBuilder();
+        for (Object o : arrayList) {
+            sb.append(o);
+            sb.append("\t");
+        }
+        return sb.toString();
     }
 
     private void searchDatabase() {

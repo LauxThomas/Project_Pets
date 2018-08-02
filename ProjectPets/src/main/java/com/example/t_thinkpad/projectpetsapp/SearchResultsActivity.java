@@ -1,106 +1,133 @@
 package com.example.t_thinkpad.projectpetsapp;
 
 import android.content.Intent;
-import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.LinkedHashMap;
+
+import static android.R.layout.simple_list_item_1;
 
 public class SearchResultsActivity extends AppCompatActivity {
     private DatabaseReference usersRef;
     private DatabaseReference petsRef;
     private ListView listView;
+    private FirebaseDatabase mFirebaseDatabase;
+    private DatabaseReference myRef;
+    private ArrayList arrayList = new ArrayList();
+    private boolean foundItem = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
+        initiateData();
         findViews();
         handleIntent();
-//        searchThroughDatabase();
-
-
     }
 
-    private void initializeStuff() {
-        usersRef = FirebaseDatabase.getInstance().getReference().child("users");
-        petsRef = FirebaseDatabase.getInstance().getReference().child("pets");
-
-
-        // ref.child('users').orderByChild('name').equalTo('Alex').on('child_added',  ...)
-//        System.out.println("LOG THAT SHIT: " + usersRef.);
-
-
+    private void initiateData() {
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        myRef = mFirebaseDatabase.getReference().child("pets");
     }
 
     public void findViews() {
         listView = findViewById(R.id.ListView);
-
     }
 
     public void handleIntent() {
         Intent intent = getIntent();
-    ArrayList listItems = intent.getParcelableArrayListExtra("arraylist");
-        System.out.println("LOGTHATSHIT2: " + listItems);
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                listItems);
-        listView.setAdapter(adapter);
+        String lookupString = intent.getStringExtra("lookupString");
+
+        handleDatabaseStuff(lookupString);
+
 
     }
 
-    public void searchThroughDatabase() {
+    private void handleDatabaseStuff(final String lookupString) {
+        readData(lookupString, new MyCallback() {
+            @Override
+            public void onCallback(LinkedHashMap value) {
+                try {
+                    fillAdapter(value);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
-//        System.out.println("LOG THAT SHIT " + petsRef.orderByChild("name").equalTo("Unicorn"));
-//        System.out.println("LOG THAT SHIT " + petsRef.orderByChild("name").equalTo("black"));
-////        petsRef.orderByChild("name").equalTo("Unicorn")
+    private void fillAdapter(LinkedHashMap value) throws JSONException {
+        ArrayList resultArray = new ArrayList();
+        resultArray.addAll(value.values());
 
-        //in sharedPreferences speichern// UPDATE: Firebase macht das automatisch!
-        // Read from the database
-//        petsRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) { //is triggered once when the listener is attached and again every time the data changes, including the children.
-//
-//
-////                HashMap<String, Object> value = (HashMap<String, Object>) dataSnapshot.getValue();
-////                assert value != null;
-////                for (Object t : value.values()) {
-////
-////                    List<String> list = Arrays.asList(t.toString().split(","));
-////                    for (int i = 0; i < list.size(); i++) {
-////                        if (list.get(i).contains("name=")) {
-////                            System.out.println("LOG THAT SHIT: " + list.get(i).substring(6, list.get(i).length()));
-////                        }
-////                    }
-////
-////                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError error) {
-//                // Failed to read value
-//                Log.w("LOG THAT SHIT", "Failed to read value.", error.toException());
-//            }
-//        });
+        //TODO: extract names from resultArrayfor just showing those in the listView
 
+        ArrayAdapter adapter;
+        adapter = new
+
+                ArrayAdapter(this,
+                simple_list_item_1,
+                resultArray);
+        listView.setAdapter(adapter);
+    }
+
+
+    public void readData(final String lookupString, final MyCallback myCallback) {
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            int index = 0;
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                LinkedHashMap<String, Object> value = new LinkedHashMap<>();
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                    String replace = ds.getValue().toString().replace("=", ":");
+                    replace.replace("/", ":");
+
+                    if (replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            || replace.contains(lookupString)
+                            ) {
+                        value.put(Integer.toString(index), ds.getValue());
+                        index++;
+                    }
+                }
+                myCallback.onCallback(value);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
     }
 }
+
+
+
+
+
+
+
