@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Pets implements Serializable {
 
 
-    public static int petId;    //TODO: der Counter muss irgendwie global gesetzt werden
+    public static int petId;
     //Essentials:
     public String image = "";
     public String name = "";
@@ -141,6 +141,13 @@ public class Pets implements Serializable {
         this.sex = sex;
     }
 
+    public void setSex(String sex) {
+        if (sex.equalsIgnoreCase("male")) {
+            this.sex = true;
+        } else
+            this.sex = false;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -206,11 +213,6 @@ public class Pets implements Serializable {
         return uuid;
     }
 
-    public String getWholePet() {
-        String petString = new String();
-        petString = "name: " + getName() + "\nfamily: " + getFamily() + "\nrace: " + getRace() + "\nage: " + getAge() + "\nsize: " + getSize() + "\nsex: " + getSex() + "\ndescription: " + getDescription();
-        return petString;
-    }
 
     @Override
     public String toString() {

@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainMenu"
-            android:label="ProjectPets"/>
+            android:label="ProjectPets" />
         <activity
             android:name=".MyPetsActivity"
             android:label="MyPets"
@@ -61,7 +61,10 @@
             android:label="ShelterMainMenu" />
         <activity
             android:name=".AddPetsActivity"
-            android:parentActivityName=".MainMenu"></activity>
+            android:parentActivityName=".MainMenu" />
+        <activity
+            android:name=".DetailedSearchResult"
+            android:parentActivityName=".SearchResultsActivity" />
     </application>
 
 </manifest>

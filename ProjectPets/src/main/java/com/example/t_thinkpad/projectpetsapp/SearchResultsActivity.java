@@ -67,22 +67,40 @@ public class SearchResultsActivity extends AppCompatActivity {
         });
     }
 
-    private void fillAdapter(Pets[] pets) throws JSONException {
+    private void fillAdapter(final Pets[] pets) throws JSONException {
         //TODO: extract names from resultArrayfor just showing those in the listView (toString in Pets umschreiben)
         listView.setAdapter(new ArrayAdapter(this, simple_list_item_1, pets));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(SearchResultsActivity.this, position + ". element clicked", Toast.LENGTH_SHORT).show();
+                startNextActivity(pets[position]);
             }
         });
+    }
+
+    private void startNextActivity(Pets pet) {
+        Intent intent = new Intent(this, DetailedSearchResult.class);
+        intent.putExtra("age", "" + pet.getAge());
+        intent.putExtra("chipId", "" + pet.getChipId());
+        intent.putExtra("currentOwner", pet.getCurrentOwner());
+        intent.putExtra("description", pet.getDescription());
+        intent.putExtra("disorders", pet.getDisorders());
+        intent.putExtra("family", pet.getFamily());
+        intent.putExtra("image", pet.getImage());
+        intent.putExtra("location", pet.getLocation());
+        intent.putExtra("name", pet.getName());
+        intent.putExtra("numberOfPreviousOwners", "" + pet.getNumberOfPreviousOwners());
+        intent.putExtra("race", pet.getRace());
+        intent.putExtra("randomUUID", pet.getRandomUUID());
+        intent.putExtra("sex", pet.getSex());
+        intent.putExtra("size", pet.getSize());
+        startActivity(intent);
+
     }
 
 
     public void readData(final String lookupString, final MyCallback myCallback) {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-
-
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Pets> petsArrayList = new ArrayList<Pets>();
