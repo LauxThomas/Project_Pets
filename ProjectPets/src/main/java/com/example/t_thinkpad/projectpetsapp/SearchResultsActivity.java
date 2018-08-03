@@ -3,8 +3,11 @@ package com.example.t_thinkpad.projectpetsapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,18 +18,13 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import static android.R.layout.simple_list_item_1;
 
 public class SearchResultsActivity extends AppCompatActivity {
-    private DatabaseReference usersRef;
-    private DatabaseReference petsRef;
     private ListView listView;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
-    private ArrayList arrayList = new ArrayList();
-    private boolean foundItem = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +34,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         findViews();
         handleIntent();
     }
+
 
     private void initiateData() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -58,9 +57,9 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void handleDatabaseStuff(final String lookupString) {
         readData(lookupString, new MyCallback() {
             @Override
-            public void onCallback(LinkedHashMap value) {
+            public void onCallback(Pets[] pets) {
                 try {
-                    fillAdapter(value);
+                    fillAdapter(pets);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -68,23 +67,15 @@ public class SearchResultsActivity extends AppCompatActivity {
         });
     }
 
-    private void fillAdapter(LinkedHashMap value) throws JSONException {
-        ArrayList resultArray = new ArrayList();
-        resultArray.addAll(value.entrySet());
-        System.out.println("RESULTARRAY:" + resultArray.get(1).getClass());
-        Pets newPet = new Pets(resultArray.get(0));
-        System.out.println("NEWPET: " + newPet.getName());
-
-        //TODO: extract names from resultArrayfor just showing those in the listView
-        //GETKEY?
-        Object[] objectArray = value.entrySet().toArray();
-        ArrayAdapter adapter;
-        adapter = new
-
-                ArrayAdapter(this,
-                simple_list_item_1,
-                resultArray);
-        listView.setAdapter(adapter);
+    private void fillAdapter(Pets[] pets) throws JSONException {
+        //TODO: extract names from resultArrayfor just showing those in the listView (toString in Pets umschreiben)
+        listView.setAdapter(new ArrayAdapter(this, simple_list_item_1, pets));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(SearchResultsActivity.this, position + ". element clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
@@ -94,7 +85,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                LinkedHashMap<String, Object> value = new LinkedHashMap<>();
+                ArrayList<Pets> petsArrayList = new ArrayList<Pets>();
                 int index = 0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
@@ -114,11 +105,19 @@ public class SearchResultsActivity extends AppCompatActivity {
                             || replace.contains(lookupString)
                             || replace.contains(lookupString)
                             ) {
-                        value.put(Integer.toString(index), createNewPet(ds));
+                        petsArrayList.add(createNewPet(ds));
                         index++;
                     }
                 }
-                myCallback.onCallback(value);
+                if (index == 0) {
+                    Toast.makeText(SearchResultsActivity.this, "nothing found for your parameters", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Pets[] pets = new Pets[petsArrayList.size()];  //TODO: nicht hardcoden, dynamisch anpassen!
+                for (int i = 0; i < petsArrayList.size(); i++) {
+                    pets[i] = petsArrayList.get(i);
+                }
+                myCallback.onCallback(pets);
 
             }
 

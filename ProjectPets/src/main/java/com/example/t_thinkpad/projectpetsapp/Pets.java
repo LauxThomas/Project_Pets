@@ -212,4 +212,10 @@ public class Pets implements Serializable {
         return petString;
     }
 
+    @Override
+    public String toString() {
+        String petString = new String();
+        petString = "name: " + getName() + "\nfamily: " + getFamily() + "\nrace: " + getRace() + "\nage: " + getAge() + "\nsize: " + getSize() + "\nsex: " + getSex() + "\ndescription: " + getDescription();
+        return petString;
+    }
 }
