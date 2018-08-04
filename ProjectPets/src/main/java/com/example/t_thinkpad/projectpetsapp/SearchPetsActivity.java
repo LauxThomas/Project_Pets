@@ -120,12 +120,12 @@ public class SearchPetsActivity extends AppCompatActivity {
                     || jsonObject.get("description").toString().contains(lookupString)
                     || jsonObject.get("disorders").toString().contains(lookupString)
                     || jsonObject.get("family").toString().contains(lookupString)
-                    || jsonObject.get("location").toString().contains(lookupString) //TODO
+                    || jsonObject.get("location").toString().contains(lookupString)
                     || jsonObject.get("name").toString().contains(lookupString)
                     || jsonObject.get("numberOfPreviousOwners").toString().contains(lookupString)
                     || jsonObject.get("race").toString().contains(lookupString)
                     || jsonObject.get("sex").toString().contains(lookupString)
-                    || jsonObject.get("size").toString().contains(lookupString) //TODO
+                    || jsonObject.get("size").toString().contains(lookupString)
                     ) {
                 System.out.println("SOUTTEST: " + jsonObject);
                 arrayList.add(jsonObject);

@@ -85,20 +85,20 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void startNextActivity(Pets pet) {
         Intent intent = new Intent(this, DetailedSearchResult.class);
         intent.putExtra("age", "" + pet.getAge());
-        intent.putExtra("chipId", "" + pet.getChipId());    //TODO
-        intent.putExtra("currentOwner", pet.getCurrentOwner());     //TODO:
-        intent.putExtra("description", pet.getDescription());     //TODO:
-        intent.putExtra("disorders", pet.getDisorders());     //TODO:
+        intent.putExtra("chipId", "" + pet.getChipId());
+        intent.putExtra("currentOwner", pet.getCurrentOwner());
+        intent.putExtra("description", pet.getDescription());
+        intent.putExtra("disorders", pet.getDisorders());
         intent.putExtra("family", pet.getFamily());
-        intent.putExtra("image", pet.getImage());     //TODO:
-        intent.putExtra("location", pet.getLocation());     //TODO:
+        intent.putExtra("image", pet.getImage());
+        intent.putExtra("location", pet.getLocation());
         intent.putExtra("name", pet.getName());
-        intent.putExtra("numberOfPreviousOwners", "" + pet.getNumberOfPreviousOwners());      //TODO:
+        intent.putExtra("numberOfPreviousOwners", "" + pet.getNumberOfPreviousOwners());
         intent.putExtra("race", pet.getRace());
         intent.putExtra("randomUUID", pet.getRandomUUID());
-        intent.putExtra("sex", pet.getSex());      //TODO?
-        intent.putExtra("size", pet.getSize());      //TODO:
-        intent.putExtra("wholePet", pet.getWholePet());
+        intent.putExtra("sex", pet.getSex());
+        intent.putExtra("size", pet.getSize());
+        intent.putExtra("wholePet", pet);
         startActivity(intent);
 
     }
@@ -111,9 +111,10 @@ public class SearchResultsActivity extends AppCompatActivity {
                 ArrayList<Pets> petsArrayList = new ArrayList<Pets>();
                 int index = 0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    //TODO: In description kann es gut vorkommen, dass ein "," auftaucht. dieses soll aber nicht als trennsymbol gewertet werden.
                     String replace = ds.getValue().toString().replace("=", ":");
                     replace.replace("/", ":");
+                    //TODO: In description kann es gut vorkommen, dass ein "," auftaucht. dieses soll aber nicht als trennsymbol gewertet werden.
+                    //TODO: Image einbinden
 
                     if (replace.contains(lookupString)
                             || replace.contains(lookupString)
@@ -136,7 +137,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                     Toast.makeText(SearchResultsActivity.this, "nothing found for your parameters", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                Pets[] pets = new Pets[petsArrayList.size()];  //TODO: nicht hardcoden, dynamisch anpassen!
+                Pets[] pets = new Pets[petsArrayList.size()];
                 for (int i = 0; i < petsArrayList.size(); i++) {
                     pets[i] = petsArrayList.get(i);
                 }
@@ -154,6 +155,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         Pets newPet = new Pets();
         String backUpString = ds.toString();
         String s;
+        System.out.println("BACKUPSTRING: " + backUpString);
 
         //age:
         s = backUpString.substring(backUpString.indexOf(" age=") + 5);
@@ -172,7 +174,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         //description:
         s = backUpString.substring(backUpString.indexOf(" description=") + 13);
-        s = s.substring(0, s.indexOf(","));
+        s = s.substring(0, s.indexOf(", number"));
         newPet.setDescription(s);
 
         //disorders:
@@ -188,7 +190,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         //image:
         s = backUpString.substring(backUpString.indexOf(" image=") + 7);
         s = s.substring(0, s.indexOf(","));
-        newPet.setCurrentOwner(s);
+        newPet.setImage(s);
 
         //location:
         s = backUpString.substring(backUpString.indexOf(" location=") + 10);
@@ -214,7 +216,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         s = backUpString.substring(backUpString.indexOf(" sex=") + 5);
         s = s.substring(0, s.indexOf(","));
         boolean sex = true;
-        if (s.contains("fem")||s.contains("wei")){
+        if (s.contains("fem") || s.contains("wei")) {
             sex = false;
         }
         newPet.setSex(sex);
@@ -222,8 +224,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         //size:
         s = backUpString.substring(backUpString.indexOf(" size=") + 6);
         s = s.substring(0, s.indexOf(","));
-        newPet.setCurrentOwner(s);
-        System.out.println("GETWHOLEPETINSRA: " + newPet.getWholePet());
+        newPet.setSize(s);
+        System.out.println("GETWHOLEPETINSRA: " + newPet);
         System.out.println("BACKUPSTRING: " + backUpString);
 
         return newPet;

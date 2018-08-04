@@ -228,6 +228,7 @@ public class AddPetsActivity extends AppCompatActivity {
         if (!disorders.equals("")) {
             newPet.setDisorders(disorders);
         }
+        //TODO: getWholeString rausnehmen
         ref.child(newPet.getName() + " @ " + newPet.getRandomUUID()).setValue(newPet);
         Toast.makeText(this, name.toString() + " angelegt!", Toast.LENGTH_SHORT).show();
         finish();

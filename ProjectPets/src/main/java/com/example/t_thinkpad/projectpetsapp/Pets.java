@@ -220,23 +220,23 @@ public class Pets implements Serializable {
         return petString;
     }
 
-
-    protected String getWholePet() {
-        String petString = "";
-        petString = petString + "\nage: " + "" + getAge() + "\n";
-        petString = petString + "chipId: " + "" + getChipId() + "\n";
-        petString = petString + "currentOwner: " + getCurrentOwner() + "\n";
-        petString = petString + "description: " + getDescription() + "\n";
-        petString = petString + "disorders: " + getDisorders() + "\n";
-        petString = petString + "family: " + getFamily() + "\n";
-        petString = petString + "image: " + getImage() + "\n";
-        petString = petString + "location: " + getLocation() + "\n";
-        petString = petString + "name: " + getName() + "\n";
-        petString = petString + "numberOfPreviousOwners: " + "" + getNumberOfPreviousOwners() + "\n";
-        petString = petString + "race: " + getRace() + "\n";
-        petString = petString + "randomUUID: " + getRandomUUID() + "\n";
-        petString = petString + "sex: " + getSex() + "\n";
-        petString = petString + "size: " + getSize() + "\n";
-        return petString;
-    }
+//    //TODO: IRgendwie rausnehmen, der zerschießt das suchen
+//    String getWholePet() {
+//        String petString = "";
+//        petString = petString + "\nage: " + "" + getAge() + "\n";
+//        petString = petString + "chipId: " + "" + getChipId() + "\n";
+//        petString = petString + "currentOwner: " + getCurrentOwner() + "\n";
+//        petString = petString + "description: " + getDescription() + "\n";
+//        petString = petString + "disorders: " + getDisorders() + "\n";
+//        petString = petString + "family: " + getFamily() + "\n";
+//        petString = petString + "image: " + getImage() + "\n";
+//        petString = petString + "location: " + getLocation() + "\n";
+//        petString = petString + "name: " + getName() + "\n";
+//        petString = petString + "numberOfPreviousOwners: " + "" + getNumberOfPreviousOwners() + "\n";
+//        petString = petString + "race: " + getRace() + "\n";
+//        petString = petString + "randomUUID: " + getRandomUUID() + "\n";
+//        petString = petString + "sex: " + getSex() + "\n";
+//        petString = petString + "size: " + getSize() + "\n";
+//        return petString;
+//    }
 }
