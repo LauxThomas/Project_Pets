@@ -111,7 +111,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                 ArrayList<Pets> petsArrayList = new ArrayList<Pets>();
                 int index = 0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
+                    //TODO: In description kann es gut vorkommen, dass ein "," auftaucht. dieses soll aber nicht als trennsymbol gewertet werden.
                     String replace = ds.getValue().toString().replace("=", ":");
                     replace.replace("/", ":");
 
