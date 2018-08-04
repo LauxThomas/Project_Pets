@@ -1,8 +1,8 @@
 package com.example.t_thinkpad.projectpetsapp;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -18,10 +18,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Objects;
 
 //TODO: Floating Action Button mit Anzahl der Suchergebnisse in realtime.
 //TODO: Beim Klick auf den button sortiert nach Entfernung die zutreffenden Tiere anzeigen
@@ -112,7 +109,8 @@ public class SearchPetsActivity extends AppCompatActivity {
 
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             String replace = ds.getValue().toString().replace("=", ":");
-            replace.replace("/", ":");
+            replace.replace("/", ":").trim();
+            replace = replace.replaceAll("\\s+", "");
             JSONObject jsonObject = new JSONObject(replace);
 
             //TODO: search through every child for lookupString
@@ -122,16 +120,16 @@ public class SearchPetsActivity extends AppCompatActivity {
                     || jsonObject.get("description").toString().contains(lookupString)
                     || jsonObject.get("disorders").toString().contains(lookupString)
                     || jsonObject.get("family").toString().contains(lookupString)
-                    || jsonObject.get("location").toString().contains(lookupString)
+                    || jsonObject.get("location").toString().contains(lookupString) //TODO
                     || jsonObject.get("name").toString().contains(lookupString)
                     || jsonObject.get("numberOfPreviousOwners").toString().contains(lookupString)
                     || jsonObject.get("race").toString().contains(lookupString)
                     || jsonObject.get("sex").toString().contains(lookupString)
-                    || jsonObject.get("size").toString().contains(lookupString)
+                    || jsonObject.get("size").toString().contains(lookupString) //TODO
                     ) {
+                System.out.println("SOUTTEST: " + jsonObject);
                 arrayList.add(jsonObject);
             }
-            System.out.println("LOGTHATSHiT0: " + arrayList.toString());
 
         }
         startNextActivity(lookupString);

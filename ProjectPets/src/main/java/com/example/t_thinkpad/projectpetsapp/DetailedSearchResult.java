@@ -3,6 +3,7 @@ package com.example.t_thinkpad.projectpetsapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -67,16 +68,20 @@ public class DetailedSearchResult extends AppCompatActivity {
         labelCurrentOwnerTextView.setText("Current owner: ");
         attributeCurrentOwnerTextView.setText(pet.getCurrentOwner());
 
-        System.out.println("PETINTOTAL: " + pet.getName());
-        System.out.println("PETINTOTAL: " + pet.getFamily());
-        System.out.println("PETINTOTAL: " + pet.getRace());
-        System.out.println("PETINTOTAL: " + pet.getAge());
-        System.out.println("PETINTOTAL: " + pet.getSex());
-        System.out.println("PETINTOTAL: " + pet.getLocation());
-        System.out.println("PETINTOTAL: " + pet.getCurrentOwner());
+
 
         setOptionalViews(pet);
 
+    }
+
+    //damit SearchResultActivity nicht zerstört wird:
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return false;
     }
 
     public void setOptionalViews(Pets pet) {
@@ -135,7 +140,11 @@ public class DetailedSearchResult extends AppCompatActivity {
         pet.setName(intent.getStringExtra("name"));
         pet.setNumberOfPreviousOwners(Integer.parseInt(intent.getStringExtra("numberOfPreviousOwners")));
         pet.setRace(intent.getStringExtra("race"));
-        pet.setSex(intent.getStringExtra("sex"));
+        boolean sex = true;
+        if (intent.getStringExtra("sex").contains("fem") || intent.getStringExtra("sex").contains("wei")) {
+            sex = false;
+        }
+        pet.setSex(sex);
         pet.setSize(intent.getStringExtra("size"));
         return pet;
     }

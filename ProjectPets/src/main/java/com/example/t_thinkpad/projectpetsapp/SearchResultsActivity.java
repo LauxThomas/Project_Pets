@@ -35,6 +35,10 @@ public class SearchResultsActivity extends AppCompatActivity {
         handleIntent();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
     private void initiateData() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -81,19 +85,20 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void startNextActivity(Pets pet) {
         Intent intent = new Intent(this, DetailedSearchResult.class);
         intent.putExtra("age", "" + pet.getAge());
-        intent.putExtra("chipId", "" + pet.getChipId());
-        intent.putExtra("currentOwner", pet.getCurrentOwner());
-        intent.putExtra("description", pet.getDescription());
-        intent.putExtra("disorders", pet.getDisorders());
+        intent.putExtra("chipId", "" + pet.getChipId());    //TODO
+        intent.putExtra("currentOwner", pet.getCurrentOwner());     //TODO:
+        intent.putExtra("description", pet.getDescription());     //TODO:
+        intent.putExtra("disorders", pet.getDisorders());     //TODO:
         intent.putExtra("family", pet.getFamily());
-        intent.putExtra("image", pet.getImage());
-        intent.putExtra("location", pet.getLocation());
+        intent.putExtra("image", pet.getImage());     //TODO:
+        intent.putExtra("location", pet.getLocation());     //TODO:
         intent.putExtra("name", pet.getName());
-        intent.putExtra("numberOfPreviousOwners", "" + pet.getNumberOfPreviousOwners());
+        intent.putExtra("numberOfPreviousOwners", "" + pet.getNumberOfPreviousOwners());      //TODO:
         intent.putExtra("race", pet.getRace());
         intent.putExtra("randomUUID", pet.getRandomUUID());
-        intent.putExtra("sex", pet.getSex());
-        intent.putExtra("size", pet.getSize());
+        intent.putExtra("sex", pet.getSex());      //TODO?
+        intent.putExtra("size", pet.getSize());      //TODO:
+        intent.putExtra("wholePet", pet.getWholePet());
         startActivity(intent);
 
     }
@@ -150,8 +155,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         String backUpString = ds.toString();
         String s;
 
-        System.out.println("BACKUPSTRING: " + backUpString);
-
         //age:
         s = backUpString.substring(backUpString.indexOf(" age=") + 5);
         s = s.substring(0, s.indexOf("}"));
@@ -190,7 +193,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         //location:
         s = backUpString.substring(backUpString.indexOf(" location=") + 10);
         s = s.substring(0, s.indexOf(","));
-        newPet.setCurrentOwner(s);
+        newPet.setLocation(s);
 
         //name:
         s = backUpString.substring(backUpString.indexOf(" name=") + 6);
@@ -210,12 +213,18 @@ public class SearchResultsActivity extends AppCompatActivity {
         //sex:
         s = backUpString.substring(backUpString.indexOf(" sex=") + 5);
         s = s.substring(0, s.indexOf(","));
-        newPet.setCurrentOwner(s);
+        boolean sex = true;
+        if (s.contains("fem")||s.contains("wei")){
+            sex = false;
+        }
+        newPet.setSex(sex);
 
         //size:
         s = backUpString.substring(backUpString.indexOf(" size=") + 6);
         s = s.substring(0, s.indexOf(","));
         newPet.setCurrentOwner(s);
+        System.out.println("GETWHOLEPETINSRA: " + newPet.getWholePet());
+        System.out.println("BACKUPSTRING: " + backUpString);
 
         return newPet;
     }

@@ -141,12 +141,12 @@ public class Pets implements Serializable {
         this.sex = sex;
     }
 
-    public void setSex(String sex) {
-        if (sex.equalsIgnoreCase("male")) {
-            this.sex = true;
-        } else
-            this.sex = false;
-    }
+//    public void setSex(String sex) {
+//        if (sex.equalsIgnoreCase("male")) {
+//            this.sex = true;
+//        } else
+//            this.sex = false;
+//    }
 
     public String getLocation() {
         return location;
@@ -213,11 +213,30 @@ public class Pets implements Serializable {
         return uuid;
     }
 
-
     @Override
     public String toString() {
-        String petString = new String();
+        String petString;
         petString = "name: " + getName() + "\nfamily: " + getFamily() + "\nrace: " + getRace() + "\nage: " + getAge() + "\nsize: " + getSize() + "\nsex: " + getSex() + "\ndescription: " + getDescription();
+        return petString;
+    }
+
+
+    protected String getWholePet() {
+        String petString = "";
+        petString = petString + "\nage: " + "" + getAge() + "\n";
+        petString = petString + "chipId: " + "" + getChipId() + "\n";
+        petString = petString + "currentOwner: " + getCurrentOwner() + "\n";
+        petString = petString + "description: " + getDescription() + "\n";
+        petString = petString + "disorders: " + getDisorders() + "\n";
+        petString = petString + "family: " + getFamily() + "\n";
+        petString = petString + "image: " + getImage() + "\n";
+        petString = petString + "location: " + getLocation() + "\n";
+        petString = petString + "name: " + getName() + "\n";
+        petString = petString + "numberOfPreviousOwners: " + "" + getNumberOfPreviousOwners() + "\n";
+        petString = petString + "race: " + getRace() + "\n";
+        petString = petString + "randomUUID: " + getRandomUUID() + "\n";
+        petString = petString + "sex: " + getSex() + "\n";
+        petString = petString + "size: " + getSize() + "\n";
         return petString;
     }
 }
