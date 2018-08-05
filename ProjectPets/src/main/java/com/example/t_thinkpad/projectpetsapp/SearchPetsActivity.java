@@ -104,18 +104,18 @@ public class SearchPetsActivity extends AppCompatActivity {
 
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             String replace = ds.getValue().toString().replace("=", ":");
-            replace.replace("/", ":").trim();
+            replace = replace.replace("/", ":");
             replace = replace.replaceAll("\\s+", "");
             JSONObject jsonObject = new JSONObject(replace);
 
             if (jsonObject.get("age").toString().contains(lookupString)
                     || jsonObject.get("chipId").toString().contains(lookupString)
-                    || jsonObject.get("currentOwner").toString().contains(lookupString)
-                    || jsonObject.get("description").toString().contains(lookupString)
-                    || jsonObject.get("disorders").toString().contains(lookupString)
+                    || jsonObject.get("currentOwner").toString().contains(lookupString) //TODO: Komma escapen
+                    || jsonObject.get("description").toString().contains(lookupString)  //TODO: hier wird das Komma nicht excaped. Replacen!
+                    || jsonObject.get("disorders").toString().contains(lookupString)    //TODO: Komma escapen
                     || jsonObject.get("family").toString().contains(lookupString)
-                    || jsonObject.get("location").toString().contains(lookupString)
-                    || jsonObject.get("name").toString().contains(lookupString)
+                    || jsonObject.get("location").toString().contains(lookupString) //TODO: Komma escapen
+                    || jsonObject.get("name").toString().contains(lookupString) //TODO: Komma escapen
                     || jsonObject.get("numberOfPreviousOwners").toString().contains(lookupString)
                     || jsonObject.get("race").toString().contains(lookupString)
                     || jsonObject.get("sex").toString().contains(lookupString)

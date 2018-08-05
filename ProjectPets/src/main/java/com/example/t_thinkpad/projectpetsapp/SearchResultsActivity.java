@@ -15,8 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONException;
-
 import java.util.ArrayList;
 
 import static android.R.layout.simple_list_item_1;
@@ -62,16 +60,12 @@ public class SearchResultsActivity extends AppCompatActivity {
         readData(lookupString, new MyCallback() {
             @Override
             public void onCallback(Pets[] pets) {
-                try {
-                    fillAdapter(pets);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                fillAdapter(pets);
             }
         });
     }
 
-    private void fillAdapter(final Pets[] pets) throws JSONException {
+    private void fillAdapter(final Pets[] pets) {
         //TODO: extract names from resultArrayfor just showing those in the listView (toString in Pets umschreiben)
         listView.setAdapter(new ArrayAdapter(this, simple_list_item_1, pets));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -156,6 +150,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         Pets newPet = new Pets();
         String backUpString = ds.toString();
         String s;
+        System.out.println("backUpString: " + backUpString);
 
         //age:
         s = backUpString.substring(backUpString.indexOf(" age=") + 5);
@@ -164,17 +159,17 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         //chipId:
         s = backUpString.substring(backUpString.indexOf(" chipId=") + 8);
-        s = s.substring(0, s.indexOf(","));
+        s = s.substring(0, s.indexOf(", age=")); //TODO: alle weiteren substrings nicht nur bis "," laufen lassen, sondern bis ", currentOwner=" z.B.
         newPet.setChipId(Integer.parseInt(s));
 
         //currentOwner:
         s = backUpString.substring(backUpString.indexOf(" currentOwner=") + 14);
-        s = s.substring(0, s.indexOf(","));
+        s = s.substring(0, s.indexOf(", name="));
         newPet.setCurrentOwner(s);
 
         //description:
         s = backUpString.substring(backUpString.indexOf(" description=") + 13);
-        s = s.substring(0, s.indexOf(", number"));
+        s = s.substring(0, s.indexOf(", numberOfPreviousOwners="));
         newPet.setDescription(s);
 
         //disorders:

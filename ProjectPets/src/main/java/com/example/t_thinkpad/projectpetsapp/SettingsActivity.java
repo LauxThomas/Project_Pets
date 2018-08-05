@@ -102,7 +102,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete  search history")
+        builder.setTitle("Delete search history")
                 .setMessage("Are you sure you want to delete your search history?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
