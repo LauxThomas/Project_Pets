@@ -119,7 +119,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     }
 
-    public void deleteHistory() {
+    public void deleteHistory() {   //TODO: Dafür müsste erstmal ne History angelegt werden. Entfernen?
         //TODO: History löschen
         Toast.makeText(this, "History deleted!", Toast.LENGTH_SHORT).show();
     }

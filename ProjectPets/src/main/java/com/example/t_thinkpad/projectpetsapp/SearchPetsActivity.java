@@ -76,14 +76,9 @@ public class SearchPetsActivity extends AppCompatActivity {
     }
 
     public void setListeners() {
-//TODO: SUCHEN BUTTON: Für jedes Kind in dataSnapshot, guck, ob die Eingaben richtige ergebnisse liefert
-        //TODO: Also iteriere durch jedes Kind von jedem Kind von petsRef und checke die Eingaben: (name||family||race|...)
-        //TODO: Dann liefere Anzahl Ergebnisse zurück, bzw überschreibe lokale Variable
-
-
         showMoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {   //TODO: entfernen?
                 if (check) {
                     animateThis.animate().translationX(-2500);
                     showMoreButton.setText("more");
@@ -113,7 +108,6 @@ public class SearchPetsActivity extends AppCompatActivity {
             replace = replace.replaceAll("\\s+", "");
             JSONObject jsonObject = new JSONObject(replace);
 
-            //TODO: search through every child for lookupString
             if (jsonObject.get("age").toString().contains(lookupString)
                     || jsonObject.get("chipId").toString().contains(lookupString)
                     || jsonObject.get("currentOwner").toString().contains(lookupString)
@@ -136,7 +130,6 @@ public class SearchPetsActivity extends AppCompatActivity {
     }
 
     public void startNextActivity(String lookupString) {
-        //TODO: Intent + Suchergebnisse
         Intent intent = new Intent(this, SearchResultsActivity.class);
         String arrayString = createArrayString(arrayList);
         intent.putExtra("lookupString", lookupString);

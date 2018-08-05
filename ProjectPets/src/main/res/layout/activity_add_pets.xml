@@ -132,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="e.g. 13370815"
+                android:hint="chipId: e.g. 13370815"
                 android:inputType="number" />
 
             <EditText

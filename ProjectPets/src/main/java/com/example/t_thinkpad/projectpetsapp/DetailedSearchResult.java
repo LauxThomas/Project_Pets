@@ -7,6 +7,9 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 public class DetailedSearchResult extends AppCompatActivity {
 
     public ImageView pictureImageView;
@@ -51,7 +54,7 @@ public class DetailedSearchResult extends AppCompatActivity {
     }
 
     public void fillViews(Pets pet) {
-        //TODO: BILDER EINFÜGEN!
+        setPicture(pictureImageView, pet);
         //pictureImageView.setImageDrawable(getD);
         labelNameTextView.setText("Name: ");
         attributeNameTextView.setText(pet.getName());
@@ -69,9 +72,21 @@ public class DetailedSearchResult extends AppCompatActivity {
         attributeCurrentOwnerTextView.setText(pet.getCurrentOwner());
 
 
-
         setOptionalViews(pet);
 
+    }
+
+    private void setPicture(ImageView imageView, Pets pet) {
+        // Reference to an image file in Cloud Storage
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference folderRef = storageRef.child("pictureReferences");
+        StorageReference imageRef = folderRef.child(pet.getImage() + ".jpg");
+        // Download directly from StorageReference using Glide
+        // (See MyAppGlideModule for Loader registration)
+        GlideApp.with(this /* context */)
+                .load(imageRef)
+                .into(imageView);
     }
 
     //damit SearchResultActivity nicht zerstört wird:

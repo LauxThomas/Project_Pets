@@ -1,12 +1,10 @@
 package com.example.t_thinkpad.projectpetsapp;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 public class Pets implements Serializable {
 
 
-    public static int petId;
     //Essentials:
     public String image = "";
     public String name = "";
@@ -17,6 +15,12 @@ public class Pets implements Serializable {
     public String location = "";
     public String currentOwner = "";
     public String emailOfCreator;
+
+    public void setRandomUUID(String randomUUID) {
+        this.randomUUID = randomUUID;
+    }
+
+    public String randomUUID;
 
     //optional:
     public String size = "0";
@@ -35,8 +39,8 @@ public class Pets implements Serializable {
         this.sex = sex;
         this.location = location;
         this.currentOwner = currentOwner;
-        petId++;
     }
+
 
     //Full boom
     public Pets(String image, String name, String family, String race, double age, boolean sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
@@ -54,7 +58,6 @@ public class Pets implements Serializable {
         this.description = description;
         this.chipId = chipId;
         this.disorders = disorders;
-        petId++;
     }
 
     public Pets() {
@@ -75,7 +78,6 @@ public class Pets implements Serializable {
         this.currentOwner = currentOwner;
         this.description = description;
         this.chipId = chipId;
-        petId++;
     }
 
     public Pets(Object o) {
@@ -204,13 +206,9 @@ public class Pets implements Serializable {
         this.disorders = disorders;
     }
 
-    public static int getPetId() {
-        return petId;
-    }
 
     public String getRandomUUID() {
-        String uuid = UUID.randomUUID().toString();
-        return uuid;
+        return randomUUID;
     }
 
     @Override
@@ -220,23 +218,4 @@ public class Pets implements Serializable {
         return petString;
     }
 
-//    //TODO: IRgendwie rausnehmen, der zerschießt das suchen
-//    String getWholePet() {
-//        String petString = "";
-//        petString = petString + "\nage: " + "" + getAge() + "\n";
-//        petString = petString + "chipId: " + "" + getChipId() + "\n";
-//        petString = petString + "currentOwner: " + getCurrentOwner() + "\n";
-//        petString = petString + "description: " + getDescription() + "\n";
-//        petString = petString + "disorders: " + getDisorders() + "\n";
-//        petString = petString + "family: " + getFamily() + "\n";
-//        petString = petString + "image: " + getImage() + "\n";
-//        petString = petString + "location: " + getLocation() + "\n";
-//        petString = petString + "name: " + getName() + "\n";
-//        petString = petString + "numberOfPreviousOwners: " + "" + getNumberOfPreviousOwners() + "\n";
-//        petString = petString + "race: " + getRace() + "\n";
-//        petString = petString + "randomUUID: " + getRandomUUID() + "\n";
-//        petString = petString + "sex: " + getSex() + "\n";
-//        petString = petString + "size: " + getSize() + "\n";
-//        return petString;
-//    }
 }

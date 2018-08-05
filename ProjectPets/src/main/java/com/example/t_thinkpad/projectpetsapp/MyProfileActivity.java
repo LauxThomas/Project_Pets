@@ -78,10 +78,8 @@ public class MyProfileActivity extends AppCompatActivity {
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //TODO: funktioniert zwar, ist aber nicht wirklich schön. ÄNDERN! //edit: doch, sieht gut aus^^
                 if (firebaseAuth.getCurrentUser() != null) {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
-                    //TODO: IF NOT NULL
                     if (dataSnapshot.child(user.getUid()).child("name").getValue() != null &&
                             dataSnapshot.child(user.getUid()).child("location").getValue() != null &&
                             dataSnapshot.child(user.getUid()).child("isLookingFor").getValue() != null) {
@@ -104,7 +102,7 @@ public class MyProfileActivity extends AppCompatActivity {
         });
 
 
-        //<editor-fold desc="TODO: Werte ändern sich nur beim focuschange, sollte auch beim klick auf den Back button funzen">
+        //<editor-fold desc="TODO: Werte ändern sich nur beim focuschange, sollte auch beim klick auf den Back button funzen: backbutton überschreiben">
         locationEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {

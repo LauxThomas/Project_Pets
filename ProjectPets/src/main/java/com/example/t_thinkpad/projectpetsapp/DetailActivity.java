@@ -63,7 +63,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public void setViews() {
         //TODO: Alle zugehörigen TextViews in ein horizontales LinearLayout packen, damit die Alignments richtig sind.
-        //TODO: BILDER EINFÜGEN!
+        //TODO: EVTL KOMPLETT AUF suCHE TRANSFERIEREN? BILDER EINFÜGEN! https://stackoverflow.com/a/39708645
         //pictureImageView.setImageDrawable(getD);
         labelNameTextView.setText("Name: ");
         attributeNameTextView.setText(pets.get(index).getName());

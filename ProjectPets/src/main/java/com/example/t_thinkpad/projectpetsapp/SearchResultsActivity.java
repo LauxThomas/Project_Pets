@@ -112,9 +112,10 @@ public class SearchResultsActivity extends AppCompatActivity {
                 int index = 0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     String replace = ds.getValue().toString().replace("=", ":");
+                    System.out.println("REPLACESTRING: " + replace);
                     replace.replace("/", ":");
                     //TODO: In description kann es gut vorkommen, dass ein "," auftaucht. dieses soll aber nicht als trennsymbol gewertet werden.
-                    //TODO: Image einbinden
+                    //TODO: Image einbinden https://stackoverflow.com/a/39708645
 
                     if (replace.contains(lookupString)
                             || replace.contains(lookupString)
@@ -155,7 +156,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         Pets newPet = new Pets();
         String backUpString = ds.toString();
         String s;
-        System.out.println("BACKUPSTRING: " + backUpString);
 
         //age:
         s = backUpString.substring(backUpString.indexOf(" age=") + 5);
@@ -188,7 +188,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         newPet.setFamily(s);
 
         //image:
-        s = backUpString.substring(backUpString.indexOf(" image=") + 7);
+        s = backUpString.substring(backUpString.indexOf(" randomUUID=") + 12);
         s = s.substring(0, s.indexOf(","));
         newPet.setImage(s);
 
@@ -225,8 +225,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         s = backUpString.substring(backUpString.indexOf(" size=") + 6);
         s = s.substring(0, s.indexOf(","));
         newPet.setSize(s);
-        System.out.println("GETWHOLEPETINSRA: " + newPet);
-        System.out.println("BACKUPSTRING: " + backUpString);
 
         return newPet;
     }

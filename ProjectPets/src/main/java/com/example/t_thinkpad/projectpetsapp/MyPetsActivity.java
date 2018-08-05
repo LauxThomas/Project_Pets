@@ -71,7 +71,7 @@ public class MyPetsActivity extends AppCompatActivity {
                 }
             });
             //ImageView ImageView
-            //TODO: BILDER EINFÜGEN!
+            //TODO: BILDER EINFÜGEN! https://stackoverflow.com/a/39708645
             ImageView imageView = new ImageView(MyPetsActivity.this);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,

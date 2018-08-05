@@ -2,19 +2,16 @@ package com.example.t_thinkpad.projectpetsapp;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,9 +26,8 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.Objects;
+import java.util.UUID;
 
 public class AddPetsActivity extends AppCompatActivity {
     ImageView imageView;
@@ -49,6 +45,7 @@ public class AddPetsActivity extends AppCompatActivity {
     private DatabaseReference ref, mDatabaseRef;
     private StorageTask mUploadTask;
     private StorageReference mStorageRef;
+    private String randomUUID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,8 +122,8 @@ public class AddPetsActivity extends AppCompatActivity {
 
     private void uploadFile() {
         if (mImageUri != null) {
-            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtention(mImageUri));
+            randomUUID = UUID.randomUUID().toString();
+            StorageReference fileReference = mStorageRef.child(randomUUID + "." + getFileExtention(mImageUri));
 
 
             mUploadTask = fileReference.putFile(mImageUri)
@@ -145,7 +142,7 @@ public class AddPetsActivity extends AppCompatActivity {
                             Upload upload = new Upload(Objects.requireNonNull(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail()),
                                     Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getDownloadUrl()).toString()));
                             String uploadId = mDatabaseRef.push().getKey();
-                            mDatabaseRef.child(uploadId).setValue(upload);
+                            mDatabaseRef.child(uploadId).setValue(upload.getImageUrl());
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -172,7 +169,6 @@ public class AddPetsActivity extends AppCompatActivity {
         String name = nameEditText.getText().toString();
         String family = familyEditText.getText().toString();
         String race = raceEditText.getText().toString();
-        //TODO: check if ageEditText is ""
         double age;
         if (ageEditText.getText().toString().equals("")) {
             age = 0;
@@ -212,6 +208,8 @@ public class AddPetsActivity extends AppCompatActivity {
         }
         String disorders = disordersEditText.getText().toString();
         Pets newPet = new Pets(/*image*/ "\"" + mStorageRef.toString() + "\"", name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
+        newPet.setCurrentOwner(newPet.getCurrentOwner() + " bei " + newPet.getEmailOfCreator());
+        newPet.setRandomUUID(randomUUID);
         //füge Optionals hinzu:
         if (!size.equals("")) {
             newPet.setSize(size);
@@ -228,8 +226,7 @@ public class AddPetsActivity extends AppCompatActivity {
         if (!disorders.equals("")) {
             newPet.setDisorders(disorders);
         }
-        //TODO: getWholeString rausnehmen
-        ref.child(newPet.getName() + " @ " + newPet.getRandomUUID()).setValue(newPet);
+        ref.child(newPet.getName() + " @ " + randomUUID).setValue(newPet);
         Toast.makeText(this, name.toString() + " angelegt!", Toast.LENGTH_SHORT).show();
         finish();
 
