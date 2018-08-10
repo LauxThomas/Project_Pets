@@ -106,6 +106,8 @@ public class SearchPetsActivity extends AppCompatActivity {
             String replace = ds.getValue().toString().replace("=", ":");
             replace = replace.replace("/", ":");
             replace = replace.replaceAll("\\s+", "");
+            replace = escapeCommas(replace);
+            System.out.println("REPLACESTRING: " + replace);
             JSONObject jsonObject = new JSONObject(replace);
 
             if (jsonObject.get("age").toString().contains(lookupString)
@@ -127,6 +129,25 @@ public class SearchPetsActivity extends AppCompatActivity {
 
         }
         startNextActivity(lookupString);
+    }
+
+    private String escapeCommas(String replace) {
+        replace = replace.replace(",race", "escapedComma" + "race");
+        replace = replace.replace(",sex", "escapedComma" + "sex");
+        replace = replace.replace(",description", "escapedComma" + "description");
+        replace = replace.replace(",numberOfPreviousOwners", "escapedComma" + "numberOfPreviousOwners");
+        replace = replace.replace(",disorders", "escapedComma" + "disorders");
+        replace = replace.replace(",size", "escapedComma" + "size");
+        replace = replace.replace(",currentOwner", "escapedComma" + "currentOwner");
+        replace = replace.replace(",name", "escapedComma" + "name");
+        replace = replace.replace(",location", "escapedComma" + "location");
+        replace = replace.replace(",randomUUID", "escapedComma" + "randomUUID");
+        replace = replace.replace(",family", "escapedComma" + "family");
+        replace = replace.replace(",chipId", "escapedComma" + "chipId");
+        replace = replace.replace(",age", "escapedComma" + "age");
+        replace = replace.replace(",", "§$%"); //TODO: reformat "§$%" into ","
+        replace = replace.replace("escapedComma", ",");
+        return replace;
     }
 
     public void startNextActivity(String lookupString) {

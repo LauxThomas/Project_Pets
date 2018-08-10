@@ -80,7 +80,7 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
     private void handleImageStuff() {
-
+        //TODO: Camera und Gallery auswählen können
 //        //Auswählen aus Gallery:
 //        Intent intent = new Intent();
 //        intent.setType("image/*");

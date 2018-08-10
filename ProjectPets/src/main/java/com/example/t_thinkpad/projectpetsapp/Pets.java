@@ -20,7 +20,7 @@ public class Pets implements Serializable {
         this.randomUUID = randomUUID;
     }
 
-    public String randomUUID;
+    public String randomUUID;   //2^128 sollte eindeutig genug sein...
 
     //optional:
     public String size = "0";

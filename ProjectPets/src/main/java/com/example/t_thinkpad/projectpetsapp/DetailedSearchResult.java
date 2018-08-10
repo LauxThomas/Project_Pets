@@ -75,7 +75,7 @@ public class DetailedSearchResult extends AppCompatActivity {
         setOptionalViews(pet);
 
     }
-
+        //TODO: auf vielfache abfragen prüfen. https://www.youtube.com/watch?v=Lb-Pnytoi-8
     private void setPicture(ImageView imageView, Pets pet) {
         // Reference to an image file in Cloud Storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -83,7 +83,6 @@ public class DetailedSearchResult extends AppCompatActivity {
         StorageReference folderRef = storageRef.child("pictureReferences");
         StorageReference imageRef = folderRef.child(pet.getImage() + ".jpg");
         // Download directly from StorageReference using Glide
-        // (See MyAppGlideModule for Loader registration)
         GlideApp.with(this /* context */)
                 .load(imageRef)
                 .into(imageView);
