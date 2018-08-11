@@ -107,17 +107,16 @@ public class SearchPetsActivity extends AppCompatActivity {
             replace = replace.replace("/", ":");
             replace = replace.replaceAll("\\s+", "");
             replace = escapeCommas(replace);
-            System.out.println("REPLACESTRING: " + replace);
             JSONObject jsonObject = new JSONObject(replace);
 
             if (jsonObject.get("age").toString().contains(lookupString)
                     || jsonObject.get("chipId").toString().contains(lookupString)
-                    || jsonObject.get("currentOwner").toString().contains(lookupString) //TODO: Komma escapen
-                    || jsonObject.get("description").toString().contains(lookupString)  //TODO: hier wird das Komma nicht excaped. Replacen!
-                    || jsonObject.get("disorders").toString().contains(lookupString)    //TODO: Komma escapen
+                    || jsonObject.get("currentOwner").toString().contains(lookupString)
+                    || jsonObject.get("description").toString().contains(lookupString)
+                    || jsonObject.get("disorders").toString().contains(lookupString)
                     || jsonObject.get("family").toString().contains(lookupString)
-                    || jsonObject.get("location").toString().contains(lookupString) //TODO: Komma escapen
-                    || jsonObject.get("name").toString().contains(lookupString) //TODO: Komma escapen
+                    || jsonObject.get("location").toString().contains(lookupString)
+                    || jsonObject.get("name").toString().contains(lookupString)
                     || jsonObject.get("numberOfPreviousOwners").toString().contains(lookupString)
                     || jsonObject.get("race").toString().contains(lookupString)
                     || jsonObject.get("sex").toString().contains(lookupString)
@@ -145,7 +144,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         replace = replace.replace(",family", "escapedComma" + "family");
         replace = replace.replace(",chipId", "escapedComma" + "chipId");
         replace = replace.replace(",age", "escapedComma" + "age");
-        replace = replace.replace(",", "§$%"); //TODO: reformat "§$%" into ","
+        replace = replace.replace(",", "§$%"); //TODO: reformat "§$%" into "," / Das wird aber nicht weiter benötigt
         replace = replace.replace("escapedComma", ",");
         return replace;
     }

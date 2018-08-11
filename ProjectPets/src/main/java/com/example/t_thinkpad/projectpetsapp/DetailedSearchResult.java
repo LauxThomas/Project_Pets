@@ -15,6 +15,8 @@ public class DetailedSearchResult extends AppCompatActivity {
     public ImageView pictureImageView;
     public TextView labelNameTextView, labelFamilyTextView, labelRaceTextView, labelAgeTextView, labelSexTextView, labelLocationTextView, labelSizeTextView, labelNumberOfPreviousOwnersTextView, labelCurrentOwnerTextView, attributeNameTextView, attributeFamilyTextView, attributeRaceTextView, attributeAgeTextView, attributeSexTextView, attributeLocationTextView, attributeSizeTextView, attributeNumberOfPreviousOwnersTextView, attributeCurrentOwnerTextView, labelDescriptionTextView, attributeDescriptionTextView, labelChipIdTextView, attributeChipIdTextView, labelDisordersTextView, attributeDisordersTextView;
 
+
+    //TODO: Bilder als BASE64 laden und decodieren!!!!
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +77,8 @@ public class DetailedSearchResult extends AppCompatActivity {
         setOptionalViews(pet);
 
     }
-        //TODO: auf vielfache abfragen prüfen. https://www.youtube.com/watch?v=Lb-Pnytoi-8
+
+    //TODO: auf vielfache abfragen prüfen. https://www.youtube.com/watch?v=Lb-Pnytoi-8
     private void setPicture(ImageView imageView, Pets pet) {
         // Reference to an image file in Cloud Storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
