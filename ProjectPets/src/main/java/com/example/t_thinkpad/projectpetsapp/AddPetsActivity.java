@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -35,10 +34,6 @@ import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -107,12 +102,15 @@ public class AddPetsActivity extends AppCompatActivity {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (items[which].equals("Take Photo")) {
-                    startCameraIntent();
-                } else if (items[which].equals("Choose from Gallery")) {
-                    startGalleryIntent();
-                } else {
-                    dialog.dismiss();
+                switch (items[which].toString()) {
+                    case "Take Photo":
+                        Toast.makeText(AddPetsActivity.this, "will be available soon", Toast.LENGTH_SHORT).show();
+                        break;
+                    case "Choose from Gallery":
+                        startGalleryIntent();
+                        break;
+                    default:
+                        dialog.dismiss();
                 }
             }
         });
@@ -122,6 +120,7 @@ public class AddPetsActivity extends AppCompatActivity {
 
     //works!
     private void startGalleryIntent() {
+        //TODO: JPG als BASE64 encoden und als setImage speichern
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -137,29 +136,13 @@ public class AddPetsActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
-//            //TODO: Bilder als BASE64 abspeichern
-            mImageUri = data.getData();
-            System.out.println("MIMAGEURI: " + mImageUri);
-            Picasso.with(this).load(mImageUri).into(imageView);
-            if (mUploadTask != null && mUploadTask.isInProgress()) {
-                Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
-            } else {
-                uploadFile();
-            }
-        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            imageView.setImageBitmap(imageBitmap);
-            encodedPhoto = encodeBitmap(imageBitmap);
-        } else {
-            Toast.makeText(this, "Irgendetwas ist null", Toast.LENGTH_SHORT).show();
-        }
+    private String convertToBase64(String imagePath) {
+        Bitmap bm = BitmapFactory.decodeFile(imagePath);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
+        byte[] byteArrayImage = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
+        return encodedImage;
     }
 
     public String encodeBitmap(Bitmap bitmap) {
@@ -171,22 +154,40 @@ public class AddPetsActivity extends AppCompatActivity {
         return imageEncoded;
     }
 
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "IMG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,      /* prefix */
-                ".jpg",     /* suffix */
-                storageDir       /* directory */
-        );
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        imageFilePath = image.getAbsolutePath();
-        return image;
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+//            //TODO: Bilder als BASE64 abspeichern
+            mImageUri = data.getData();
+//            String encodedImage = convertToBase64(data.getData().getPath());
+            Picasso.with(this).load(mImageUri).into(imageView);
+            if (mUploadTask != null && mUploadTask.isInProgress()) {
+                Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
+            } else {
+                uploadFile();
+            }
+        } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            //TODO: Bilder speichern und auf firebase hochladen
+            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            imageView.setImageBitmap(photo);
+            new File("/sdcard/Pictures").mkdirs();
+            new File("/sdcard/DCIM/Camera").mkdirs();
+            String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), photo, null, null);
+            System.out.println("URITEST: " + path);
+            Uri image1 = Uri.parse(path);
+            if (mUploadTask != null && mUploadTask.isInProgress()) {
+                Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
+            } else {
+                uploadFile();
+            }
+
+
+        } else {
+            Toast.makeText(this, "Irgendetwas ist null", Toast.LENGTH_SHORT).show();
+        }
     }
-
-    //camera works but not the upload
-    //        }
 
     private String getFileExtention(Uri uri) {
         ContentResolver cR = getContentResolver();
@@ -195,49 +196,6 @@ public class AddPetsActivity extends AppCompatActivity {
     }
     //            imageView.setImageBitmap(imageBitmap);
 
-    private void uploadFileV2() {
-        if (mImageUri != null) {
-            randomUUID = UUID.randomUUID().toString();
-            StorageReference fileReference = mStorageRef.child(randomUUID + "." +
-                    mImageUri.toString().substring(mImageUri.toString().length() - 3, mImageUri.toString().length()));
-
-
-            mUploadTask = fileReference.putFile(mImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-//                                    progressBar.setProgress(0);
-                                }
-                            }, 2000);
-
-                            Toast.makeText(AddPetsActivity.this, "Imageupload successful", Toast.LENGTH_SHORT).show();
-                            Upload upload = new Upload(Objects.requireNonNull(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getEmail()),
-                                    Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getDownloadUrl()).toString()));
-                            String uploadId = mDatabaseRef.push().getKey();
-                            mDatabaseRef.child(uploadId).setValue(upload.getImageUrl());
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(AddPetsActivity.this, "Imageupload failed!", Toast.LENGTH_SHORT).show();
-                        }
-                    })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-
-                        }
-                    });
-        } else {
-            Toast.makeText(this, "no Image selected!", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private void uploadFile() {
         if (mImageUri != null) {
@@ -329,7 +287,8 @@ public class AddPetsActivity extends AppCompatActivity {
             chipId = Integer.parseInt(chipIdEditText.getText().toString());
         }
         String disorders = disordersEditText.getText().toString();
-//       //works: Pets newPet = new Pets(/*image*/ "\"" + mStorageRef.toString() + "\"", name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
+//      TODO:speichert als Bild ab   //works: Pets newPet = new Pets(/*image*/ "\"" + mStorageRef.toString() + "\"", name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
+        //TODO:
         Pets newPet = new Pets(encodedPhoto, name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
         System.out.println("BASE64: " + encodedPhoto);
         newPet.setCurrentOwner(newPet.getCurrentOwner() + " bei " + newPet.getEmailOfCreator());
