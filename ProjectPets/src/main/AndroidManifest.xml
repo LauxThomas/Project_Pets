@@ -70,7 +70,7 @@
             android:parentActivityName=".SearchPetsActivity" />
         <activity
             android:name=".LoginActivity"
-            android:label="ProjectPets Login">
+            android:label="Register">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -79,7 +79,7 @@
         </activity>
         <activity
             android:name=".secondLoginActivity"
-            android:label="signUp"
+            android:label="Log in"
             android:parentActivityName=".LoginActivity" />
         <activity
             android:name=".MainMenuShelter"

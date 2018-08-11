@@ -16,7 +16,6 @@ public class DetailedSearchResult extends AppCompatActivity {
     public TextView labelNameTextView, labelFamilyTextView, labelRaceTextView, labelAgeTextView, labelSexTextView, labelLocationTextView, labelSizeTextView, labelNumberOfPreviousOwnersTextView, labelCurrentOwnerTextView, attributeNameTextView, attributeFamilyTextView, attributeRaceTextView, attributeAgeTextView, attributeSexTextView, attributeLocationTextView, attributeSizeTextView, attributeNumberOfPreviousOwnersTextView, attributeCurrentOwnerTextView, labelDescriptionTextView, attributeDescriptionTextView, labelChipIdTextView, attributeChipIdTextView, labelDisordersTextView, attributeDisordersTextView;
 
 
-    //TODO: Bilder als BASE64 laden und decodieren!!!!
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +83,7 @@ public class DetailedSearchResult extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference folderRef = storageRef.child("pictureReferences");
-        StorageReference imageRef = folderRef.child(pet.getImage() + ".jpg");
+        StorageReference imageRef = folderRef.child(pet.getImage() + ".jpg");   //TODO: Bilder werden nicht nur  als .jpg abgespeichert
         // Download directly from StorageReference using Glide
         GlideApp.with(this /* context */)
                 .load(imageRef)

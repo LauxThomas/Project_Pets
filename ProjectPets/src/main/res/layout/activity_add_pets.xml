@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Age in years e.g. 3.5"
-                android:inputType="textPersonName"
+                android:inputType="numberDecimal"
                 android:singleLine="false" />
 
             <EditText
@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="number of previous owners e.g. 1"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:singleLine="false" />
 
             <EditText

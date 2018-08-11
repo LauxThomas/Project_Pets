@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +11,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -32,7 +30,6 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Objects;
 import java.util.UUID;
@@ -43,13 +40,9 @@ public class AddPetsActivity extends AppCompatActivity {
             sexEditText, locationEditText, currentOwnerEditText, sizeEditText,
             numberOfPreviousOwnersEditText, descriptionEditText, chipIdEditText, disordersEditText;
     Button addPetButton;
-    private static int RESULT_LOAD_IMAGE = 1;
-    //    Uri file;
     Uri mImageUri;
     private static final int PICK_IMAGE_REQUEST = 1;
-    private static final int CAMERA_REQUEST_CODE = 1;
     private static final int REQUEST_CAPTURE_IMAGE = 100;
-    String imageFilePath;
 
 
     private FirebaseAuth firebaseAuth;
@@ -57,11 +50,8 @@ public class AddPetsActivity extends AppCompatActivity {
     private StorageTask mUploadTask;
     private StorageReference mStorageRef;
     private String randomUUID;
-    private int REQ_CAMERA_IMAGE = 1;
     private int REQUEST_IMAGE_CAPTURE = 123;
-    private String encodedPhoto;
-    File photoFile;
-    public String photoFileName = "photo.jpg";
+    private String encodedPhoto = "nicht BASE64 decodiert";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +69,6 @@ public class AddPetsActivity extends AppCompatActivity {
         ref = FirebaseDatabase.getInstance().getReference().child("pets");  //petsreferenz
     }
 
-
     private void setListeners() {
         addPetButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,12 +79,12 @@ public class AddPetsActivity extends AppCompatActivity {
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectImage();
+                selectImageSource();
             }
         });
     }
 
-    private void selectImage() {
+    private void selectImageSource() {
         final CharSequence[] items = {"Take Photo", "Choose from Gallery", "Cancel"};
         AlertDialog.Builder builder = new AlertDialog.Builder(AddPetsActivity.this);
         builder.setTitle("Add Photo");
@@ -104,7 +93,10 @@ public class AddPetsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (items[which].toString()) {
                     case "Take Photo":
+                        //TODO:
                         Toast.makeText(AddPetsActivity.this, "will be available soon", Toast.LENGTH_SHORT).show();
+                        //TODO: REACTIVATE IF WORKING
+//                        startCameraIntent();
                         break;
                     case "Choose from Gallery":
                         startGalleryIntent();
@@ -115,17 +107,13 @@ public class AddPetsActivity extends AppCompatActivity {
             }
         });
         builder.show();
-
     }
 
-    //works!
     private void startGalleryIntent() {
-        //TODO: JPG als BASE64 encoden und als setImage speichern
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
-
     }
 
     private void startCameraIntent() {
@@ -133,25 +121,6 @@ public class AddPetsActivity extends AppCompatActivity {
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         }
-
-    }
-
-    private String convertToBase64(String imagePath) {
-        Bitmap bm = BitmapFactory.decodeFile(imagePath);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos); //bm is the bitmap object
-        byte[] byteArrayImage = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(byteArrayImage, Base64.DEFAULT);
-        return encodedImage;
-    }
-
-    public String encodeBitmap(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        String imageEncoded = Base64.encodeToString(baos.toByteArray(), Base64.DEFAULT);
-        imageEncoded = imageEncoded.replace("\\n", "");
-        System.out.println("IMAGEENCODED: " + imageEncoded);
-        return imageEncoded;
     }
 
     @Override
@@ -159,9 +128,7 @@ public class AddPetsActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
-//            //TODO: Bilder als BASE64 abspeichern
             mImageUri = data.getData();
-//            String encodedImage = convertToBase64(data.getData().getPath());
             Picasso.with(this).load(mImageUri).into(imageView);
             if (mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
@@ -169,11 +136,12 @@ public class AddPetsActivity extends AppCompatActivity {
                 uploadFile();
             }
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            //TODO: Bilder speichern und auf firebase hochladen
             Bitmap photo = (Bitmap) data.getExtras().get("data");
             imageView.setImageBitmap(photo);
+            //TODO: aus "photo" eine uri erzeugen
             new File("/sdcard/Pictures").mkdirs();
             new File("/sdcard/DCIM/Camera").mkdirs();
+            //TODO: path wird nicht richtig erzeugt. (null)
             String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), photo, null, null);
             System.out.println("URITEST: " + path);
             Uri image1 = Uri.parse(path);
@@ -182,8 +150,6 @@ public class AddPetsActivity extends AppCompatActivity {
             } else {
                 uploadFile();
             }
-
-
         } else {
             Toast.makeText(this, "Irgendetwas ist null", Toast.LENGTH_SHORT).show();
         }
@@ -194,8 +160,6 @@ public class AddPetsActivity extends AppCompatActivity {
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
-    //            imageView.setImageBitmap(imageBitmap);
-
 
     private void uploadFile() {
         if (mImageUri != null) {
@@ -238,10 +202,6 @@ public class AddPetsActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "no Image selected!", Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    private void createNewPet(String imageEncoded) {
     }
 
     private void createNewPet() {
@@ -287,11 +247,11 @@ public class AddPetsActivity extends AppCompatActivity {
             chipId = Integer.parseInt(chipIdEditText.getText().toString());
         }
         String disorders = disordersEditText.getText().toString();
-//      TODO:speichert als Bild ab   //works: Pets newPet = new Pets(/*image*/ "\"" + mStorageRef.toString() + "\"", name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
-        //TODO:
+        //encodedPhoto could be a BASE64 String
         Pets newPet = new Pets(encodedPhoto, name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
+
         System.out.println("BASE64: " + encodedPhoto);
-        newPet.setCurrentOwner(newPet.getCurrentOwner() + " bei " + newPet.getEmailOfCreator());
+        newPet.setCurrentOwner(newPet.getCurrentOwner());
         newPet.setRandomUUID(randomUUID);
         //füge Optionals hinzu:
         if (!size.equals("")) {
@@ -312,8 +272,6 @@ public class AddPetsActivity extends AppCompatActivity {
         ref.child(newPet.getName() + " @ " + randomUUID).setValue(newPet);
         Toast.makeText(this, name.toString() + " angelegt!", Toast.LENGTH_SHORT).show();
         finish();
-
-
     }
 
 

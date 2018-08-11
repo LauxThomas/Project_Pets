@@ -2,6 +2,8 @@ package com.example.t_thinkpad.projectpetsapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -20,7 +22,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-//TODO: Floating Action Button mit Anzahl der Suchergebnisse in realtime.
 //TODO: Beim Klick auf den button sortiert nach Entfernung die zutreffenden Tiere anzeigen
 public class SearchPetsActivity extends AppCompatActivity {
     public TextView generalSearchTextView, nameTextView;
@@ -30,7 +31,8 @@ public class SearchPetsActivity extends AppCompatActivity {
             chipIdSearchView, disordersSearchView;
 
     public LinearLayout animateThis;
-    public Button showMoreButton, searchButton;
+    public Button showMoreButton;
+    public FloatingActionButton searchButton;
     boolean check = false;
     ArrayList arrayList = new ArrayList();
 
@@ -55,11 +57,11 @@ public class SearchPetsActivity extends AppCompatActivity {
 
     public void findViews() {
 //        petsRef = FirebaseDatabase.getInstance().getReference().child("pets");  //Referenz auf pets
-        generalSearchTextView = findViewById(R.id.generalSearchTextView);
+//        generalSearchTextView = findViewById(R.id.generalSearchTextView);
         nameTextView = findViewById(R.id.nameTextView);
         animateThis = findViewById(R.id.animateThis);
         showMoreButton = findViewById(R.id.showMoreButton);
-        searchButton = findViewById(R.id.searchButton);
+        searchButton = findViewById(R.id.fab);
         generalSearchView = findViewById(R.id.generalSearchSearchView);
         nameSeachView = findViewById(R.id.nameSearchView);
         familySearchView = findViewById(R.id.familySearchView);
@@ -89,12 +91,11 @@ public class SearchPetsActivity extends AppCompatActivity {
                 check = !check;
             }
         });
-
+        //TODO: Realtime aktualisierung der ergebnisse einfügen
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchDatabase();
-
             }
         });
     }

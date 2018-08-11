@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -101,8 +102,6 @@ public class MyProfileActivity extends AppCompatActivity {
             }
         });
 
-
-        //<editor-fold desc="TODO: Werte ändern sich nur beim focuschange, sollte auch beim klick auf den Back button funzen: backbutton überschreiben">
         locationEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -180,7 +179,14 @@ public class MyProfileActivity extends AppCompatActivity {
             }
         });
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            saveUserInformation();
+            return true;
+        }
+        return false;
+    }
 
     public void startMyPetsActivity() {
         Intent intent = new Intent(this, MyPetsActivity.class);

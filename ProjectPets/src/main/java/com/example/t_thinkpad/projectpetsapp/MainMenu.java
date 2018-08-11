@@ -64,7 +64,7 @@ public class MainMenu extends AppCompatActivity {
                     }
 
                     //Wenn der Eintrag "isAnimalShelter" true ist, dann starte das ShelterMenu
-                    //TODO: Wenn isAnimalShelter, dann lege einen Button an der Cardflip ermöglicht.
+                    //TODO: Wenn isAnimalShelter, dann lege einen Button an der Cardflip ermöglicht. https://developer.android.com/training/animation/reveal-or-hide-view
                     if (dataSnapshot.child(user.getUid()).child("isAnimalShelter").getValue() != null
                             && dataSnapshot.child(user.getUid()).child("isAnimalShelter").getValue().toString().equals("true")) {
                         startMainMenuShelter();

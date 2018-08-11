@@ -108,21 +108,20 @@ public class SearchResultsActivity extends AppCompatActivity {
                     String replace = ds.getValue().toString().replace("=", ":");
                     System.out.println("REPLACESTRING: " + replace);
                     replace.replace("/", ":");
-                    //TODO: In description kann es gut vorkommen, dass ein "," auftaucht. dieses soll aber nicht als trennsymbol gewertet werden.
                     //TODO: Image einbinden https://stackoverflow.com/a/39708645
 
                     if (replace.contains(lookupString)
-                            || replace.contains(lookupString)
-                            || replace.contains(lookupString)
-                            || replace.contains(lookupString)
-                            || replace.contains(lookupString)
-                            || replace.contains(lookupString)
-                            || replace.contains(lookupString)
-                            || replace.contains(lookupString)
-                            || replace.contains(lookupString)
-                            || replace.contains(lookupString)
-                            || replace.contains(lookupString)
-                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
+//                            || replace.contains(lookupString)
                             ) {
                         petsArrayList.add(createNewPet(ds));
                         index++;
@@ -159,7 +158,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         //chipId:
         s = backUpString.substring(backUpString.indexOf(" chipId=") + 8);
-        s = s.substring(0, s.indexOf(", age=")); //TODO: alle weiteren substrings nicht nur bis "," laufen lassen, sondern bis ", currentOwner=" z.B.
+        s = s.substring(0, s.indexOf(", age="));
         newPet.setChipId(Integer.parseInt(s));
 
         //currentOwner:
