@@ -47,6 +47,12 @@ public class SearchPetsActivity extends AppCompatActivity {
         initiateDatabase();
         setListeners();
         animateThis.setTranslationX(-2500);
+        //TODO: reactivate when functions are working
+        deactivateNotFinishedStuff();
+    }
+
+    private void deactivateNotFinishedStuff() {
+        showMoreButton.setEnabled(false);
     }
 
     private void initiateDatabase() {
@@ -61,6 +67,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         nameTextView = findViewById(R.id.nameTextView);
         animateThis = findViewById(R.id.animateThis);
         showMoreButton = findViewById(R.id.showMoreButton);
+        //TODO: FAB unten rechts ankleben
         searchButton = findViewById(R.id.fab);
         generalSearchView = findViewById(R.id.generalSearchSearchView);
         nameSeachView = findViewById(R.id.nameSearchView);

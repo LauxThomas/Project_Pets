@@ -14,7 +14,7 @@ public class DetailedSearchResult extends AppCompatActivity {
 
     public ImageView pictureImageView;
     public TextView labelNameTextView, labelFamilyTextView, labelRaceTextView, labelAgeTextView, labelSexTextView, labelLocationTextView, labelSizeTextView, labelNumberOfPreviousOwnersTextView, labelCurrentOwnerTextView, attributeNameTextView, attributeFamilyTextView, attributeRaceTextView, attributeAgeTextView, attributeSexTextView, attributeLocationTextView, attributeSizeTextView, attributeNumberOfPreviousOwnersTextView, attributeCurrentOwnerTextView, labelDescriptionTextView, attributeDescriptionTextView, labelChipIdTextView, attributeChipIdTextView, labelDisordersTextView, attributeDisordersTextView;
-
+    //TODO: editButton und deleteButton in der actionbar anzeigen
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

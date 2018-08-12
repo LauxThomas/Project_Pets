@@ -26,6 +26,13 @@ public class MainMenu extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         findViewsAndInitializeStuff();
         setListeners();
+        //TODO: reactivate when functions are working
+        deactivateNotFinishedStuff();
+    }
+
+    private void deactivateNotFinishedStuff() {
+        myPets.setEnabled(false);
+        myProfile.setEnabled(false);
     }
 
     public void findViewsAndInitializeStuff() {

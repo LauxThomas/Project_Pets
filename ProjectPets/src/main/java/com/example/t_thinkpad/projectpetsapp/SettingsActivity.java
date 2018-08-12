@@ -23,6 +23,13 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         findViewsAndInitializeStuff();
         setListeners();
+        //TODO: reactivate when functions are working
+        deactivateNotFinishedStuff();
+    }
+
+    private void deactivateNotFinishedStuff() {
+        notificationsTextView.setEnabled(false);
+        deleteSearchHistoryTextView.setEnabled(false);
     }
 
     public void findViewsAndInitializeStuff() {

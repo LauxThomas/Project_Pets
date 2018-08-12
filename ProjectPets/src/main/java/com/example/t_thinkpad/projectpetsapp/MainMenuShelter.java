@@ -17,6 +17,13 @@ public class MainMenuShelter extends AppCompatActivity{
         setContentView(R.layout.activity_main_menu_shelter);
         findViewsAndInitializeStuff();
         setListeners();
+        //TODO: reactivate when functions are working
+        deactivateNotFinishedStuff();
+    }
+
+    private void deactivateNotFinishedStuff() {
+        myPetsButton.setEnabled(false);
+        myProfileButton.setEnabled(false);
     }
 
     public void findViewsAndInitializeStuff() {
