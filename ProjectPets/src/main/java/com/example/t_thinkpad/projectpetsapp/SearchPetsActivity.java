@@ -3,13 +3,13 @@ package com.example.t_thinkpad.projectpetsapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,7 +31,7 @@ public class SearchPetsActivity extends AppCompatActivity {
             chipIdSearchView, disordersSearchView;
 
     public LinearLayout animateThis;
-    public Button showMoreButton;
+    //    public Button showMoreButton;
     public FloatingActionButton searchButton;
     boolean check = false;
     ArrayList arrayList = new ArrayList();
@@ -43,16 +43,19 @@ public class SearchPetsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_pets);
+
+        // show FAB above Keyboard:
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         findViews();
         initiateDatabase();
         setListeners();
-        animateThis.setTranslationX(-2500);
+//        animateThis.setTranslationX(-2500);
         //TODO: reactivate when functions are working
         deactivateNotFinishedStuff();
     }
 
     private void deactivateNotFinishedStuff() {
-        showMoreButton.setEnabled(false);
+//        showMoreButton.setEnabled(false);
     }
 
     private void initiateDatabase() {
@@ -64,44 +67,44 @@ public class SearchPetsActivity extends AppCompatActivity {
     public void findViews() {
 //        petsRef = FirebaseDatabase.getInstance().getReference().child("pets");  //Referenz auf pets
 //        generalSearchTextView = findViewById(R.id.generalSearchTextView);
-        nameTextView = findViewById(R.id.nameTextView);
-        animateThis = findViewById(R.id.animateThis);
-        showMoreButton = findViewById(R.id.showMoreButton);
-        //TODO: FAB unten rechts ankleben
+//        nameTextView = findViewById(R.id.nameTextView);
+//        animateThis = findViewById(R.id.animateThis);
+//        showMoreButton = findViewById(R.id.showMoreButton);
         searchButton = findViewById(R.id.fab);
         generalSearchView = findViewById(R.id.generalSearchSearchView);
-        nameSeachView = findViewById(R.id.nameSearchView);
-        familySearchView = findViewById(R.id.familySearchView);
-        raceSearchView = findViewById(R.id.raceSearchView);
-        ageSearchView = findViewById(R.id.ageSearchView);
-        sexSearchView = findViewById(R.id.sexSearchView);
-        locationSearchView = findViewById(R.id.locationSearchView);
-        sizeSearchView = findViewById(R.id.sizeSearchView);
-        currentOwnerSearchView = findViewById(R.id.currentOwnerSearchView);
-        numberOfPreviousOwnersSearchView = findViewById(R.id.numberOfPreviousOwnersSearchView);
-        descriptionSearchView = findViewById(R.id.descriptionSearchView);
-        chipIdSearchView = findViewById(R.id.chipIdSearchView);
-        disordersSearchView = findViewById(R.id.disordersSearchView);
+//        nameSeachView = findViewById(R.id.nameSearchView);
+//        familySearchView = findViewById(R.id.familySearchView);
+//        raceSearchView = findViewById(R.id.raceSearchView);
+//        ageSearchView = findViewById(R.id.ageSearchView);
+//        sexSearchView = findViewById(R.id.sexSearchView);
+//        locationSearchView = findViewById(R.id.locationSearchView);
+//        sizeSearchView = findViewById(R.id.sizeSearchView);
+//        currentOwnerSearchView = findViewById(R.id.currentOwnerSearchView);
+//        numberOfPreviousOwnersSearchView = findViewById(R.id.numberOfPreviousOwnersSearchView);
+//        descriptionSearchView = findViewById(R.id.descriptionSearchView);
+//        chipIdSearchView = findViewById(R.id.chipIdSearchView);
+//        disordersSearchView = findViewById(R.id.disordersSearchView);
     }
 
     public void setListeners() {
-        showMoreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {   //TODO: entfernen?
-                if (check) {
-                    animateThis.animate().translationX(-2500);
-                    showMoreButton.setText("more");
-                } else {
-                    animateThis.animate().translationX(0);
-                    showMoreButton.setText("less");
-                }
-                check = !check;
-            }
-        });
+//        showMoreButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {   //TODO: entfernen?
+//                if (check) {
+//                    animateThis.animate().translationX(-2500);
+//                    showMoreButton.setText("more");
+//                } else {
+//                    animateThis.animate().translationX(0);
+//                    showMoreButton.setText("less");
+//                }
+//                check = !check;
+//            }
+//        });
         //TODO: Realtime aktualisierung der ergebnisse einfügen
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(SearchPetsActivity.this, "suche geklickt", Toast.LENGTH_SHORT).show();
                 searchDatabase();
             }
         });
@@ -110,12 +113,40 @@ public class SearchPetsActivity extends AppCompatActivity {
     private void showData(DataSnapshot dataSnapshot) throws JSONException {
         String lookupString = generalSearchView.getQuery().toString();
 
+
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            //TODO: replace Modular aufbauen. also ds.getValue().getName() + ", " + ds.getValue().getAge() + ...
             String replace = ds.getValue().toString().replace("=", ":");
+            JSONObject jobj = new JSONObject();
+            String value = ds.getValue().toString();
+            String s = value.substring(value.indexOf("\"image\"") + 8);
+            s = s.substring(0, s.indexOf(","));
+            System.out.println("SOUTTEST: " + s);
+            jobj.put("image", s);
+            //currentOwner:
+//            s = backUpString.substring(backUpString.indexOf(" currentOwner=") + 14);
+//            s = s.substring(0, s.indexOf(", name="));
+//            newPet.setCurrentOwner(s);
+
+            jobj.put("age", "VALUE");
+            jobj.put("chipId", "VALUE");
+            jobj.put("currentOwner", "VALUE");
+            jobj.put("description", "VALUE");
+            jobj.put("disorders", "VALUE");
+            jobj.put("family", "VALUE");
+            jobj.put("location", "VALUE");
+            jobj.put("name", "VALUE");
+            jobj.put("numberOfPreviousOwners", "VALUE");
+            jobj.put("sex", "VALUE");
+            jobj.put("size", "VALUE");
+            System.out.println("REPLACESTRING1: " + replace);
             replace = replace.replace("/", ":");
+            System.out.println("REPLACESTRING2: " + replace);
             replace = replace.replaceAll("\\s+", "");
+            System.out.println("REPLACESTRING3: " + replace);
             replace = escapeCommas(replace);
-            JSONObject jsonObject = new JSONObject(replace);
+            System.out.println("REPLACESTRING4: " + replace);
+            JSONObject jsonObject = new JSONObject(replace);    //TODO: Hier wird oft der Fehler geworfen!
 
             if (jsonObject.get("age").toString().contains(lookupString)
                     || jsonObject.get("chipId").toString().contains(lookupString)
@@ -130,7 +161,6 @@ public class SearchPetsActivity extends AppCompatActivity {
                     || jsonObject.get("sex").toString().contains(lookupString)
                     || jsonObject.get("size").toString().contains(lookupString)
                     ) {
-                System.out.println("SOUTTEST: " + jsonObject);
                 arrayList.add(jsonObject);
             }
 
@@ -145,6 +175,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         replace = replace.replace(",numberOfPreviousOwners", "escapedComma" + "numberOfPreviousOwners");
         replace = replace.replace(",disorders", "escapedComma" + "disorders");
         replace = replace.replace(",size", "escapedComma" + "size");
+        replace = replace.replace(",image", "escapedComma" + "image");
         replace = replace.replace(",currentOwner", "escapedComma" + "currentOwner");
         replace = replace.replace(",name", "escapedComma" + "name");
         replace = replace.replace(",location", "escapedComma" + "location");

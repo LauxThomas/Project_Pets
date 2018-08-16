@@ -151,6 +151,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         String s;
         System.out.println("backUpString: " + backUpString);
 
+        //TODO: Auf meinem Mi2 wird der String anders erstellt. Reihenfolge anders!
+
         //age:
         s = backUpString.substring(backUpString.indexOf(" age=") + 5);
         s = s.substring(0, s.indexOf("}"));
