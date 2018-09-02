@@ -3,7 +3,7 @@ package com.example.t_thinkpad.projectpetsapp;
 import java.io.Serializable;
 
 public class Pets implements Serializable {
-    
+
     //Essentials:
     public String image = "";
     public String name = "";
