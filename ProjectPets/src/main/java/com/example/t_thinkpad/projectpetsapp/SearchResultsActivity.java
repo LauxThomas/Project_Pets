@@ -150,7 +150,8 @@ public class SearchResultsActivity extends AppCompatActivity {
             }
         });
     }
-    
+
+
     //wird umgangen
     private Pets createNewPet(DataSnapshot ds) {
         Pets newPet = new Pets();

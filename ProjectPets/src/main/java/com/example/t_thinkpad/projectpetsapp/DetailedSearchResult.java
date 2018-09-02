@@ -83,7 +83,7 @@ public class DetailedSearchResult extends AppCompatActivity {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference folderRef = storageRef.child("pictureReferences");
-        StorageReference imageRef = folderRef.child(pet.getImage() + ".jpg");   //TODO: Bilder werden nicht nur  als .jpg abgespeichert
+        StorageReference imageRef = folderRef.child(pet.getRandomUUID() + ".jpg");   //TODO: Bilder werden nicht nur  als .jpg abgespeichert
         // Download directly from StorageReference using Glide
         GlideApp.with(this /* context */)
                 .load(imageRef)
@@ -156,6 +156,7 @@ public class DetailedSearchResult extends AppCompatActivity {
         pet.setName(intent.getStringExtra("name"));
         pet.setNumberOfPreviousOwners(Integer.parseInt(intent.getStringExtra("numberOfPreviousOwners")));
         pet.setRace(intent.getStringExtra("race"));
+        pet.setRandomUUID(intent.getStringExtra("randomUUID"));
         /*boolean sex = true;
         if (intent.getStringExtra("sex").contains("fem") || intent.getStringExtra("sex").contains("wei")) {
             sex = false;
