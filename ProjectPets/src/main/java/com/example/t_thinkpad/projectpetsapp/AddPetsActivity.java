@@ -41,7 +41,7 @@ public class AddPetsActivity extends AppCompatActivity {
     EditText nameEditText, familyEditText, raceEditText, ageEditText,
             sexEditText, locationEditText, currentOwnerEditText, sizeEditText,
             numberOfPreviousOwnersEditText, descriptionEditText, chipIdEditText, disordersEditText;
-    Spinner sexSpinner, ageSpinner;
+    Spinner sexSpinner, ageSpinner, numOfPreviousOwnersSpinner;
     Button addPetButton;
     Uri mImageUri;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -77,11 +77,18 @@ public class AddPetsActivity extends AppCompatActivity {
         sexSpinner.setAdapter(adapter);
 
         Integer[] ageSpinnerItems = new Integer[100];
-        for (int i = 0; i < 99; ++i) {
+        for (int i = 0; i < 100; ++i) {
             ageSpinnerItems[i] = i;
         }
         ArrayAdapter<Integer> adapter2 = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, ageSpinnerItems);
         ageSpinner.setAdapter(adapter2);
+
+        Integer[] numOfPreviousOwnersSpinnerItems = new Integer[20];
+        for (int i = 0; i < 20; ++i) {
+            numOfPreviousOwnersSpinnerItems[i] = i;
+        }
+        ArrayAdapter<Integer> adapter3 = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, numOfPreviousOwnersSpinnerItems);
+        numOfPreviousOwnersSpinner.setAdapter(adapter3);
 
     }
 
@@ -250,12 +257,12 @@ public class AddPetsActivity extends AppCompatActivity {
         String currentOwner = currentOwnerEditText.getText().toString();
 
         String size = sizeEditText.getText().toString();
-        int numberOfPreviousOwners;
-        if (numberOfPreviousOwnersEditText.getText().toString().equals("")) {
+        int numberOfPreviousOwners = (int) numOfPreviousOwnersSpinner.getSelectedItem();
+        /*if (numberOfPreviousOwnersEditText.getText().toString().equals("")) {
             numberOfPreviousOwners = 0;
         } else {
             numberOfPreviousOwners = Integer.parseInt(numberOfPreviousOwnersEditText.getText().toString());
-        }
+        }*/
         String description = descriptionEditText.getText().toString();
         int chipId;
         if (chipIdEditText.getText().toString().equals("")) {
@@ -275,6 +282,7 @@ public class AddPetsActivity extends AppCompatActivity {
         if (!size.equals("")) {
             newPet.setSize(size);
         }
+        //abfrage redundant
         if (numberOfPreviousOwners != -1) {
             newPet.setNumberOfPreviousOwners(numberOfPreviousOwners);
         }
@@ -303,12 +311,13 @@ public class AddPetsActivity extends AppCompatActivity {
         locationEditText = findViewById(R.id.locationEditText);
         currentOwnerEditText = findViewById(R.id.currentOwnerEditText);
         sizeEditText = findViewById(R.id.sizeEditText);
-        numberOfPreviousOwnersEditText = findViewById(R.id.numberOfPreviousOwnersEditText);
+        //numberOfPreviousOwnersEditText = findViewById(R.id.numberOfPreviousOwnersEditText);
         descriptionEditText = findViewById(R.id.descriptionEditText);
         chipIdEditText = findViewById(R.id.chipIdEditText);
         disordersEditText = findViewById(R.id.disordersEditText);
         addPetButton = findViewById(R.id.addPetButton);
         sexSpinner = findViewById(R.id.spinner_sex);
         ageSpinner = findViewById(R.id.spinner_age);
+        numOfPreviousOwnersSpinner = findViewById(R.id.spinner_numOfPreviousOwners);
     }
 }
