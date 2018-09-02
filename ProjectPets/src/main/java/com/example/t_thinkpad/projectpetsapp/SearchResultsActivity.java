@@ -105,6 +105,12 @@ public class SearchResultsActivity extends AppCompatActivity {
                 ArrayList<Pets> petsArrayList = new ArrayList<Pets>();
                 int index = 0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+
+                    Pets pet =  ds.getValue(Pets.class);
+
+
+                    System.out.println("PETSOUTNAME: " + pet.getName());
                     String replace = ds.getValue().toString().replace("=", ":");
                     System.out.println("REPLACESTRING: " + replace);
                     replace.replace("/", ":");
@@ -123,7 +129,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 //                            || replace.contains(lookupString)
 //                            || replace.contains(lookupString)
                             ) {
-                        petsArrayList.add(createNewPet(ds));
+                        petsArrayList.add(pet);
                         index++;
                     }
                 }
@@ -144,7 +150,8 @@ public class SearchResultsActivity extends AppCompatActivity {
             }
         });
     }
-
+    
+    //wird umgangen
     private Pets createNewPet(DataSnapshot ds) {
         Pets newPet = new Pets();
         String backUpString = ds.toString();

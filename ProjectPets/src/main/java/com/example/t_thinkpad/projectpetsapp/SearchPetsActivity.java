@@ -117,6 +117,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             //TODO: replace Modular aufbauen. also ds.getValue().getName() + ", " + ds.getValue().getAge() + ...
             //TODO:https://stackoverflow.com/questions/4249897/how-to-send-objects-through-bundle
+
             String replace = ds.getValue().toString().replace("=", ":");
             JSONObject jobj = new JSONObject();
             String value = ds.getValue().toString();
