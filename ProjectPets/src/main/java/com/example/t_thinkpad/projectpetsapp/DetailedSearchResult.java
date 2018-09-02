@@ -156,11 +156,11 @@ public class DetailedSearchResult extends AppCompatActivity {
         pet.setName(intent.getStringExtra("name"));
         pet.setNumberOfPreviousOwners(Integer.parseInt(intent.getStringExtra("numberOfPreviousOwners")));
         pet.setRace(intent.getStringExtra("race"));
-        boolean sex = true;
+        /*boolean sex = true;
         if (intent.getStringExtra("sex").contains("fem") || intent.getStringExtra("sex").contains("wei")) {
             sex = false;
-        }
-        pet.setSex(sex);
+        }*/
+        pet.setSex(intent.getStringExtra("sex"));
         pet.setSize(intent.getStringExtra("size"));
         return pet;
     }

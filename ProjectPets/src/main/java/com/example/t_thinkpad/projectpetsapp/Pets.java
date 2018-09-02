@@ -11,7 +11,7 @@ public class Pets implements Serializable {
     public String family = "";
     public String race = "";
     public double age = -1;
-    public boolean sex = true;          //Uhh look at this! sex = true means male ¯\_(ツ)_/¯
+    public String sex = "";          //Uhh look at this! sex = true means male ¯\_(ツ)_/¯
     public String location = "";
     public String currentOwner = "";
     public String emailOfCreator;
@@ -30,7 +30,7 @@ public class Pets implements Serializable {
     public String disorders = "none";
 
     //Bare essentials:
-    public Pets(String image, String name, String family, String race, double age, boolean sex, String location, String currentOwner) {
+    public Pets(String image, String name, String family, String race, double age, String sex, String location, String currentOwner) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -43,7 +43,7 @@ public class Pets implements Serializable {
 
 
     //Full boom
-    public Pets(String image, String name, String family, String race, double age, boolean sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
+    public Pets(String image, String name, String family, String race, double age, String sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -65,7 +65,7 @@ public class Pets implements Serializable {
     }
 
     //+size,numberOfPreviousOwners,currentOwner,description,chipId
-    public Pets(String image, String name, String family, String race, double age, boolean sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
+    public Pets(String image, String name, String family, String race, double age, String sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -132,14 +132,10 @@ public class Pets implements Serializable {
     }
 
     public String getSex() {
-        if (sex) {
-            return "male";
-        } else {
-            return "female";
-        }
+        return sex;
     }
 
-    public void setSex(boolean sex) {
+    public void setSex(String sex) {
         this.sex = sex;
     }
 

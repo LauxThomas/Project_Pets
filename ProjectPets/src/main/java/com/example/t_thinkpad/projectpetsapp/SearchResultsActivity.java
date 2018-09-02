@@ -212,11 +212,11 @@ public class SearchResultsActivity extends AppCompatActivity {
         //sex:
         s = backUpString.substring(backUpString.indexOf(" sex=") + 5);
         s = s.substring(0, s.indexOf(","));
-        boolean sex = true;
+       /* boolean sex = true;
         if (s.contains("fem") || s.contains("wei")) {
             sex = false;
-        }
-        newPet.setSex(sex);
+        }*/
+        newPet.setSex(s);
 
         //size:
         s = backUpString.substring(backUpString.indexOf(" size=") + 6);

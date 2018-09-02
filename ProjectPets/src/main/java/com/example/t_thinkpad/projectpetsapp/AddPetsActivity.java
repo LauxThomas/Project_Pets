@@ -13,9 +13,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,6 +41,7 @@ public class AddPetsActivity extends AppCompatActivity {
     EditText nameEditText, familyEditText, raceEditText, ageEditText,
             sexEditText, locationEditText, currentOwnerEditText, sizeEditText,
             numberOfPreviousOwnersEditText, descriptionEditText, chipIdEditText, disordersEditText;
+    Spinner sexSpinner;
     Button addPetButton;
     Uri mImageUri;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -67,6 +70,11 @@ public class AddPetsActivity extends AppCompatActivity {
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("pictureReferences");
         firebaseAuth = FirebaseAuth.getInstance();
         ref = FirebaseDatabase.getInstance().getReference().child("pets");  //petsreferenz
+
+        //initializing spinner values
+        String[] sexSpinnerItems = new String[]{"männlich", "weiblich"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, sexSpinnerItems);
+        sexSpinner.setAdapter(adapter);
     }
 
     private void setListeners() {
@@ -216,7 +224,7 @@ public class AddPetsActivity extends AppCompatActivity {
             age = Double.parseDouble(ageEditText.getText().toString());
         }
         //TODO: Das kann man bestimmt eleganter machen...
-        Boolean sex;
+        /*Boolean sex;
         if (sexEditText.getText().toString().contains("män")
                 || sexEditText.getText().toString().contains("maen")
                 || !sexEditText.getText().toString().contains("fem")
@@ -228,7 +236,8 @@ public class AddPetsActivity extends AppCompatActivity {
             sex = true;
         } else {
             sex = false;
-        }
+        }*/
+        String sex = sexSpinner.getSelectedItem().toString();
         String location = locationEditText.getText().toString();
         String currentOwner = currentOwnerEditText.getText().toString();
 
@@ -281,7 +290,7 @@ public class AddPetsActivity extends AppCompatActivity {
         familyEditText = findViewById(R.id.familyEditText);
         raceEditText = findViewById(R.id.raceEditText);
         ageEditText = findViewById(R.id.ageEditText);
-        sexEditText = findViewById(R.id.sexEditText);
+        //sexEditText = findViewById(R.id.sexEditText);
         locationEditText = findViewById(R.id.locationEditText);
         currentOwnerEditText = findViewById(R.id.currentOwnerEditText);
         sizeEditText = findViewById(R.id.sizeEditText);
@@ -290,5 +299,6 @@ public class AddPetsActivity extends AppCompatActivity {
         chipIdEditText = findViewById(R.id.chipIdEditText);
         disordersEditText = findViewById(R.id.disordersEditText);
         addPetButton = findViewById(R.id.addPetButton);
+        sexSpinner = findViewById(R.id.spinner_sex);
     }
 }
