@@ -121,7 +121,7 @@ public class Pets implements Serializable {
         this.race = race;
     }
 
-    public double getAge() {
+    public int getAge() {
         return age;
     }
 
