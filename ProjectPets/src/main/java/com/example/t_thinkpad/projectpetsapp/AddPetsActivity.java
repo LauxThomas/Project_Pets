@@ -262,6 +262,7 @@ public class AddPetsActivity extends AppCompatActivity {
         System.out.println("BASE64: " + encodedPhoto);
         newPet.setCurrentOwner(newPet.getCurrentOwner());
         newPet.setRandomUUID(randomUUID);
+//        newPet.setEmailOfCreator(firebaseAuth.getCurrentUser().getEmail());   //TODO: Unterminated object at character 172 of...
         //füge Optionals hinzu:
         if (!size.equals("")) {
             newPet.setSize(size);

@@ -14,7 +14,7 @@ public class Pets implements Serializable {
     public String sex = "";          //Uhh look at this! sex = true means male ¯\_(ツ)_/¯
     public String location = "";
     public String currentOwner = "";
-    public String emailOfCreator;
+    String emailOfCreator;
 
     public void setRandomUUID(String randomUUID) {
         this.randomUUID = randomUUID;
@@ -41,7 +41,6 @@ public class Pets implements Serializable {
         this.currentOwner = currentOwner;
     }
 
-
     //Full boom
     public Pets(String image, String name, String family, String race, double age, String sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
         this.image = image;
@@ -52,7 +51,6 @@ public class Pets implements Serializable {
         this.sex = sex;
         this.location = location;
         this.currentOwner = currentOwner;
-
         this.size = size;
         this.numberOfPreviousOwners = numberOfPreviousOwners;
         this.description = description;
@@ -83,11 +81,11 @@ public class Pets implements Serializable {
     public Pets(Object o) {
     }
 
-    public String getEmailOfCreator() {
+    String getEmailOfCreator() {
         return emailOfCreator;
     }
 
-    public void setEmailOfCreator(String emailOfCreator) {
+    void setEmailOfCreator(String emailOfCreator) {
         this.emailOfCreator = emailOfCreator;
     }
 

@@ -50,10 +50,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     public void handleIntent() {
         Intent intent = getIntent();
         String lookupString = intent.getStringExtra("lookupString");
-
         handleDatabaseStuff(lookupString);
-
-
     }
 
     private void handleDatabaseStuff(final String lookupString) {
@@ -94,7 +91,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         intent.putExtra("size", pet.getSize());
         intent.putExtra("wholePet", pet);
         startActivity(intent);
-
     }
 
 
@@ -106,9 +102,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                 int index = 0;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
-
-                    Pets pet =  ds.getValue(Pets.class);
-
+                    Pets pet = ds.getValue(Pets.class);
 
                     System.out.println("PETSOUTNAME: " + pet.getName());
                     String replace = ds.getValue().toString().replace("=", ":");
@@ -116,19 +110,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                     replace.replace("/", ":");
                     //TODO: Image einbinden https://stackoverflow.com/a/39708645
 
-                    if (replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-//                            || replace.contains(lookupString)
-                            ) {
+                    if (replace.contains(lookupString)) {
                         petsArrayList.add(pet);
                         index++;
                     }
@@ -149,89 +131,6 @@ public class SearchResultsActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
-    }
-
-
-    //wird umgangen
-    private Pets createNewPet(DataSnapshot ds) {
-        Pets newPet = new Pets();
-        String backUpString = ds.toString();
-        String s;
-        System.out.println("backUpString: " + backUpString);
-
-        //TODO: Auf meinem Mi2 wird der String anders erstellt. Reihenfolge anders!
-        //TODO:https://stackoverflow.com/questions/4249897/how-to-send-objects-through-bundle
-
-        //age:
-        s = backUpString.substring(backUpString.indexOf(" age=") + 5);
-        s = s.substring(0, s.indexOf("}"));
-        newPet.setAge(Double.parseDouble(s));
-
-        //chipId:
-        s = backUpString.substring(backUpString.indexOf(" chipId=") + 8);
-        s = s.substring(0, s.indexOf(", age="));
-        newPet.setChipId(Integer.parseInt(s));
-
-        //currentOwner:
-        s = backUpString.substring(backUpString.indexOf(" currentOwner=") + 14);
-        s = s.substring(0, s.indexOf(", name="));
-        newPet.setCurrentOwner(s);
-
-        //description:
-        s = backUpString.substring(backUpString.indexOf(" description=") + 13);
-        s = s.substring(0, s.indexOf(", numberOfPreviousOwners="));
-        newPet.setDescription(s);
-
-        //disorders:
-        s = backUpString.substring(backUpString.indexOf(" disorders=") + 11);
-        s = s.substring(0, s.indexOf(","));
-        newPet.setDisorders(s);
-
-        //family:
-        s = backUpString.substring(backUpString.indexOf(" family=") + 8);
-        s = s.substring(0, s.indexOf(","));
-        newPet.setFamily(s);
-
-        //image:
-        s = backUpString.substring(backUpString.indexOf(" randomUUID=") + 12);
-        s = s.substring(0, s.indexOf(","));
-        newPet.setImage(s);
-
-        //location:
-        s = backUpString.substring(backUpString.indexOf(" location=") + 10);
-        s = s.substring(0, s.indexOf(","));
-        newPet.setLocation(s);
-
-        //name:
-        s = backUpString.substring(backUpString.indexOf(" name=") + 6);
-        s = s.substring(0, s.indexOf(","));
-        newPet.setName(s);
-
-        //numberOfPreviousOwners:
-        s = backUpString.substring(backUpString.indexOf(" numberOfPreviousOwners=") + 24);
-        s = s.substring(0, s.indexOf(","));
-        newPet.setNumberOfPreviousOwners(Integer.parseInt(s));
-
-        //race:
-        s = backUpString.substring(backUpString.indexOf(" race=") + 6);
-        s = s.substring(0, s.indexOf(","));
-        newPet.setRace(s);
-
-        //sex:
-        s = backUpString.substring(backUpString.indexOf(" sex=") + 5);
-        s = s.substring(0, s.indexOf(","));
-       /* boolean sex = true;
-        if (s.contains("fem") || s.contains("wei")) {
-            sex = false;
-        }*/
-        newPet.setSex(s);
-
-        //size:
-        s = backUpString.substring(backUpString.indexOf(" size=") + 6);
-        s = s.substring(0, s.indexOf(","));
-        newPet.setSize(s);
-
-        return newPet;
     }
 }
 
