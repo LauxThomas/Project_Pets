@@ -41,7 +41,7 @@ public class AddPetsActivity extends AppCompatActivity {
     EditText nameEditText, familyEditText, raceEditText, ageEditText,
             sexEditText, locationEditText, currentOwnerEditText, sizeEditText,
             numberOfPreviousOwnersEditText, descriptionEditText, chipIdEditText, disordersEditText;
-    Spinner sexSpinner;
+    Spinner sexSpinner, ageSpinner;
     Button addPetButton;
     Uri mImageUri;
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -75,6 +75,14 @@ public class AddPetsActivity extends AppCompatActivity {
         String[] sexSpinnerItems = new String[]{"männlich", "weiblich"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, sexSpinnerItems);
         sexSpinner.setAdapter(adapter);
+
+        Integer[] ageSpinnerItems = new Integer[100];
+        for (int i = 0; i < 99; ++i) {
+            ageSpinnerItems[i] = i;
+        }
+        ArrayAdapter<Integer> adapter2 = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, ageSpinnerItems);
+        ageSpinner.setAdapter(adapter2);
+
     }
 
     private void setListeners() {
@@ -217,12 +225,12 @@ public class AddPetsActivity extends AppCompatActivity {
         String name = nameEditText.getText().toString();
         String family = familyEditText.getText().toString();
         String race = raceEditText.getText().toString();
-        double age;
-        if (ageEditText.getText().toString().equals("")) {
+        int age = (int) ageSpinner.getSelectedItem();
+        /*if (ageEditText.getText().toString().equals("")) {
             age = 0;
         } else {
             age = Double.parseDouble(ageEditText.getText().toString());
-        }
+        }*/
         //TODO: Das kann man bestimmt eleganter machen...
         /*Boolean sex;
         if (sexEditText.getText().toString().contains("män")
@@ -290,7 +298,7 @@ public class AddPetsActivity extends AppCompatActivity {
         nameEditText = findViewById(R.id.nameEditText);
         familyEditText = findViewById(R.id.familyEditText);
         raceEditText = findViewById(R.id.raceEditText);
-        ageEditText = findViewById(R.id.ageEditText);
+        //ageEditText = findViewById(R.id.ageEditText);
         //sexEditText = findViewById(R.id.sexEditText);
         locationEditText = findViewById(R.id.locationEditText);
         currentOwnerEditText = findViewById(R.id.currentOwnerEditText);
@@ -301,5 +309,6 @@ public class AddPetsActivity extends AppCompatActivity {
         disordersEditText = findViewById(R.id.disordersEditText);
         addPetButton = findViewById(R.id.addPetButton);
         sexSpinner = findViewById(R.id.spinner_sex);
+        ageSpinner = findViewById(R.id.spinner_age);
     }
 }

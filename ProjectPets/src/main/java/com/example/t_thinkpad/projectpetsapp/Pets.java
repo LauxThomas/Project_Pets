@@ -10,7 +10,7 @@ public class Pets implements Serializable {
     public String name = "";
     public String family = "";
     public String race = "";
-    public double age = -1;
+    public int age = -1;
     public String sex = "";          //Uhh look at this! sex = true means male ¯\_(ツ)_/¯
     public String location = "";
     public String currentOwner = "";
@@ -30,7 +30,7 @@ public class Pets implements Serializable {
     public String disorders = "none";
 
     //Bare essentials:
-    public Pets(String image, String name, String family, String race, double age, String sex, String location, String currentOwner) {
+    public Pets(String image, String name, String family, String race, int age, String sex, String location, String currentOwner) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -42,7 +42,7 @@ public class Pets implements Serializable {
     }
 
     //Full boom
-    public Pets(String image, String name, String family, String race, double age, String sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
+    public Pets(String image, String name, String family, String race, int age, String sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -63,7 +63,7 @@ public class Pets implements Serializable {
     }
 
     //+size,numberOfPreviousOwners,currentOwner,description,chipId
-    public Pets(String image, String name, String family, String race, double age, String sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
+    public Pets(String image, String name, String family, String race, int age, String sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
         this.image = image;
         this.name = name;
         this.family = family;
@@ -125,7 +125,7 @@ public class Pets implements Serializable {
         return age;
     }
 
-    public void setAge(double age) {
+    public void setAge(int age) {
         this.age = age;
     }
 

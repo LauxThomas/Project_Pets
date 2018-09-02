@@ -145,7 +145,7 @@ public class DetailedSearchResult extends AppCompatActivity {
     private Pets handleIntent() {
         Intent intent = getIntent();
         Pets pet = new Pets();
-        pet.setAge(Double.parseDouble(intent.getStringExtra("age")));
+        pet.setAge(Integer.parseInt(intent.getStringExtra("age")));
         pet.setChipId(Integer.parseInt(intent.getStringExtra("chipId")));
         pet.setCurrentOwner(intent.getStringExtra("currentOwner"));
         pet.setDescription(intent.getStringExtra("description"));
