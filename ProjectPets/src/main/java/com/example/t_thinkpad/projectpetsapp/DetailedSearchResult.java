@@ -78,6 +78,7 @@ public class DetailedSearchResult extends AppCompatActivity {
     }
 
     //TODO: auf vielfache abfragen prüfen. https://www.youtube.com/watch?v=Lb-Pnytoi-8
+    //penis
     private void setPicture(ImageView imageView, Pets pet) {
         // Reference to an image file in Cloud Storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
