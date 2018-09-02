@@ -152,6 +152,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         System.out.println("backUpString: " + backUpString);
 
         //TODO: Auf meinem Mi2 wird der String anders erstellt. Reihenfolge anders!
+        //TODO:https://stackoverflow.com/questions/4249897/how-to-send-objects-through-bundle
 
         //age:
         s = backUpString.substring(backUpString.indexOf(" age=") + 5);
