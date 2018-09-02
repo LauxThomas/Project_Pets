@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Pets implements Serializable {
 
+    //TEST!
 
     //Essentials:
     public String image = "";
