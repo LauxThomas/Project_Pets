@@ -61,16 +61,12 @@ public class AddPetsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_pets);
         findViews();
-        initializeStuff();
+        initializeFirebase();
+        initializeSpinners();
         setListeners();
     }
 
-    private void initializeStuff() {
-        mStorageRef = FirebaseStorage.getInstance().getReference("pictureReferences");
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("pictureReferences");
-        firebaseAuth = FirebaseAuth.getInstance();
-        ref = FirebaseDatabase.getInstance().getReference().child("pets");  //petsreferenz
-
+    private void initializeSpinners() {
         //initializing spinner values
         String[] sexSpinnerItems = new String[]{"männlich", "weiblich"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, sexSpinnerItems);
@@ -89,7 +85,13 @@ public class AddPetsActivity extends AppCompatActivity {
         }
         ArrayAdapter<Integer> adapter3 = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, numOfPreviousOwnersSpinnerItems);
         numOfPreviousOwnersSpinner.setAdapter(adapter3);
+    }
 
+    private void initializeFirebase() {
+        mStorageRef = FirebaseStorage.getInstance().getReference("pictureReferences");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("pictureReferences");
+        firebaseAuth = FirebaseAuth.getInstance();
+        ref = FirebaseDatabase.getInstance().getReference().child("pets");  //petsreferenz
     }
 
     private void setListeners() {
