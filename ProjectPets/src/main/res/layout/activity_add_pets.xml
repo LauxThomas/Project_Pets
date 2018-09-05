@@ -129,14 +129,24 @@
                 android:inputType="textPersonName"
                 android:singleLine="false" />
 
-            <EditText
-                android:id="@+id/numberOfPreviousOwnersEditText"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="number of previous owners e.g. 1"
-                android:inputType="number"
-                android:singleLine="false" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="347dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Number of previous owners" />
+
+                <Spinner
+                    android:id="@+id/spinner_numOfPreviousOwners"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/descriptionEditText"

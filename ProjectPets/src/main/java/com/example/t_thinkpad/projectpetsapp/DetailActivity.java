@@ -21,7 +21,7 @@ public class DetailActivity extends AppCompatActivity {
         findViews();
         handleIntent();
         setViews();
-
+        setViews();
 
     }
 
