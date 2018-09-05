@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 public class Pets implements Serializable {
 
-
     //Essentials:
     public String image = "";
     public String name = "";
@@ -20,7 +19,7 @@ public class Pets implements Serializable {
         this.randomUUID = randomUUID;
     }
 
-    public String randomUUID;   //2^128 sollte eindeutig genug sein...
+    public String randomUUID;       //2^128 sollte eindeutig genug sein...
 
     //optional:
     public String size = "0";
