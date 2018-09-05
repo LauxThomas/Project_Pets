@@ -6,9 +6,12 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -33,6 +36,11 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.io.IOException;
+
+import java.text.SimpleDateFormat;
+
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -44,8 +52,9 @@ public class AddPetsActivity extends AppCompatActivity {
     Spinner sexSpinner, ageSpinner, numOfPreviousOwnersSpinner;
     Button addPetButton;
     Uri mImageUri;
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private static final int REQUEST_CAPTURE_IMAGE = 100;
+    static final int REQUEST_PICK_IMAGE = 1;
+    static final int REQUEST_CAPTURE_IMAGE = 100;
+    static final int REQUEST_IMAGE_CAPTURE = 123;
 
 
     private FirebaseAuth firebaseAuth;
@@ -53,7 +62,7 @@ public class AddPetsActivity extends AppCompatActivity {
     private StorageTask mUploadTask;
     private StorageReference mStorageRef;
     private String randomUUID;
-    private int REQUEST_IMAGE_CAPTURE = 123;
+
     private String encodedPhoto = "nicht BASE64 decodiert";
 
     @Override
@@ -121,7 +130,7 @@ public class AddPetsActivity extends AppCompatActivity {
                         //TODO:
                         Toast.makeText(AddPetsActivity.this, "will be available soon", Toast.LENGTH_SHORT).show();
                         //TODO: REACTIVATE IF WORKING
-//                        startCameraIntent();
+                        startCameraIntent();
                         break;
                     case "Choose from Gallery":
                         startGalleryIntent();
@@ -138,13 +147,34 @@ public class AddPetsActivity extends AppCompatActivity {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQUEST_PICK_IMAGE);
     }
 
     private void startCameraIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        /*Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }*/
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File...
+
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,
+                        "com.example.android.fileprovider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
         }
     }
 
@@ -152,7 +182,7 @@ public class AddPetsActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_PICK_IMAGE && resultCode == RESULT_OK) {
             mImageUri = data.getData();
             Picasso.with(this).load(mImageUri).into(imageView);
             if (mUploadTask != null && mUploadTask.isInProgress()) {
@@ -161,23 +191,49 @@ public class AddPetsActivity extends AppCompatActivity {
                 uploadFile();
             }
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bitmap photo = (Bitmap) data.getExtras().get("data");
+            System.out.println("test");
+            //Bitmap photo = (Bitmap) data.getExtras().get("data");
+            Bitmap photo = null;
+            try {
+                photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(new File(mCurrentPhotoPath)));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             imageView.setImageBitmap(photo);
             //TODO: aus "photo" eine uri erzeugen
-            new File("/sdcard/Pictures").mkdirs();
-            new File("/sdcard/DCIM/Camera").mkdirs();
+            //new File("/sdcard/Pictures").mkdirs();
+            //new File("/sdcard/DCIM/Camera").mkdirs();
             //TODO: path wird nicht richtig erzeugt. (null)
-            String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), photo, null, null);
+            /*String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), photo, null, null);
             System.out.println("URITEST: " + path);
             Uri image1 = Uri.parse(path);
-            if (mUploadTask != null && mUploadTask.isInProgress()) {
+            */if (mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
             } else {
+                mImageUri = Uri.fromFile(new File(mCurrentPhotoPath));
                 uploadFile();
             }
         } else {
             Toast.makeText(this, "Irgendetwas ist null", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    String mCurrentPhotoPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
     private String getFileExtention(Uri uri) {
