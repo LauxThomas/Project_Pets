@@ -245,7 +245,9 @@ public class AddPetsActivity extends AppCompatActivity {
     private void uploadFile() {
         if (mImageUri != null) {
             randomUUID = UUID.randomUUID().toString();
-            StorageReference fileReference = mStorageRef.child(randomUUID + "." + getFileExtention(mImageUri));
+            //TODO: getfileextention methode wieder gerade biegen, sodass keien .null dateien in firebase geraten
+            //StorageReference fileReference = mStorageRef.child(randomUUID + "." +getFileExtention(mImageUri));
+            StorageReference fileReference = mStorageRef.child(randomUUID + ".jpg");
 
 
             mUploadTask = fileReference.putFile(mImageUri)
