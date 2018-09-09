@@ -183,8 +183,9 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
 
-    private void startPickLocationIntent() {
-
+    private void startPickLocationIntent(){
+        //TODO: attributions to google when using place picker might need to be shown on screen
+        //https://developers.google.com/places/android-sdk/attributions
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
         try {
@@ -219,7 +220,10 @@ public class AddPetsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             imageView.setImageBitmap(photo);
-            if (mUploadTask != null && mUploadTask.isInProgress()) {
+            /*String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), photo, null, null);
+            System.out.println("URITEST: " + path);
+            Uri image1 = Uri.parse(path);
+            */if (mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
             } else {
                 mImageUri = Uri.fromFile(new File(mCurrentPhotoPath));

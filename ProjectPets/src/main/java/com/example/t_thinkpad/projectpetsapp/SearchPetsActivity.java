@@ -49,7 +49,9 @@ public class SearchPetsActivity extends AppCompatActivity {
         findViews();
         initiateDatabase();
         setListeners();
+
     }
+
 
     private void initiateDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -58,8 +60,10 @@ public class SearchPetsActivity extends AppCompatActivity {
 
 
     public void findViews() {
+
         searchButton = findViewById(R.id.fab);
         generalSearchView = findViewById(R.id.generalSearchSearchView);
+
     }
 
     public void setListeners() {
