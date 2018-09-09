@@ -22,6 +22,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -50,12 +56,12 @@ public class AddPetsActivity extends AppCompatActivity {
             sexEditText, locationEditText, currentOwnerEditText, sizeEditText,
             numberOfPreviousOwnersEditText, descriptionEditText, chipIdEditText, disordersEditText;
     Spinner sexSpinner, ageSpinner, numOfPreviousOwnersSpinner;
-    Button addPetButton;
+    Button addPetButton, pickLocationButton;
     Uri mImageUri;
     static final int REQUEST_PICK_IMAGE = 1;
     static final int REQUEST_CAPTURE_IMAGE = 100;
     static final int REQUEST_IMAGE_CAPTURE = 123;
-
+    static final int PLACE_PICKER_REQUEST = 37;
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference ref, mDatabaseRef;
@@ -114,6 +120,12 @@ public class AddPetsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 selectImageSource();
+            }
+        });
+        pickLocationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                startPickLocationIntent();
             }
         });
     }
@@ -178,9 +190,23 @@ public class AddPetsActivity extends AppCompatActivity {
         }
     }
 
+
+    private void startPickLocationIntent(){
+
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+
+        try {
+            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+        } catch (GooglePlayServicesRepairableException e) {
+            e.printStackTrace();
+        } catch (GooglePlayServicesNotAvailableException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+       super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == RESULT_OK) {
             mImageUri = data.getData();
@@ -213,8 +239,13 @@ public class AddPetsActivity extends AppCompatActivity {
                 mImageUri = Uri.fromFile(new File(mCurrentPhotoPath));
                 uploadFile();
             }
-        } else {
-            Toast.makeText(this, "Irgendetwas ist null", Toast.LENGTH_SHORT).show();
+        } else if(requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK){
+            Toast.makeText(this, "Placepicker geht", Toast.LENGTH_SHORT).show();
+            final Place place = PlacePicker.getPlace(this, data);
+            System.out.println("test123" + place.getName());
+            locationEditText.setText(place.getName());
+        }else {
+           Toast.makeText(this, "Irgendetwas ist null", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -379,5 +410,6 @@ public class AddPetsActivity extends AppCompatActivity {
         sexSpinner = findViewById(R.id.spinner_sex);
         ageSpinner = findViewById(R.id.spinner_age);
         numOfPreviousOwnersSpinner = findViewById(R.id.spinner_numOfPreviousOwners);
+        pickLocationButton = findViewById(R.id.button_location_picker);
     }
 }

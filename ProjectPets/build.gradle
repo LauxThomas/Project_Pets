@@ -36,7 +36,8 @@ dependencies {
     // Find the latest Glide releases here: https://goo.gl/LpksbR
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
-
+    //TODO: keine ahnung ob das hier richtig olatziert ist, zu mal in der anderern build.gradle file schon eine ähnliche codezeile auftaucht
+    compile 'com.google.android.gms:play-services:11.8.0'
 }
 
 
