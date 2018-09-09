@@ -139,9 +139,6 @@ public class AddPetsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (items[which].toString()) {
                     case "Take Photo":
-                        //TODO:
-                        Toast.makeText(AddPetsActivity.this, "will be available soon", Toast.LENGTH_SHORT).show();
-                        //TODO: REACTIVATE IF WORKING
                         startCameraIntent();
                         break;
                     case "Choose from Gallery":
@@ -192,7 +189,8 @@ public class AddPetsActivity extends AppCompatActivity {
 
 
     private void startPickLocationIntent(){
-
+        //TODO: attributions to google when using place picker might need to be shown on screen
+        //https://developers.google.com/places/android-sdk/attributions
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
         try {
@@ -226,10 +224,6 @@ public class AddPetsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             imageView.setImageBitmap(photo);
-            //TODO: aus "photo" eine uri erzeugen
-            //new File("/sdcard/Pictures").mkdirs();
-            //new File("/sdcard/DCIM/Camera").mkdirs();
-            //TODO: path wird nicht richtig erzeugt. (null)
             /*String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), photo, null, null);
             System.out.println("URITEST: " + path);
             Uri image1 = Uri.parse(path);
@@ -319,30 +313,10 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
     private void createNewPet() {
-        //TODO: Image aus Gallery oder Camera
         String name = nameEditText.getText().toString();
         String family = familyEditText.getText().toString();
         String race = raceEditText.getText().toString();
         int age = (int) ageSpinner.getSelectedItem();
-        /*if (ageEditText.getText().toString().equals("")) {
-            age = 0;
-        } else {
-            age = Double.parseDouble(ageEditText.getText().toString());
-        }*/
-        //TODO: Das kann man bestimmt eleganter machen...
-        /*Boolean sex;
-        if (sexEditText.getText().toString().contains("män")
-                || sexEditText.getText().toString().contains("maen")
-                || !sexEditText.getText().toString().contains("fem")
-                || !sexEditText.getText().toString().contains("weib")
-                || sexEditText.getText().toString().contains("rüd")
-                || !sexEditText.getText().toString().contains("hün")
-                || !sexEditText.getText().toString().contains("katz")
-                || sexEditText.getText().toString().contains("kater")) {
-            sex = true;
-        } else {
-            sex = false;
-        }*/
         String sex = sexSpinner.getSelectedItem().toString();
         String location = locationEditText.getText().toString();
         String currentOwner = currentOwnerEditText.getText().toString();

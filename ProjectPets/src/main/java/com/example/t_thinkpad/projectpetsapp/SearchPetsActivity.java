@@ -49,14 +49,9 @@ public class SearchPetsActivity extends AppCompatActivity {
         findViews();
         initiateDatabase();
         setListeners();
-//        animateThis.setTranslationX(-2500);
-        //TODO: reactivate when functions are working
-        deactivateNotFinishedStuff();
+
     }
 
-    private void deactivateNotFinishedStuff() {
-//        showMoreButton.setEnabled(false);
-    }
 
     private void initiateDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -65,41 +60,13 @@ public class SearchPetsActivity extends AppCompatActivity {
 
 
     public void findViews() {
-//        petsRef = FirebaseDatabase.getInstance().getReference().child("pets");  //Referenz auf pets
-//        generalSearchTextView = findViewById(R.id.generalSearchTextView);
-//        nameTextView = findViewById(R.id.nameTextView);
-//        animateThis = findViewById(R.id.animateThis);
-//        showMoreButton = findViewById(R.id.showMoreButton);
+
         searchButton = findViewById(R.id.fab);
         generalSearchView = findViewById(R.id.generalSearchSearchView);
-//        nameSeachView = findViewById(R.id.nameSearchView);
-//        familySearchView = findViewById(R.id.familySearchView);
-//        raceSearchView = findViewById(R.id.raceSearchView);
-//        ageSearchView = findViewById(R.id.ageSearchView);
-//        sexSearchView = findViewById(R.id.sexSearchView);
-//        locationSearchView = findViewById(R.id.locationSearchView);
-//        sizeSearchView = findViewById(R.id.sizeSearchView);
-//        currentOwnerSearchView = findViewById(R.id.currentOwnerSearchView);
-//        numberOfPreviousOwnersSearchView = findViewById(R.id.numberOfPreviousOwnersSearchView);
-//        descriptionSearchView = findViewById(R.id.descriptionSearchView);
-//        chipIdSearchView = findViewById(R.id.chipIdSearchView);
-//        disordersSearchView = findViewById(R.id.disordersSearchView);
+
     }
 
     public void setListeners() {
-//        showMoreButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {   //TODO: entfernen?
-//                if (check) {
-//                    animateThis.animate().translationX(-2500);
-//                    showMoreButton.setText("more");
-//                } else {
-//                    animateThis.animate().translationX(0);
-//                    showMoreButton.setText("less");
-//                }
-//                check = !check;
-//            }
-//        });
         //TODO: Realtime aktualisierung der ergebnisse einfügen
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,8 +82,6 @@ public class SearchPetsActivity extends AppCompatActivity {
 
 
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            //TODO: replace Modular aufbauen. also ds.getValue().getName() + ", " + ds.getValue().getAge() + ...
-            //TODO:https://stackoverflow.com/questions/4249897/how-to-send-objects-through-bundle
 
             String replace = ds.getValue().toString().replace("=", ":");
             JSONObject jobj = new JSONObject();
@@ -148,7 +113,7 @@ public class SearchPetsActivity extends AppCompatActivity {
             System.out.println("REPLACESTRING3: " + replace);
             replace = escapeCommas(replace);
             System.out.println("REPLACESTRING4: " + replace);
-            JSONObject jsonObject = new JSONObject(replace);    //TODO: Hier wird oft der Fehler geworfen!
+            JSONObject jsonObject = new JSONObject(replace);
 
             if (jsonObject.get("age").toString().contains(lookupString)
                     || jsonObject.get("chipId").toString().contains(lookupString)
@@ -185,7 +150,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         replace = replace.replace(",family", "escapedComma" + "family");
         replace = replace.replace(",chipId", "escapedComma" + "chipId");
         replace = replace.replace(",age", "escapedComma" + "age");
-        replace = replace.replace(",", "§$%"); //TODO: reformat "§$%" into "," / Das wird aber nicht weiter benötigt
+        replace = replace.replace(",", "§$%");
         replace = replace.replace("escapedComma", ",");
         return replace;
     }
