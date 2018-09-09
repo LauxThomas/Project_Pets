@@ -104,6 +104,12 @@
                 android:inputType="textPersonName"
                 android:singleLine="false" />
 
+            <Button
+                android:id="@+id/button_location_picker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Pick Location" />
+
             <EditText
                 android:id="@+id/currentOwnerEditText"
                 android:layout_width="match_parent"
