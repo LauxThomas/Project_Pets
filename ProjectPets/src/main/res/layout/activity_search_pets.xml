@@ -23,7 +23,15 @@
         android:layout_marginBottom="22dp"
         android:layout_marginEnd="26dp"
         android:baselineAlignBottom="true"
+        android:elevation="0dp"
 
         android:src="@android:drawable/ic_search_category_default" />
+
+    <TextView
+        android:id="@+id/fABTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView" />
+
 
 </RelativeLayout>

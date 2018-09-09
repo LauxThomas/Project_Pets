@@ -1,6 +1,8 @@
 package com.example.t_thinkpad.projectpetsapp;
 
 import android.content.Intent;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,6 +18,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static android.R.layout.simple_list_item_1;
 
@@ -119,6 +123,9 @@ public class SearchResultsActivity extends AppCompatActivity {
                     Toast.makeText(SearchResultsActivity.this, "nothing found for your parameters", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                
+                sortArrayList(petsArrayList);
+                
                 Pets[] pets = new Pets[petsArrayList.size()];
                 for (int i = 0; i < petsArrayList.size(); i++) {
                     pets[i] = petsArrayList.get(i);
@@ -131,6 +138,18 @@ public class SearchResultsActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    private void sortArrayList(ArrayList<Pets> petsArrayList) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Collections.sort(petsArrayList, new Comparator<Pets>(){
+                public int compare(Pets p1, Pets p2) {
+                    System.out.println("TESTTHATSHIT");
+                    return p2.getLocation().compareTo(p1.getLocation());
+
+                }
+            });
+        }
     }
 }
 
