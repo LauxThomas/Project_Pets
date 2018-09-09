@@ -49,8 +49,6 @@ public class MyPetsActivity extends AppCompatActivity {
     public void ADDMULTIPLEANIMALSFORTESTING() {
 
         pets = new ArrayList<>();
-        pets.add(new Pets(null, "Leon", "Dog", "Collie", 9,"weiblich", "Rathen", "DogGod", "medium", 0, generateDescription(), 1337, "none"));
-        pets.add(new Pets(null, "Teddy", "Cat", "Shorthair mix", 3,"männlich", "Mettlach", "Sarah Grünewald"));
 
     }
 

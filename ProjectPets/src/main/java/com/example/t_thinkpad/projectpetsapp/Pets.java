@@ -28,53 +28,10 @@ public class Pets implements Serializable {
     public int chipId = -1;
     public String disorders = "none";
 
-    //Bare essentials:
-    public Pets(String image, String name, String family, String race, int age, String sex, String location, String currentOwner) {
-        this.image = image;
-        this.name = name;
-        this.family = family;
-        this.race = race;
-        this.age = age;
-        this.sex = sex;
-        this.location = location;
-        this.currentOwner = currentOwner;
-    }
 
-    //Full boom
-    public Pets(String image, String name, String family, String race, int age, String sex, String location, String currentOwner, String size, int numberOfPreviousOwners, String description, int chipId, String disorders) {
-        this.image = image;
-        this.name = name;
-        this.family = family;
-        this.race = race;
-        this.age = age;
-        this.sex = sex;
-        this.location = location;
-        this.currentOwner = currentOwner;
-        this.size = size;
-        this.numberOfPreviousOwners = numberOfPreviousOwners;
-        this.description = description;
-        this.chipId = chipId;
-        this.disorders = disorders;
-    }
 
     public Pets() {
         //wird zur Abfrage benötigt
-    }
-
-    //+size,numberOfPreviousOwners,currentOwner,description,chipId
-    public Pets(String image, String name, String family, String race, int age, String sex, String location, String size, int numberOfPreviousOwners, String currentOwner, String description, int chipId) {
-        this.image = image;
-        this.name = name;
-        this.family = family;
-        this.race = race;
-        this.age = age;
-        this.sex = sex;
-        this.location = location;
-        this.size = size;
-        this.numberOfPreviousOwners = numberOfPreviousOwners;
-        this.currentOwner = currentOwner;
-        this.description = description;
-        this.chipId = chipId;
     }
 
     public Pets(Object o) {

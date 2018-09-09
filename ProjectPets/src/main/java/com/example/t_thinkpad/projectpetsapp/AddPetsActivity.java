@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
@@ -22,13 +21,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,9 +40,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
-
 import java.text.SimpleDateFormat;
-
 import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
@@ -124,7 +119,7 @@ public class AddPetsActivity extends AppCompatActivity {
         });
         pickLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 startPickLocationIntent();
             }
         });
@@ -139,9 +134,6 @@ public class AddPetsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (items[which].toString()) {
                     case "Take Photo":
-                        //TODO:
-                        Toast.makeText(AddPetsActivity.this, "will be available soon", Toast.LENGTH_SHORT).show();
-                        //TODO: REACTIVATE IF WORKING
                         startCameraIntent();
                         break;
                     case "Choose from Gallery":
@@ -191,13 +183,14 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
 
-    private void startPickLocationIntent(){
+    private void startPickLocationIntent() {
 
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
         try {
             startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
         } catch (GooglePlayServicesRepairableException e) {
+            System.out.println("TESTTHATSHIT1: ");
             e.printStackTrace();
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
@@ -206,7 +199,7 @@ public class AddPetsActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-       super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == RESULT_OK) {
             mImageUri = data.getData();
@@ -226,26 +219,19 @@ public class AddPetsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             imageView.setImageBitmap(photo);
-            //TODO: aus "photo" eine uri erzeugen
-            //new File("/sdcard/Pictures").mkdirs();
-            //new File("/sdcard/DCIM/Camera").mkdirs();
-            //TODO: path wird nicht richtig erzeugt. (null)
-            /*String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), photo, null, null);
-            System.out.println("URITEST: " + path);
-            Uri image1 = Uri.parse(path);
-            */if (mUploadTask != null && mUploadTask.isInProgress()) {
+            if (mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
             } else {
                 mImageUri = Uri.fromFile(new File(mCurrentPhotoPath));
                 uploadFile();
             }
-        } else if(requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK){
+        } else if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
             Toast.makeText(this, "Placepicker geht", Toast.LENGTH_SHORT).show();
             final Place place = PlacePicker.getPlace(this, data);
             System.out.println("test123" + place.getName());
             locationEditText.setText(place.getName());
-        }else {
-           Toast.makeText(this, "Irgendetwas ist null", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Irgendetwas ist null", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -319,30 +305,10 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
     private void createNewPet() {
-        //TODO: Image aus Gallery oder Camera
         String name = nameEditText.getText().toString();
         String family = familyEditText.getText().toString();
         String race = raceEditText.getText().toString();
         int age = (int) ageSpinner.getSelectedItem();
-        /*if (ageEditText.getText().toString().equals("")) {
-            age = 0;
-        } else {
-            age = Double.parseDouble(ageEditText.getText().toString());
-        }*/
-        //TODO: Das kann man bestimmt eleganter machen...
-        /*Boolean sex;
-        if (sexEditText.getText().toString().contains("män")
-                || sexEditText.getText().toString().contains("maen")
-                || !sexEditText.getText().toString().contains("fem")
-                || !sexEditText.getText().toString().contains("weib")
-                || sexEditText.getText().toString().contains("rüd")
-                || !sexEditText.getText().toString().contains("hün")
-                || !sexEditText.getText().toString().contains("katz")
-                || sexEditText.getText().toString().contains("kater")) {
-            sex = true;
-        } else {
-            sex = false;
-        }*/
         String sex = sexSpinner.getSelectedItem().toString();
         String location = locationEditText.getText().toString();
         String currentOwner = currentOwnerEditText.getText().toString();
@@ -363,8 +329,15 @@ public class AddPetsActivity extends AppCompatActivity {
         }
         String disorders = disordersEditText.getText().toString();
         //encodedPhoto could be a BASE64 String
-        Pets newPet = new Pets(encodedPhoto, name, family, race, age, sex, location, currentOwner);   //Lege neues Tier an
-
+        Pets newPet = new Pets();   //Lege neues Tier an
+        newPet.setImage(encodedPhoto);
+        newPet.setName(name);
+        newPet.setFamily(family);
+        newPet.setRace(race);
+        newPet.setAge(age);
+        newPet.setSex(sex);
+        newPet.setLocation(location);
+        newPet.setCurrentOwner(currentOwner);
         System.out.println("BASE64: " + encodedPhoto);
         newPet.setCurrentOwner(newPet.getCurrentOwner());
         newPet.setRandomUUID(randomUUID);
