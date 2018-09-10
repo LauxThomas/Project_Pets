@@ -28,7 +28,7 @@ import java.util.Comparator;
 import static android.R.layout.simple_list_item_1;
 
 public class SearchResultsActivity extends AppCompatActivity {
-    private ListView listView;
+    private ListView listView, listView_tumbnails;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -55,6 +55,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     public void findViews() {
         listView = findViewById(R.id.ListView);
+        listView_tumbnails = findViewById(R.id.listView_thumbnails);
     }
 
     public void handleIntent() {
@@ -81,6 +82,14 @@ public class SearchResultsActivity extends AppCompatActivity {
                 startNextActivity(pets[position]);
             }
         });
+
+
+        ArrayList<Pets> petsArrayList= new ArrayList<Pets>();
+        for(Pets pet:pets){
+            petsArrayList.add(pet);
+        }
+        PetsAdapter petsAdapter = new PetsAdapter(this,petsArrayList);
+        listView_tumbnails.setAdapter(petsAdapter);
     }
 
     private void startNextActivity(Pets pet) {
@@ -131,7 +140,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                     Toast.makeText(SearchResultsActivity.this, "nothing found for your parameters", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                getCurrentLocation(petsArrayList);
+                //getCurrentLocation(petsArrayList);
 
                 Pets[] pets = new Pets[petsArrayList.size()];
                 for (int i = 0; i < petsArrayList.size(); i++) {
@@ -154,8 +163,9 @@ public class SearchResultsActivity extends AppCompatActivity {
             Collections.sort(petsArrayList, new Comparator<Pets>() {
                 public int compare(Pets p1, Pets p2) {
 
-                    return ((p2.getLongitude - currentLocation.getLongitude()) + (p2.getLatitude() - currentLocation.getLatitude())).compareTo
-                            ((p1.getLongitude - currentLocation.getLongitude()) + (p1.getLatitude() - currentLocation.getLatitude()));
+                    //return ((p2.getLongitude() - currentLocation.getLongitude()) + (p2.getLatitude() - currentLocation.getLatitude())).compareTo
+                           // ((p1.getLongitude() - currentLocation.getLongitude()) + (p1.getLatitude() - currentLocation.getLatitude()));
+                    return 1;
                 }
             });
         }
