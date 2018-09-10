@@ -93,6 +93,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         intent.putExtra("family", pet.getFamily());
         intent.putExtra("image", pet.getImage());
         intent.putExtra("location", pet.getLocation());
+        intent.putExtra("latitude", ""+pet.getLatitude());
+        intent.putExtra("longitude", ""+pet.getLongitude());
         intent.putExtra("name", pet.getName());
         intent.putExtra("numberOfPreviousOwners", "" + pet.getNumberOfPreviousOwners());
         intent.putExtra("race", pet.getRace());

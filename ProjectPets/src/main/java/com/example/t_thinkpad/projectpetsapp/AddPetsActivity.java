@@ -4,6 +4,7 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -63,6 +64,7 @@ public class AddPetsActivity extends AppCompatActivity {
     private StorageTask mUploadTask;
     private StorageReference mStorageRef;
     private String randomUUID;
+    private Place place;
 
     private String encodedPhoto = "nicht BASE64 decodiert";
 
@@ -230,8 +232,8 @@ public class AddPetsActivity extends AppCompatActivity {
             }
         } else if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
             Toast.makeText(this, "Placepicker geht", Toast.LENGTH_SHORT).show();
-            final Place place = PlacePicker.getPlace(this, data);
-            System.out.println("test123" + place.getName());
+            place = PlacePicker.getPlace(this, data);
+            //System.out.println("test123" + place.getAddress());
             locationEditText.setText(place.getName());
         } else {
             Toast.makeText(this, "Irgendetwas ist null", Toast.LENGTH_SHORT).show();
@@ -313,9 +315,8 @@ public class AddPetsActivity extends AppCompatActivity {
         String race = raceEditText.getText().toString();
         int age = (int) ageSpinner.getSelectedItem();
         String sex = sexSpinner.getSelectedItem().toString();
-        String location = locationEditText.getText().toString();
+        String location = place.getName().toString();
         String currentOwner = currentOwnerEditText.getText().toString();
-
         String size = sizeEditText.getText().toString();
         int numberOfPreviousOwners = (int) numOfPreviousOwnersSpinner.getSelectedItem();
         /*if (numberOfPreviousOwnersEditText.getText().toString().equals("")) {
@@ -340,6 +341,8 @@ public class AddPetsActivity extends AppCompatActivity {
         newPet.setAge(age);
         newPet.setSex(sex);
         newPet.setLocation(location);
+        newPet.setLatitude(place.getLatLng().latitude);
+        newPet.setLongitude(place.getLatLng().longitude);
         newPet.setCurrentOwner(currentOwner);
         System.out.println("BASE64: " + encodedPhoto);
         newPet.setCurrentOwner(newPet.getCurrentOwner());

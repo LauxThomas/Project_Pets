@@ -112,6 +112,8 @@ public class SearchPetsActivity extends AppCompatActivity {
             jobj.put("disorders", "VALUE");
             jobj.put("family", "VALUE");
             jobj.put("location", "VALUE");
+            //jobj.put("latitude","VALUE");
+            //jobj.put("longitude","VALUE");
             jobj.put("name", "VALUE");
             jobj.put("numberOfPreviousOwners", "VALUE");
             jobj.put("sex", "VALUE");
@@ -160,6 +162,8 @@ public class SearchPetsActivity extends AppCompatActivity {
         replace = replace.replace(",family", "escapedComma" + "family");
         replace = replace.replace(",chipId", "escapedComma" + "chipId");
         replace = replace.replace(",age", "escapedComma" + "age");
+        replace = replace.replace(",latitude", "escapedComma" + "latitude");
+        replace = replace.replace(",longitude", "escapedComma" + "longitude");
         replace = replace.replace(",", "§$%");
         replace = replace.replace("escapedComma", ",");
         return replace;
