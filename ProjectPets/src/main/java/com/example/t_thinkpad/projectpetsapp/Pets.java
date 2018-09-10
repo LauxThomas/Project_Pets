@@ -2,6 +2,8 @@ package com.example.t_thinkpad.projectpetsapp;
 
 import android.location.Location;
 
+import com.google.firebase.storage.StorageReference;
+
 import java.io.Serializable;
 
 public class Pets implements Serializable {

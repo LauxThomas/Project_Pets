@@ -62,7 +62,7 @@ public class AddPetsActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference ref, mDatabaseRef;
     private StorageTask mUploadTask;
-    private StorageReference mStorageRef;
+    private StorageReference mStorageRef, fileReference;
     private String randomUUID;
     private Place place;
 
@@ -269,7 +269,7 @@ public class AddPetsActivity extends AppCompatActivity {
             randomUUID = UUID.randomUUID().toString();
             //TODO: getfileextention methode wieder gerade biegen, sodass keien .null dateien in firebase geraten
             //StorageReference fileReference = mStorageRef.child(randomUUID + "." +getFileExtention(mImageUri));
-            StorageReference fileReference = mStorageRef.child(randomUUID + ".jpg");
+            fileReference = mStorageRef.child(randomUUID + ".jpg");
 
 
             mUploadTask = fileReference.putFile(mImageUri)
@@ -365,6 +365,7 @@ public class AddPetsActivity extends AppCompatActivity {
         if (!disorders.equals("")) {
             newPet.setDisorders(disorders);
         }
+        System.out.println("TESTERROR: "+ newPet.getName());
         ref.child(newPet.getName() + " @ " + randomUUID).setValue(newPet);
         Toast.makeText(this, name.toString() + " angelegt!", Toast.LENGTH_SHORT).show();
         finish();
