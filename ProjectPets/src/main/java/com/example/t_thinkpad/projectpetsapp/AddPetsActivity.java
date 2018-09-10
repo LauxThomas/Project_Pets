@@ -191,7 +191,6 @@ public class AddPetsActivity extends AppCompatActivity {
         try {
             startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
         } catch (GooglePlayServicesRepairableException e) {
-            System.out.println("TESTTHATSHIT1: ");
             e.printStackTrace();
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();

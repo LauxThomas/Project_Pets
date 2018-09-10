@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 
 //TODO: Beim Klick auf den button sortiert nach Entfernung die zutreffenden Tiere anzeigen
 public class SearchPetsActivity extends AppCompatActivity {
-    public TextView generalSearchTextView, nameTextView;
+    public TextView generalSearchTextView, fABText;
     public SearchView generalSearchView, nameSeachView, familySearchView, raceSearchView, ageSearchView,
             sexSearchView, locationSearchView, currentOwnerSearchView, sizeSearchView,
             numberOfPreviousOwnersSearchView, descriptionSearchView,
@@ -60,7 +62,7 @@ public class SearchPetsActivity extends AppCompatActivity {
 
 
     public void findViews() {
-
+        fABText = findViewById(R.id.fABTextView);
         searchButton = findViewById(R.id.fab);
         generalSearchView = findViewById(R.id.generalSearchSearchView);
 
@@ -75,6 +77,14 @@ public class SearchPetsActivity extends AppCompatActivity {
                 searchDatabase();
             }
         });
+    }
+
+
+    //TODO: evtl. zu viel unnötige Abfragen für den kleinen Mist.
+    private void updateFABText() {
+        fABText.setX(searchButton.getX()-7);
+        fABText.setY(searchButton.getY()-7);
+
     }
 
     private void showData(DataSnapshot dataSnapshot) throws JSONException {

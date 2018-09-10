@@ -1,6 +1,9 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,6 +12,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -16,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import static android.R.layout.simple_list_item_1;
 
@@ -23,10 +31,12 @@ public class SearchResultsActivity extends AppCompatActivity {
     private ListView listView;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         setContentView(R.layout.activity_search_results);
         initiateData();
         findViews();
@@ -119,6 +129,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                     Toast.makeText(SearchResultsActivity.this, "nothing found for your parameters", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                getCurrentLocation(petsArrayList);
+
                 Pets[] pets = new Pets[petsArrayList.size()];
                 for (int i = 0; i < petsArrayList.size(); i++) {
                     pets[i] = petsArrayList.get(i);
@@ -131,6 +143,34 @@ public class SearchResultsActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+    }
+
+    private void sortArrayList(ArrayList<Pets> petsArrayList, final Location currentLocation) {
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Collections.sort(petsArrayList, new Comparator<Pets>() {
+                public int compare(Pets p1, Pets p2) {
+
+                    return ((p2.getLongitude - currentLocation.getLongitude()) + (p2.getLatitude() - currentLocation.getLatitude())).compareTo
+                            ((p1.getLongitude - currentLocation.getLongitude()) + (p1.getLatitude() - currentLocation.getLatitude()));
+                }
+            });
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    private void getCurrentLocation(final ArrayList<Pets> petsArrayList) {
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location currentLocation) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (currentLocation != null) {
+                            sortArrayList(petsArrayList, currentLocation);
+                        }
+                    }
+                });
     }
 }
 
