@@ -153,6 +153,12 @@ public class DetailedSearchResult extends AppCompatActivity {
         pet.setFamily(intent.getStringExtra("family"));
         pet.setImage(intent.getStringExtra("image"));
         pet.setLocation(intent.getStringExtra("location"));
+
+        pet.setLatitude(Double.parseDouble(intent.getStringExtra("latitude")));
+        pet.setLongitude(Double.parseDouble(intent.getStringExtra("longitude")));
+        //pet.setLatitude(intent.getDoubleExtra("latitude",0.0));
+        //pet.setLongitude(intent.getDoubleExtra("longitude",0.0));
+
         pet.setName(intent.getStringExtra("name"));
         pet.setNumberOfPreviousOwners(Integer.parseInt(intent.getStringExtra("numberOfPreviousOwners")));
         pet.setRace(intent.getStringExtra("race"));

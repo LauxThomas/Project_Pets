@@ -1,5 +1,7 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.location.Location;
+
 import java.io.Serializable;
 
 public class Pets implements Serializable {
@@ -11,9 +13,11 @@ public class Pets implements Serializable {
     public String race = "";
     public int age = -1;
     public String sex = "";          //Uhh look at this! sex = true means male ¯\_(ツ)_/¯
-    public String location = "";
+    public String location;
     public String currentOwner = "";
     String emailOfCreator;
+    public double latitude=0.0;
+    public double longitude=0.0;
 
     public void setRandomUUID(String randomUUID) {
         this.randomUUID = randomUUID;
@@ -107,6 +111,23 @@ public class Pets implements Serializable {
     public void setLocation(String location) {
         this.location = location;
     }
+
+    public double getLatitude(){
+        return latitude;
+    }
+
+    public void setLatitude(double latitude){
+        this.latitude=latitude;
+    }
+
+    public double getLongitude(){
+        return longitude;
+    }
+
+    public void setLongitude(double longitude){
+        this.longitude=longitude;
+    }
+
 
     public String getSize() {
         return size;
