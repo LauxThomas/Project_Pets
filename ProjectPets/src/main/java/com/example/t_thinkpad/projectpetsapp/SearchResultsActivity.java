@@ -131,7 +131,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                 }
                 getCurrentLocation(petsArrayList);
 
-
                 Pets[] pets = new Pets[petsArrayList.size()];
                 for (int i = 0; i < petsArrayList.size(); i++) {
                     pets[i] = petsArrayList.get(i);
@@ -150,19 +149,18 @@ public class SearchResultsActivity extends AppCompatActivity {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Collections.sort(petsArrayList, new Comparator<Pets>(){
+            Collections.sort(petsArrayList, new Comparator<Pets>() {
                 public int compare(Pets p1, Pets p2) {
 
-                    return ((p2.getLongitude-currentLocation.getLongitude())+(p2.getLatitude()- currentLocation.getLatitude())).compareTo
-                            ((p1.getLongitude-currentLocation.getLongitude())+(p1.getLatitude()- currentLocation.getLatitude()));
-
+                    return ((p2.getLongitude - currentLocation.getLongitude()) + (p2.getLatitude() - currentLocation.getLatitude())).compareTo
+                            ((p1.getLongitude - currentLocation.getLongitude()) + (p1.getLatitude() - currentLocation.getLatitude()));
                 }
             });
         }
     }
 
     @SuppressLint("MissingPermission")
-    private Location getCurrentLocation(final ArrayList<Pets> petsArrayList) {
+    private void getCurrentLocation(final ArrayList<Pets> petsArrayList) {
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
