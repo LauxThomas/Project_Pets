@@ -54,6 +54,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     public void findViews() {
+        //TODO: delete listView at some point
         listView = findViewById(R.id.ListView);
         listView_tumbnails = findViewById(R.id.listView_thumbnails);
     }
@@ -75,13 +76,13 @@ public class SearchResultsActivity extends AppCompatActivity {
 
     private void fillAdapter(final Pets[] pets) {
         //TODO: extract names from resultArrayfor just showing those in the listView (toString in Pets umschreiben)
-        listView.setAdapter(new ArrayAdapter(this, simple_list_item_1, pets));
+       /* listView.setAdapter(new ArrayAdapter(this, simple_list_item_1, pets));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 startNextActivity(pets[position]);
             }
-        });
+        });*/
 
 
         ArrayList<Pets> petsArrayList= new ArrayList<Pets>();
@@ -92,7 +93,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         listView_tumbnails.setAdapter(petsAdapter);
     }
 
-    private void startNextActivity(Pets pet) {
+    /*private void startNextActivity(Pets pet) {
         Intent intent = new Intent(this, DetailedSearchResult.class);
         intent.putExtra("age", "" + pet.getAge());
         intent.putExtra("chipId", "" + pet.getChipId());
@@ -112,7 +113,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         intent.putExtra("size", pet.getSize());
         intent.putExtra("wholePet", pet);
         startActivity(intent);
-    }
+    }*/
 
 
     public void readData(final String lookupString, final MyCallback myCallback) {
