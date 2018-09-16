@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,7 +15,9 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -48,16 +49,27 @@ import java.util.UUID;
 
 public class AddPetsActivity extends AppCompatActivity {
     ImageView imageView;
-    EditText nameEditText, familyEditText, raceEditText, ageEditText,
-            sexEditText, locationEditText, currentOwnerEditText, sizeEditText,
+    AutoCompleteTextView raceAutoComplete;
+    EditText nameEditText,
+
+    sexEditText, locationEditText, currentOwnerEditText, sizeEditText,
             numberOfPreviousOwnersEditText, descriptionEditText, chipIdEditText, disordersEditText;
-    Spinner sexSpinner, ageSpinner, numOfPreviousOwnersSpinner;
+    Spinner sexSpinner, ageSpinner, numOfPreviousOwnersSpinner, familySpinner;
     Button addPetButton, pickLocationButton;
     Uri mImageUri;
     static final int REQUEST_PICK_IMAGE = 1;
     static final int REQUEST_CAPTURE_IMAGE = 100;
     static final int REQUEST_IMAGE_CAPTURE = 123;
     static final int PLACE_PICKER_REQUEST = 37;
+    private final String[] FAMILIES = new String[]{"Dogs", "Cats", "Birds", "Fish", "Small animals", "other"};
+    //TODO: erweitern
+    private final String[] DOGS = new String[]{"Französische Bulldogge", "Labrador", "Australian Shepherd", "Chihuahua", "Golden Retriever", "Border Collie", "Labradoodle", "Rottweiler", "Beagle", "Mops"};
+    private final String[] CATS = new String[]{"Maine Coon", "Norwegische Waldkatze", "Bengalkatze", "Britisch Kurzhaar", "Siamkatze", "Ragdoll", "Savannah Katze", "Perserkatze", "Heilige Birma", "Hauskatze"};
+    private final String[] BIRDS = new String[]{"Amadinen", "Bergsittich", "Felsensittich", "Gelbbrustara", "Goldnackenara", "Kanarienvogel", "Königssittich", "Nymphensittich", "Weißhaubenkakadu", "Wellensittich"};
+    private final String[] FISH = new String[]{"Guppy", "Neonfisch", "Platy", "Kardinalfisch", "Black Molly", "Panzerwels", "Antennenwels", "Blauer Fadenfisch", "Koi", "Hammerhai"};
+    private final String[] SMALL_ANIMALS = new String[]{"Kaninchen", "Ratte", "Maus", "Hamster", "Chinchilla", "Hase", "Meerschweinchen", "Wüstenspringmaus"};
+    private final String[] OTHER = new String[]{"Känguru", "Spinne", "Schlange", "Schildkröte", "Bartagame", "Gecko", "Schwein", "Kuh", "Schaf", "Ziege"};
+
 
     private FirebaseAuth firebaseAuth;
     private DatabaseReference ref, mDatabaseRef;
@@ -97,6 +109,52 @@ public class AddPetsActivity extends AppCompatActivity {
         }
         ArrayAdapter<Integer> adapter3 = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, numOfPreviousOwnersSpinnerItems);
         numOfPreviousOwnersSpinner.setAdapter(adapter3);
+
+        String[] familySpinnerItems = new String[]{"Dogs", "Cats", "Birds", "Fish", "Small animals", "other"};
+        ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, familySpinnerItems);
+        familySpinner.setAdapter(adapter4);
+        familySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                updateRaceSpinnerWithPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+    }
+    private void updateRaceSpinnerWithPosition(int position) {
+        String[] RACES = new String[]{};
+        switch (familySpinner.getSelectedItemPosition()) {
+            case 0:
+                RACES = DOGS;
+                break;
+            case 1:
+                RACES = CATS;
+                break;
+            case 2:
+                RACES = BIRDS;
+                break;
+            case 3:
+                RACES = FISH;
+                break;
+            case 4:
+                RACES = SMALL_ANIMALS;
+                break;
+            case 5:
+                RACES = OTHER;
+                break;
+            default:
+                break;
+        }
+        AutoCompleteTextView raceAutoCompleteTextView = (AutoCompleteTextView)
+                findViewById(R.id.raceAutoComplete);
+        ArrayAdapter<String> raceAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, RACES);
+        raceAutoCompleteTextView.setAdapter(raceAdapter);
     }
 
     private void initializeFirebase() {
@@ -185,7 +243,7 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
 
-    private void startPickLocationIntent(){
+    private void startPickLocationIntent() {
         //TODO: attributions to google when using place picker might need to be shown on screen
         //https://developers.google.com/places/android-sdk/attributions
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
@@ -224,7 +282,8 @@ public class AddPetsActivity extends AppCompatActivity {
             /*String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), photo, null, null);
             System.out.println("URITEST: " + path);
             Uri image1 = Uri.parse(path);
-            */if (mUploadTask != null && mUploadTask.isInProgress()) {
+            */
+            if (mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
             } else {
                 mImageUri = Uri.fromFile(new File(mCurrentPhotoPath));
@@ -311,8 +370,9 @@ public class AddPetsActivity extends AppCompatActivity {
 
     private void createNewPet() {
         String name = nameEditText.getText().toString();
-        String family = familyEditText.getText().toString();
-        String race = raceEditText.getText().toString();
+        String family = familySpinner.toString();
+//        String family = familySpinner.getText().toString();
+        String race = raceAutoComplete.getText().toString();
         int age = (int) ageSpinner.getSelectedItem();
         String sex = sexSpinner.getSelectedItem().toString();
         String location = place.getName().toString();
@@ -365,7 +425,7 @@ public class AddPetsActivity extends AppCompatActivity {
         if (!disorders.equals("")) {
             newPet.setDisorders(disorders);
         }
-        System.out.println("TESTERROR: "+ newPet.getName());
+        System.out.println("TESTERROR: " + newPet.getName());
         ref.child(newPet.getName() + " @ " + randomUUID).setValue(newPet);
         Toast.makeText(this, name.toString() + " angelegt!", Toast.LENGTH_SHORT).show();
         finish();
@@ -375,8 +435,7 @@ public class AddPetsActivity extends AppCompatActivity {
     private void findViews() {
         imageView = findViewById(R.id.imageView);
         nameEditText = findViewById(R.id.nameEditText);
-        familyEditText = findViewById(R.id.familyEditText);
-        raceEditText = findViewById(R.id.raceEditText);
+        raceAutoComplete = findViewById(R.id.raceAutoComplete);
         //ageEditText = findViewById(R.id.ageEditText);
         //sexEditText = findViewById(R.id.sexEditText);
         locationEditText = findViewById(R.id.locationEditText);
@@ -389,6 +448,7 @@ public class AddPetsActivity extends AppCompatActivity {
         addPetButton = findViewById(R.id.addPetButton);
         sexSpinner = findViewById(R.id.spinner_sex);
         ageSpinner = findViewById(R.id.spinner_age);
+        familySpinner = findViewById(R.id.spinner_family);
         numOfPreviousOwnersSpinner = findViewById(R.id.spinner_numOfPreviousOwners);
         pickLocationButton = findViewById(R.id.button_location_picker);
     }

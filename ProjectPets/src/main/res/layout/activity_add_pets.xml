@@ -39,21 +39,19 @@
                 android:inputType="textPersonName"
                 android:singleLine="false" />
 
-            <EditText
-                android:id="@+id/familyEditText"
+            <Spinner
+                android:id="@+id/spinner_family"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Family e.g. Dogs, Cats, ..."
-                android:inputType="textPersonName"
-                android:singleLine="false" />
+                android:layout_weight="1" />
 
-            <EditText
-                android:id="@+id/raceEditText"
+            <AutoCompleteTextView
+                android:id="@+id/raceAutoComplete"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Race e.g. German Shepperd"
+                android:completionThreshold="1"
+                android:hint="race"
                 android:inputType="textPersonName"
                 android:singleLine="false" />
 
