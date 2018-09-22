@@ -30,6 +30,7 @@ public class PetsAdapter extends ArrayAdapter<Pets> {
     private static class ViewHolder {
         ImageView thumbnail;
         TextView description;
+        TextView dist;
     }
 
     public PetsAdapter(Context context, ArrayList<Pets> pets) {
@@ -46,18 +47,21 @@ public class PetsAdapter extends ArrayAdapter<Pets> {
         final Pets pet = getItem(position);
         // Check if an existing view is being reused, otherwise inflate the view
         ViewHolder viewHolder; // view lookup cache stored in tag
-        if (convertView == null) {
+        if (/*convertView == null*/true) {
             // If there's no view to re-use, inflate a brand new view for row
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_pets, parent, false);
             viewHolder.thumbnail = (ImageView) convertView.findViewById(R.id.thumbnailImageView);
             viewHolder.description = (TextView) convertView.findViewById(R.id.textView5);
+            viewHolder.dist = (TextView) convertView.findViewById(R.id.textView6);
             // Cache the viewHolder object inside the fresh view
             convertView.setTag(viewHolder);
         } else {
             // View is being recycled, retrieve the viewHolder object from tag
             viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder.description.setText(null);
+            viewHolder.thumbnail.setImageBitmap(null);
         }
         // Populate the data from the data object via the viewHolder object
         // into the template view.
@@ -73,6 +77,7 @@ public class PetsAdapter extends ArrayAdapter<Pets> {
         }
 
         viewHolder.description.setText(pet.toString());
+        viewHolder.dist.setText("dist: "+(int)pet.getDistFromUserLocation()+"m");
 
         viewHolder.description.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -98,6 +103,7 @@ public class PetsAdapter extends ArrayAdapter<Pets> {
         intent.putExtra("location", pet.getLocation());
         intent.putExtra("latitude", ""+pet.getLatitude());
         intent.putExtra("longitude", ""+pet.getLongitude());
+        intent.putExtra("distFromUserLocation",""+pet.getDistFromUserLocation());
         intent.putExtra("name", pet.getName());
         intent.putExtra("numberOfPreviousOwners", "" + pet.getNumberOfPreviousOwners());
         intent.putExtra("race", pet.getRace());

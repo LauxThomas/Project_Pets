@@ -370,7 +370,7 @@ public class AddPetsActivity extends AppCompatActivity {
 
     private void createNewPet() {
         String name = nameEditText.getText().toString();
-        String family = familySpinner.toString();
+        String family = (String) familySpinner.getSelectedItem();
 //        String family = familySpinner.getText().toString();
         String race = raceAutoComplete.getText().toString();
         int age = (int) ageSpinner.getSelectedItem();

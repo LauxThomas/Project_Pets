@@ -1,8 +1,13 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,6 +37,8 @@ public class SearchPetsActivity extends AppCompatActivity {
             numberOfPreviousOwnersSearchView, descriptionSearchView,
             chipIdSearchView, disordersSearchView;
 
+    private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=123;
+    private boolean locationPermissionGranted;
     public LinearLayout animateThis;
     //    public Button showMoreButton;
     public FloatingActionButton searchButton;
@@ -52,8 +59,65 @@ public class SearchPetsActivity extends AppCompatActivity {
         initiateDatabase();
         setListeners();
 
-    }
+        //obsolete in a bit
+        /*checkPermission();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            checkPermission();
+        }*/
+        /*
+        // Here, thisActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
 
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+            locationPermissionGranted = true;
+        }*/
+
+
+
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    locationPermissionGranted = true;
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    locationPermissionGranted = false;
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
 
     private void initiateDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -164,6 +228,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         replace = replace.replace(",age", "escapedComma" + "age");
         replace = replace.replace(",latitude", "escapedComma" + "latitude");
         replace = replace.replace(",longitude", "escapedComma" + "longitude");
+        replace = replace.replace(",distFromUserLocation", "escapedComma" + "distFromUserLocation");
         replace = replace.replace(",", "§$%");
         replace = replace.replace("escapedComma", ",");
         return replace;
@@ -203,6 +268,17 @@ public class SearchPetsActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void checkPermission(){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                ){//Can add more as per requirement
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                    123);
+        }
     }
 
 }

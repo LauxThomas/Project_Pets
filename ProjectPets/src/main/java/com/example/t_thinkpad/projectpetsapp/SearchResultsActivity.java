@@ -1,10 +1,18 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.media.audiofx.Equalizer;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -28,20 +36,25 @@ import java.util.Comparator;
 import static android.R.layout.simple_list_item_1;
 
 public class SearchResultsActivity extends AppCompatActivity {
-    private ListView listView, listView_tumbnails;
+    private ListView listView_tumbnails;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FusedLocationProviderClient mFusedLocationClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+
         setContentView(R.layout.activity_search_results);
         initiateData();
         findViews();
         handleIntent();
+
     }
+
 
     @Override
     protected void onResume() {
@@ -54,8 +67,6 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     public void findViews() {
-        //TODO: delete listView at some point
-        listView = findViewById(R.id.ListView);
         listView_tumbnails = findViewById(R.id.listView_thumbnails);
     }
 
@@ -89,6 +100,9 @@ public class SearchResultsActivity extends AppCompatActivity {
         for(Pets pet:pets){
             petsArrayList.add(pet);
         }
+
+        getCurrentLocation(petsArrayList);
+
         PetsAdapter petsAdapter = new PetsAdapter(this,petsArrayList);
         listView_tumbnails.setAdapter(petsAdapter);
     }
@@ -160,7 +174,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void sortArrayList(ArrayList<Pets> petsArrayList, final Location currentLocation) {
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             Collections.sort(petsArrayList, new Comparator<Pets>() {
                 public int compare(Pets p1, Pets p2) {
 
@@ -169,7 +183,22 @@ public class SearchResultsActivity extends AppCompatActivity {
                     return 1;
                 }
             });
+        }*/
+        Location petLoc = new Location("dummyProvider");
+        for(Pets pet:petsArrayList){
+            petLoc.setLatitude(pet.getLatitude());
+            petLoc.setLongitude(pet.getLongitude());
+            pet.setDistFromUserLocation(currentLocation.distanceTo(petLoc));
         }
+
+            Collections.sort(petsArrayList, new Comparator<Pets>() {
+                @Override
+                public int compare(Pets p1, Pets p2) {
+                    return (int) (p1.getDistFromUserLocation() - p2.getDistFromUserLocation());
+                }
+            });
+
+
     }
 
     @SuppressLint("MissingPermission")
@@ -184,7 +213,10 @@ public class SearchResultsActivity extends AppCompatActivity {
                         }
                     }
                 });
+
     }
+
+
 }
 
 

@@ -34,6 +34,7 @@ public class Pets implements Serializable {
     public int chipId = -1;
     public String disorders = "none";
 
+    public double distFromUserLocation;
 
 
     public Pets() {
@@ -191,4 +192,11 @@ public class Pets implements Serializable {
         return petString;
     }
 
+    public double getDistFromUserLocation(){
+        return distFromUserLocation;
+    }
+
+    public void setDistFromUserLocation(double distFromUserLocation){
+        this.distFromUserLocation = distFromUserLocation;
+    }
 }

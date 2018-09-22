@@ -7,13 +7,24 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class DetailedSearchResult extends AppCompatActivity {
+public class DetailedSearchResult extends AppCompatActivity implements OnMapReadyCallback{
 
     public ImageView pictureImageView;
-    public TextView labelNameTextView, labelFamilyTextView, labelRaceTextView, labelAgeTextView, labelSexTextView, labelLocationTextView, labelSizeTextView, labelNumberOfPreviousOwnersTextView, labelCurrentOwnerTextView, attributeNameTextView, attributeFamilyTextView, attributeRaceTextView, attributeAgeTextView, attributeSexTextView, attributeLocationTextView, attributeSizeTextView, attributeNumberOfPreviousOwnersTextView, attributeCurrentOwnerTextView, labelDescriptionTextView, attributeDescriptionTextView, labelChipIdTextView, attributeChipIdTextView, labelDisordersTextView, attributeDisordersTextView;
+    public TextView labelNameTextView, labelFamilyTextView, labelRaceTextView, labelAgeTextView, labelSexTextView, labelLocationTextView,
+            labelSizeTextView, labelNumberOfPreviousOwnersTextView, labelCurrentOwnerTextView, attributeNameTextView, attributeFamilyTextView,
+            attributeRaceTextView, attributeAgeTextView, attributeSexTextView, attributeLocationTextView, attributeSizeTextView,
+            attributeNumberOfPreviousOwnersTextView, attributeCurrentOwnerTextView, labelDescriptionTextView, attributeDescriptionTextView,
+            labelChipIdTextView, attributeChipIdTextView, labelDisordersTextView, attributeDisordersTextView, labelDistFromUserLocation, attributeDistFromUserLocation;
+    private Pets pet;
     //TODO: editButton und deleteButton in der actionbar anzeigen https://medium.com/@101/android-toolbar-for-appcompatactivity-671b1d10f354
 
     @Override
@@ -21,8 +32,24 @@ public class DetailedSearchResult extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_search_result);
         findViews();
-        Pets pet = handleIntent();
+        pet = handleIntent();
         fillViews(pet);
+        // Get the SupportMapFragment and request notification
+        // when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        // Add a marker in Sydney, Australia,
+        // and move the map's camera to the same location.
+        LatLng petLoc = new LatLng(pet.getLatitude(), pet.getLongitude());
+        googleMap.addMarker(new MarkerOptions().position(petLoc)
+                .title("Hier befindet sich "+pet.getName()));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(petLoc));
+        googleMap.moveCamera(CameraUpdateFactory.zoomTo(10));
     }
 
     private void findViews() {
@@ -52,6 +79,9 @@ public class DetailedSearchResult extends AppCompatActivity {
         attributeChipIdTextView = findViewById(R.id.attributeChipIdTextView);
         labelDisordersTextView = findViewById(R.id.labelDisordersTextView);
         attributeDisordersTextView = findViewById(R.id.attributeDisordersTextView);
+        labelDistFromUserLocation = findViewById(R.id.labelDistFromUserLocation);
+        attributeDistFromUserLocation = findViewById(R.id.attributeDistFromUserLocation);
+
     }
 
     public void fillViews(Pets pet) {
@@ -71,7 +101,8 @@ public class DetailedSearchResult extends AppCompatActivity {
         attributeLocationTextView.setText(pet.getLocation());
         labelCurrentOwnerTextView.setText("Current owner: ");
         attributeCurrentOwnerTextView.setText(pet.getCurrentOwner());
-
+        labelDistFromUserLocation.setText("Distance From User: ");
+        attributeDistFromUserLocation.setText(pet.getDistFromUserLocation()+"");
 
         setOptionalViews(pet);
 
@@ -158,6 +189,7 @@ public class DetailedSearchResult extends AppCompatActivity {
         pet.setLongitude(Double.parseDouble(intent.getStringExtra("longitude")));
         //pet.setLatitude(intent.getDoubleExtra("latitude",0.0));
         //pet.setLongitude(intent.getDoubleExtra("longitude",0.0));
+        pet.setDistFromUserLocation(Double.parseDouble(intent.getStringExtra("distFromUserLocation")));
 
         pet.setName(intent.getStringExtra("name"));
         pet.setNumberOfPreviousOwners(Integer.parseInt(intent.getStringExtra("numberOfPreviousOwners")));
