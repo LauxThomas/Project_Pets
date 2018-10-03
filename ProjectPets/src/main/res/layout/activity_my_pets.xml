@@ -7,97 +7,97 @@
     android:orientation="vertical"
     tools:context=".MyPetsActivity">
 
-    <ScrollView
+  <ScrollView
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_weight="1">
+
+    <LinearLayout
+        android:id="@+id/searchResultContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+      <LinearLayout
+          android:id="@+id/petContainer"
+          android:layout_width="match_parent"
+          android:layout_height="50dp"
+          android:layout_weight="1"
+          android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            app:srcCompat="@mipmap/ic_projectpets_launcher" />
 
         <LinearLayout
-            android:id="@+id/searchResultContainer"
+            android:id="@+id/firstPart"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/petContainer"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
+          <TextView
+              android:id="@+id/petNameTextView"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:text="Hasso" />
+
+          <LinearLayout
+              android:id="@+id/secondPart"
+              android:layout_width="match_parent"
+              android:layout_height="59dp"
+              android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/familyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:text="Dog" />
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    app:srcCompat="@mipmap/ic_projectpets_launcher" />
+            <TextView
+                android:id="@+id/raceTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Dalmatian" />
 
-                <LinearLayout
-                    android:id="@+id/firstPart"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+            <TextView
+                android:id="@+id/ageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="9 years" />
 
-                    <TextView
-                        android:id="@+id/petNameTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Hasso" />
+            <TextView
+                android:id="@+id/sexTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="male" />
 
-                    <LinearLayout
-                        android:id="@+id/secondPart"
-                        android:layout_width="match_parent"
-                        android:layout_height="59dp"
-                        android:orientation="horizontal">
+            <TextView
+                android:id="@+id/locationTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Dillingen" />
 
-                        <TextView
-                            android:id="@+id/familyTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Dog" />
-
-                        <TextView
-                            android:id="@+id/raceTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Dalmatian" />
-
-                        <TextView
-                            android:id="@+id/ageTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="9 years" />
-
-                        <TextView
-                            android:id="@+id/sexTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="male" />
-
-                        <TextView
-                            android:id="@+id/locationTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Dillingen" />
-
-                        <TextView
-                            android:id="@+id/dateAddedTextView"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="28.01.2017" />
-                    </LinearLayout>
-                </LinearLayout>
-            </LinearLayout>
-
+            <TextView
+                android:id="@+id/dateAddedTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="28.01.2017" />
+          </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+      </LinearLayout>
+
+    </LinearLayout>
+  </ScrollView>
 
 </LinearLayout>
