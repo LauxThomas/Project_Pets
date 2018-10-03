@@ -7,11 +7,13 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -50,6 +52,8 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
                 .title("Hier befindet sich "+pet.getName()));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(petLoc));
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(10));
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(petLoc, 10);
+        googleMap.animateCamera(cameraUpdate);
     }
 
     private void findViews() {
