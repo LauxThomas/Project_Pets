@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.t_thinkpad.projectpetsapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -80,10 +79,6 @@
             android:name=".NotificationsActivity"
             android:label="Notifications"
             android:parentActivityName=".SettingsActivity" />
-        <activity
-            android:name=".DetailActivity"
-            android:label="Detailed view"
-            android:parentActivityName=".MyPetsActivity" />
         <activity
             android:name=".SearchResultsActivity"
             android:label="Search results"
