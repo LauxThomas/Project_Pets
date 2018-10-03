@@ -17,8 +17,8 @@ public class MainMenuShelter extends AppCompatActivity{
         setContentView(R.layout.activity_main_menu_shelter);
         findViewsAndInitializeStuff();
         setListeners();
-        //remove comment for disabling buttons
-        //deactivateNotFinishedStuff();
+
+        //deactivateNotFinishedStuff();     //remove comment for disabling buttons
     }
 
     private void deactivateNotFinishedStuff() {
