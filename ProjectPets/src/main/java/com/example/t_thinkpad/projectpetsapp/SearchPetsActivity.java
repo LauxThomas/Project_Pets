@@ -9,8 +9,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -60,10 +58,10 @@ public class SearchPetsActivity extends AppCompatActivity {
         setListeners();
 
         //obsolete in a bit
-        /*checkPermission();
+        checkPermission();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             checkPermission();
-        }*/
+        }
         /*
         // Here, thisActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,

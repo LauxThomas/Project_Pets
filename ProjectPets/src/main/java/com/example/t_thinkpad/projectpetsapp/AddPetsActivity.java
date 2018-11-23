@@ -61,6 +61,7 @@ public class AddPetsActivity extends AppCompatActivity {
     static final int REQUEST_CAPTURE_IMAGE = 100;
     static final int REQUEST_IMAGE_CAPTURE = 123;
     static final int PLACE_PICKER_REQUEST = 37;
+    private boolean isUploaded = false;
     private final String[] FAMILIES = new String[]{"Dogs", "Cats", "Birds", "Fish", "Small animals", "other"};
     //TODO: erweitern
     private final String[] DOGS = new String[]{"Französische Bulldogge", "Labrador", "Australian Shepherd", "Chihuahua", "Golden Retriever", "Border Collie", "Labradoodle", "Rottweiler", "Beagle", "Mops"};
@@ -77,6 +78,7 @@ public class AddPetsActivity extends AppCompatActivity {
     private StorageReference mStorageRef, fileReference;
     private String randomUUID;
     private Place place;
+//    private ProgressBar progressBar;
 
     private String encodedPhoto = "nicht BASE64 decodiert";
 
@@ -110,8 +112,8 @@ public class AddPetsActivity extends AppCompatActivity {
         ArrayAdapter<Integer> adapter3 = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, numOfPreviousOwnersSpinnerItems);
         numOfPreviousOwnersSpinner.setAdapter(adapter3);
 
-        String[] familySpinnerItems = new String[]{"Dogs", "Cats", "Birds", "Fish", "Small animals", "other"};
-        ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, familySpinnerItems);
+//        String[] familySpinnerItems = new String[]{"Dogs", "Cats", "Birds", "Fish", "Small animals", "other"};
+        ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, FAMILIES);
         familySpinner.setAdapter(adapter4);
         familySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -165,12 +167,7 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
     private void setListeners() {
-        addPetButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                createNewPet();
-            }
-        });
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -263,7 +260,7 @@ public class AddPetsActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == RESULT_OK) {
             mImageUri = data.getData();
-            Picasso.with(this).load(mImageUri).into(imageView);
+            Picasso.with(this).load(mImageUri).into(imageView);//TODO: PICASSO!!
             if (mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
             } else {
@@ -348,6 +345,12 @@ public class AddPetsActivity extends AppCompatActivity {
                                     Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getDownloadUrl()).toString()));
                             String uploadId = mDatabaseRef.push().getKey();
                             mDatabaseRef.child(uploadId).setValue(upload.getImageUrl());
+                            addPetButton.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    createNewPet();
+                                }
+                            });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
@@ -360,6 +363,7 @@ public class AddPetsActivity extends AppCompatActivity {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
 //                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+//                            progressBar.setProgress((int)progress);
 
                         }
                     });
@@ -434,6 +438,7 @@ public class AddPetsActivity extends AppCompatActivity {
 
     private void findViews() {
         imageView = findViewById(R.id.imageView);
+//        progressBar = findViewById(R.id.progressBar);
         nameEditText = findViewById(R.id.nameEditText);
         raceAutoComplete = findViewById(R.id.raceAutoComplete);
         //ageEditText = findViewById(R.id.ageEditText);

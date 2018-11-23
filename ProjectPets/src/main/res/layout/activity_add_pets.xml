@@ -30,6 +30,7 @@
                 android:contentDescription="Picture"
                 app:srcCompat="@android:drawable/ic_menu_camera" />
 
+
             <EditText
                 android:id="@+id/nameEditText"
                 android:layout_width="match_parent"
