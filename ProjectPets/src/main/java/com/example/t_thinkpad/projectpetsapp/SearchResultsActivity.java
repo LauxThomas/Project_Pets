@@ -1,22 +1,10 @@
 package com.example.t_thinkpad.projectpetsapp;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.media.audiofx.Equalizer;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -32,8 +20,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
-import static android.R.layout.simple_list_item_1;
 
 public class SearchResultsActivity extends AppCompatActivity {
     private ListView listView_tumbnails;
@@ -142,8 +128,6 @@ public class SearchResultsActivity extends AppCompatActivity {
 
                     System.out.println("PETSOUTNAME: " + pet.getName());
                     String replace = ds.getValue().toString().replace("=", ":");
-                    System.out.println("REPLACESTRING: " + replace);
-                    replace.replace("/", ":");
                     //TODO: Image einbinden https://stackoverflow.com/a/39708645
 
                     if (replace.contains(lookupString)) {

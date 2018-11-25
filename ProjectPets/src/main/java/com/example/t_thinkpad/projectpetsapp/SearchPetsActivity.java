@@ -181,7 +181,7 @@ public class SearchPetsActivity extends AppCompatActivity {
             jobj.put("sex", "VALUE");
             jobj.put("size", "VALUE");
             System.out.println("REPLACESTRING1: " + replace);
-            replace = replace.replace("/", ":");
+            replace = replace.replace("/", " bzw ");
             System.out.println("REPLACESTRING2: " + replace);
             replace = replace.replaceAll("\\s+", "");
             System.out.println("REPLACESTRING3: " + replace);
