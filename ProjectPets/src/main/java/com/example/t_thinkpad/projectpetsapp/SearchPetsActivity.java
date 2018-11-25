@@ -153,7 +153,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         String lookupString = generalSearchView.getQuery().toString();
 
 
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+        /*for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
             String replace = ds.getValue().toString().replace("=", ":");
             JSONObject jobj = new JSONObject();
@@ -205,11 +205,11 @@ public class SearchPetsActivity extends AppCompatActivity {
                 arrayList.add(jsonObject);
             }
 
-        }
+        }*/
         startNextActivity(lookupString);
     }
 
-    private String escapeCommas(String replace) {
+    /*private String escapeCommas(String replace) {
         replace = replace.replace(",race", "escapedComma" + "race");
         replace = replace.replace(",sex", "escapedComma" + "sex");
         replace = replace.replace(",description", "escapedComma" + "description");
@@ -230,7 +230,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         replace = replace.replace(",", "§$%");
         replace = replace.replace("escapedComma", ",");
         return replace;
-    }
+    }*/
 
     public void startNextActivity(String lookupString) {
         Intent intent = new Intent(this, SearchResultsActivity.class);
