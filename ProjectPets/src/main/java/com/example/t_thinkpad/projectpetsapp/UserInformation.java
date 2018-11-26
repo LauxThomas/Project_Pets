@@ -1,5 +1,7 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import java.util.ArrayList;
+
 public class UserInformation {
 
     public String name;
@@ -7,6 +9,7 @@ public class UserInformation {
     public boolean isAnimalShelter;
     public String isLookingFor;
     public String mail;
+    public ArrayList<String> favs;
 
     public UserInformation() {
         //NEEDED!!
@@ -17,6 +20,7 @@ public class UserInformation {
         this.location = location;
         this.mail = mail;
         this.isLookingFor = isLookingFor;
+        this.favs = null;
     }
 
     public boolean isAnimalShelter() {
@@ -27,6 +31,17 @@ public class UserInformation {
         isAnimalShelter = animalShelter;
     }
 
+    public ArrayList getFavs() {
+        return favs;
+    }
+
+    public String getFavOnIndex(int index) {
+        return favs.get(index);
+    }
+
+    public void addFav(String reference) {
+        favs.add(reference);
+    }
 
     public String getMail() {
         return mail;

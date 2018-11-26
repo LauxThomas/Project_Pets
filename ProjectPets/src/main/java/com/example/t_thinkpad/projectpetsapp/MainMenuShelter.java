@@ -6,6 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 public class MainMenuShelter extends AppCompatActivity{
 
     Button addPetsButton, myProfileButton, myPetsButton, settingsButton;
@@ -64,7 +67,14 @@ public class MainMenuShelter extends AppCompatActivity{
     }
 
     private void startMyPetsActivity() {
-        startActivity(new Intent(this,MyPetsActivity.class));
+        Intent intent = new Intent(this, SearchResultsActivity.class);
+        //String arrayString = createArrayString(arrayList);
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        intent.putExtra("lookupString", user.getEmail());
+        intent.putExtra("isShelter", true);
+        //intent.putExtra("arrayString", arrayString);
+        startActivity(intent);
     }
 
 

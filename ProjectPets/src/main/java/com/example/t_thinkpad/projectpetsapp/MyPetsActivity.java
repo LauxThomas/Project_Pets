@@ -1,8 +1,12 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
@@ -13,7 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MyPetsActivity extends AppCompatActivity {
-
+    //TODO: whole class is obsolete. May be deleted
 
     public ArrayList<Pets> pets;
     public LinearLayout searchResultContainer, petContainer, firstPart, secondPart;
@@ -24,6 +28,8 @@ public class MyPetsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_pets);
         findViews();
+        //TODO: Not working yet
+        checkPermission();
         addDummypets();
         searchResultContainer.removeAllViews();
         addDummyviews();
@@ -211,5 +217,16 @@ public class MyPetsActivity extends AppCompatActivity {
         intent.putExtra("size", pet.getSize());
         intent.putExtra("wholePet", pet);
         this.startActivity(intent);
+    }
+
+    public void checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                ) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    123);
+        }
     }
 }

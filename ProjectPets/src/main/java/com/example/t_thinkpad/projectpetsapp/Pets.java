@@ -1,9 +1,5 @@
 package com.example.t_thinkpad.projectpetsapp;
 
-import android.location.Location;
-
-import com.google.firebase.storage.StorageReference;
-
 import java.io.Serializable;
 
 public class Pets implements Serializable {
@@ -17,7 +13,7 @@ public class Pets implements Serializable {
     public String sex = "";
     public String location;
     public String currentOwner = "";
-    String emailOfCreator;
+    public String emailOfCreator;
     public double latitude=0.0;
     public double longitude=0.0;
 

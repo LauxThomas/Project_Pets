@@ -3,9 +3,11 @@ package com.example.t_thinkpad.projectpetsapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -14,6 +16,13 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -27,6 +36,9 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
             labelChipIdTextView, attributeChipIdTextView, labelDisordersTextView, attributeDisordersTextView, labelDistFromUserLocation, attributeDistFromUserLocation;
     private Pets pet;
     //TODO: editButton und deleteButton in der actionbar anzeigen https://medium.com/@101/android-toolbar-for-appcompatactivity-671b1d10f354
+    //TODO: fav icon anzeigen, wenn nutzer, die beiden adneren, wenn nicht
+    //private Toolbar mTopToolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +50,77 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        final boolean isShelter = false;
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        ref = ref.child("users");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (firebaseAuth.getCurrentUser() != null) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (dataSnapshot.child(user.getUid()).child("isAnimalShelter").getValue() != null
+                            && dataSnapshot.child(user.getUid()).child("isAnimalShelter").getValue().toString().equals("true")) {
+                        System.out.println("ANGEMELDET ALS SHELTER");
+                        MenuItem item = menu.findItem(R.id.action_favorite);
+                        item.setVisible(false);
+                    } else {
+                        System.out.println("ANGEMELDET ALS PRIVATNUTZER");
+                        MenuItem item = menu.findItem(R.id.action_edit);
+                        item.setVisible(false);
+                        item = menu.findItem(R.id.action_delete);
+                        item.setVisible(false);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+//        if (isShelter) {
+//            MenuItem item = menu.findItem(R.id.action_favorite);
+//            item.setVisible(false);
+//        } else {
+//            MenuItem item = menu.findItem(R.id.action_edit);
+//            item.setVisible(false);
+//            item = menu.findItem(R.id.action_delete);
+//            item.setVisible(false);
+//        }
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.actionbar_detailed_search_results, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_favorite) {
+            Toast.makeText(DetailedSearchResult.this, "fav clicked", Toast.LENGTH_LONG).show();
+            return true;
+        } else if (id == R.id.action_delete) {
+            Toast.makeText(DetailedSearchResult.this, "delete clicked", Toast.LENGTH_LONG).show();
+            return true;
+        } else if (id == R.id.action_edit) {
+            Toast.makeText(DetailedSearchResult.this, "edit clicked", Toast.LENGTH_LONG).show();
+            return true;
+        } else if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -81,6 +164,9 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         labelDistFromUserLocation = findViewById(R.id.labelDistFromUserLocation);
         attributeDistFromUserLocation = findViewById(R.id.attributeDistFromUserLocation);
 
+        //mTopToolbar = (Toolbar) findViewById(R.id.action_favorite);
+        //setSupportActionBar(mTopToolbar);
+
     }
 
     public void fillViews(Pets pet) {
@@ -117,14 +203,15 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
     }
 
     //damit SearchResultActivity nicht zerstört wird:
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
-        return false;
-    }
+    //TODO: wiederherstellen:
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == android.R.id.home) {
+//            onBackPressed();
+//            return true;
+//        }
+//        return false;
+//    }
 
     public void setOptionalViews(Pets pet) {
         if (!(pet.getSize().equals(""))) {

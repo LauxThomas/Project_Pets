@@ -1,6 +1,5 @@
 package com.example.t_thinkpad.projectpetsapp;
 
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,7 +13,6 @@ import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -38,7 +36,6 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -368,6 +365,7 @@ public class AddPetsActivity extends AppCompatActivity {
         newPet.setCurrentOwner(currentOwner);
         newPet.setCurrentOwner(newPet.getCurrentOwner());
         newPet.setRandomUUID(randomUUID);
+        System.out.println("currentUsersEmail: " + firebaseAuth.getCurrentUser().getEmail());
         newPet.setEmailOfCreator(firebaseAuth.getCurrentUser().getEmail());   //TODO: Unterminated object at character 172 of...
         //füge Optionals hinzu:
         if (!size.equals("")) {

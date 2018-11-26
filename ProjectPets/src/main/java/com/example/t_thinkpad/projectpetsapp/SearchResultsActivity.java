@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -59,11 +60,15 @@ public class SearchResultsActivity extends AppCompatActivity {
     public void handleIntent() {
         Intent intent = getIntent();
         String lookupString = intent.getStringExtra("lookupString");
-        handleDatabaseStuff(lookupString);
+        if (intent.getBooleanExtra("isShelter", false)) {
+            handleDatabaseStuff(lookupString, true);
+        } else {
+            handleDatabaseStuff(lookupString, false);
+        }
     }
 
-    private void handleDatabaseStuff(final String lookupString) {
-        readData(lookupString, new MyCallback() {
+    private void handleDatabaseStuff(final String lookupString, boolean isShelter) {
+        readData(isShelter, lookupString, new MyCallback() {
             @Override
             public void onCallback(Pets[] pets) {
                 fillAdapter(pets);
@@ -72,45 +77,71 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     private void fillAdapter(final Pets[] pets) {
-        ArrayList<Pets> petsArrayList= new ArrayList<Pets>();
-        for(Pets pet:pets){
+        ArrayList<Pets> petsArrayList = new ArrayList<Pets>();
+        for (Pets pet : pets) {
             petsArrayList.add(pet);
         }
 
         getCurrentLocation(petsArrayList);
 
-        PetsAdapter petsAdapter = new PetsAdapter(this,petsArrayList);
+        PetsAdapter petsAdapter = new PetsAdapter(this, petsArrayList);
         listView_tumbnails.setAdapter(petsAdapter);
     }
 
-    public void readData(final String lookupString, final MyCallback myCallback) {
+    public void readData(final boolean isShelter, final String lookupString, final MyCallback myCallback) {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Pets> petsArrayList = new ArrayList<Pets>();
                 int index = 0;
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
-                    Pets pet = ds.getValue(Pets.class);
-
-                    String replace = ds.getValue().toString().replace("=", ":");
-
-                    if (replace.contains(lookupString)) {
-                        petsArrayList.add(pet);
-                        index++;
+                if (isShelter) {
+                    FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        Pets pet = ds.getValue(Pets.class);
+                        System.out.println("IMMATESTTHATSHITpets.emailofCreator: " + pet.getEmailOfCreator().toString());
+                        System.out.println("IMMATESTTHATSHITcurrentLoggedInUser: " + firebaseAuth.getCurrentUser().getEmail().toString());
+                        if (pet.getEmailOfCreator().toString().contains(firebaseAuth.getCurrentUser().getEmail())) {
+                            System.out.println("CURRENTUSERISACTUALLYSHELTER");
+                            petsArrayList.add(pet);
+                            index++;
+                        }
                     }
-                }
-                if (index == 0) {
-                    Toast.makeText(SearchResultsActivity.this, "Nothing found for your parameters.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    if (index == 0) {
+                        Toast.makeText(SearchResultsActivity.this, "Nothing found for your parameters.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                Pets[] pets = new Pets[petsArrayList.size()];
-                for (int i = 0; i < petsArrayList.size(); i++) {
-                    pets[i] = petsArrayList.get(i);
-                }
-                myCallback.onCallback(pets);
+                    Pets[] pets = new Pets[petsArrayList.size()];
+                    for (int i = 0; i < petsArrayList.size(); i++) {
+                        pets[i] = petsArrayList.get(i);
+                    }
+                    myCallback.onCallback(pets);
+                } else {
 
+
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                        Pets pet = ds.getValue(Pets.class);
+
+                        String replace = ds.getValue().toString().replace("=", ":");
+
+                        if (replace.contains(lookupString)) {
+                            petsArrayList.add(pet);
+                            index++;
+                        }
+                    }
+                    if (index == 0) {
+                        Toast.makeText(SearchResultsActivity.this, "Nothing found for your parameters.", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    Pets[] pets = new Pets[petsArrayList.size()];
+                    for (int i = 0; i < petsArrayList.size(); i++) {
+                        pets[i] = petsArrayList.get(i);
+                    }
+                    myCallback.onCallback(pets);
+
+                }
             }
 
             @Override
@@ -122,18 +153,18 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void sortArrayList(ArrayList<Pets> petsArrayList, final Location currentLocation) {
         //TODO: gucken warums nich von anfang an richtig sortiert ist
         Location petLoc = new Location("dummyProvider");
-        for(Pets pet:petsArrayList){
+        for (Pets pet : petsArrayList) {
             petLoc.setLatitude(pet.getLatitude());
             petLoc.setLongitude(pet.getLongitude());
             pet.setDistFromUserLocation(currentLocation.distanceTo(petLoc));
         }
 
-            Collections.sort(petsArrayList, new Comparator<Pets>() {
-                @Override
-                public int compare(Pets p1, Pets p2) {
-                    return (int) (p1.getDistFromUserLocation() - p2.getDistFromUserLocation());
-                }
-            });
+        Collections.sort(petsArrayList, new Comparator<Pets>() {
+            @Override
+            public int compare(Pets p1, Pets p2) {
+                return (int) (p1.getDistFromUserLocation() - p2.getDistFromUserLocation());
+            }
+        });
 
 
     }
