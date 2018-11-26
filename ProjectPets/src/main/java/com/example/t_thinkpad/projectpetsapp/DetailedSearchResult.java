@@ -13,12 +13,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-public class DetailedSearchResult extends AppCompatActivity implements OnMapReadyCallback{
+public class DetailedSearchResult extends AppCompatActivity implements OnMapReadyCallback {
 
     public ImageView pictureImageView;
     public TextView labelNameTextView, labelFamilyTextView, labelRaceTextView, labelAgeTextView, labelSexTextView, labelLocationTextView,
@@ -34,10 +33,8 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailed_search_result);
         findViews();
-        pet = handleIntent();
+        pet = getSelectedPet();
         fillViews(pet);
-        // Get the SupportMapFragment and request notification
-        // when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -45,11 +42,9 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        // Add a marker in Sydney, Australia,
-        // and move the map's camera to the same location.
         LatLng petLoc = new LatLng(pet.getLatitude(), pet.getLongitude());
         googleMap.addMarker(new MarkerOptions().position(petLoc)
-                .title("Hier befindet sich "+pet.getName()));
+                .title("Here is " + pet.getName()));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(petLoc));
         googleMap.moveCamera(CameraUpdateFactory.zoomTo(10));
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(petLoc, 10);
@@ -90,7 +85,6 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
 
     public void fillViews(Pets pet) {
         setPicture(pictureImageView, pet);
-        //pictureImageView.setImageDrawable(getD);
         labelNameTextView.setText("Name: ");
         attributeNameTextView.setText(pet.getName());
         labelFamilyTextView.setText("Family: ");
@@ -106,21 +100,18 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         labelCurrentOwnerTextView.setText("Current owner: ");
         attributeCurrentOwnerTextView.setText(pet.getCurrentOwner());
         labelDistFromUserLocation.setText("Distance From User: ");
-        attributeDistFromUserLocation.setText(pet.getDistFromUserLocation()+"");
+        attributeDistFromUserLocation.setText(pet.getDistFromUserLocation() + "");
 
         setOptionalViews(pet);
 
     }
 
-    //TODO: auf vielfache abfragen prüfen. https://www.youtube.com/watch?v=Lb-Pnytoi-8
     private void setPicture(ImageView imageView, Pets pet) {
-        // Reference to an image file in Cloud Storage
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReference();
         StorageReference folderRef = storageRef.child("pictureReferences");
         StorageReference imageRef = folderRef.child(pet.getRandomUUID() + ".jpg");
-        // Download directly from StorageReference using Glide
-        GlideApp.with(this /* context */)
+        GlideApp.with(this)
                 .load(imageRef)
                 .into(imageView);
     }
@@ -136,7 +127,7 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
     }
 
     public void setOptionalViews(Pets pet) {
-        if (!(pet.getSize() == "")) {
+        if (!(pet.getSize().equals(""))) {
             labelSizeTextView.setText("Size: ");
             attributeSizeTextView.setText(pet.getSize());
         } else {
@@ -152,7 +143,7 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
             attributeNumberOfPreviousOwnersTextView.setText("");
         }
 
-        if (!(pet.getDescription() == "")) {
+        if (!(pet.getDescription().equals(""))) {
             labelDescriptionTextView.setText("Description: ");
             attributeDescriptionTextView.setText(pet.getDescription());
         } else {
@@ -168,7 +159,7 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
             attributeChipIdTextView.setText("");
         }
 
-        if (!(pet.getDisorders() == "")) {
+        if (!(pet.getDisorders().equals(""))) {
             labelDisordersTextView.setText("Disorders: ");
             attributeDisordersTextView.setText(pet.getDisorders());
         } else {
@@ -177,7 +168,7 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         }
     }
 
-    private Pets handleIntent() {
+    private Pets getSelectedPet() {
         Intent intent = getIntent();
         Pets pet = new Pets();
         pet.setAge(Integer.parseInt(intent.getStringExtra("age")));
@@ -191,18 +182,12 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
 
         pet.setLatitude(Double.parseDouble(intent.getStringExtra("latitude")));
         pet.setLongitude(Double.parseDouble(intent.getStringExtra("longitude")));
-        //pet.setLatitude(intent.getDoubleExtra("latitude",0.0));
-        //pet.setLongitude(intent.getDoubleExtra("longitude",0.0));
         pet.setDistFromUserLocation(Double.parseDouble(intent.getStringExtra("distFromUserLocation")));
 
         pet.setName(intent.getStringExtra("name"));
         pet.setNumberOfPreviousOwners(Integer.parseInt(intent.getStringExtra("numberOfPreviousOwners")));
         pet.setRace(intent.getStringExtra("race"));
         pet.setRandomUUID(intent.getStringExtra("randomUUID"));
-        /*boolean sex = true;
-        if (intent.getStringExtra("sex").contains("fem") || intent.getStringExtra("sex").contains("wei")) {
-            sex = false;
-        }*/
         pet.setSex(intent.getStringExtra("sex"));
         pet.setSize(intent.getStringExtra("size"));
         return pet;

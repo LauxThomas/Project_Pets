@@ -14,7 +14,7 @@ public class Pets implements Serializable {
     public String family = "";
     public String race = "";
     public int age = -1;
-    public String sex = "";          //Uhh look at this! sex = true means male ¯\_(ツ)_/¯
+    public String sex = "";
     public String location;
     public String currentOwner = "";
     String emailOfCreator;
@@ -25,7 +25,7 @@ public class Pets implements Serializable {
         this.randomUUID = randomUUID;
     }
 
-    public String randomUUID;       //2^128 sollte eindeutig genug sein...
+    public String randomUUID;
 
     //optional:
     public String size = "0";
@@ -99,13 +99,6 @@ public class Pets implements Serializable {
     public void setSex(String sex) {
         this.sex = sex;
     }
-
-//    public void setSex(String sex) {
-//        if (sex.equalsIgnoreCase("male")) {
-//            this.sex = true;
-//        } else
-//            this.sex = false;
-//    }
 
     public String getLocation() {
         return location;

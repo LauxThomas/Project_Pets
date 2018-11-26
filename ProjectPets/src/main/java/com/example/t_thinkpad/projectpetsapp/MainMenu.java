@@ -19,23 +19,23 @@ public class MainMenu extends AppCompatActivity {
     public Button searchPets, myPets, myProfile, settings;
     private FirebaseAuth firebaseAuth;
     private DatabaseReference ref;
+    private boolean isAnimalShelter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        findViewsAndInitializeStuff();
+        findViewsAndInitialiseDatabase();
         setListeners();
-        //TODO: reactivate when functions are working
-        deactivateNotFinishedStuff();
+        //deactivateUnfinishedButtons();
     }
 
-    private void deactivateNotFinishedStuff() {
+    private void deactivateUnfinishedButtons() {
         myPets.setEnabled(false);
         myProfile.setEnabled(false);
     }
 
-    public void findViewsAndInitializeStuff() {
+    public void findViewsAndInitialiseDatabase() {
         searchPets = findViewById(R.id.searchPets);
         myPets = findViewById(R.id.myPets);
         myProfile = findViewById(R.id.myProfile);
@@ -44,10 +44,9 @@ public class MainMenu extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() == null) {
-            startLoginActivity();
+            startSignupActivity();
         }
         checkIfUserIsShelter();
-
     }
 
     public void checkIfUserIsShelter() {
@@ -85,57 +84,56 @@ public class MainMenu extends AppCompatActivity {
             }
         });
     }
-
     public void setListeners() {
         searchPets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openSearchPetsActivity();
+                startSearchPetsActivity();
             }
         });
         myPets.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMyPetsActivity();
+                startMyPetsActivity();
             }
         });
         myProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMyProfileActivity();
+                startMyProfileActivity();
             }
         });
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openSettingsActivity();
+                startSettingsActivity();
             }
         });
     }
 
-    public void startLoginActivity() {
-        startActivity(new Intent(this, LoginActivity.class));
+    public void startSignupActivity() {
+        startActivity(new Intent(this, SignupActivity.class));
         finish();
     }
 
-    public void openSearchPetsActivity() {
+    public void startSearchPetsActivity() {
         Intent intent = new Intent(this, SearchPetsActivity.class);
         startActivity(intent);
     }
 
-    public void openMyPetsActivity() {
+    public void startMyPetsActivity() {
         Intent intent = new Intent(this, MyPetsActivity.class);
         startActivity(intent);
 
     }
 
-    public void openMyProfileActivity() {
+    public void startMyProfileActivity() {
         Intent intent = new Intent(this, MyProfileActivity.class);
         startActivity(intent);
 
     }
 
-    public void openSettingsActivity() {
+    public void startSettingsActivity() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
 

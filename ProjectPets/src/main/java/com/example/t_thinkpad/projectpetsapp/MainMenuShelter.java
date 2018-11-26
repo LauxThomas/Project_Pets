@@ -15,18 +15,18 @@ public class MainMenuShelter extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu_shelter);
-        findViewsAndInitializeStuff();
+        findViewsAndInitialiseDatabase();
         setListeners();
 
-        //deactivateNotFinishedStuff();     //remove comment for disabling buttons
+        //deactivateUnfinishedButtons();
     }
 
-    private void deactivateNotFinishedStuff() {
+    private void deactivateUnfinishedButtons() {
         myPetsButton.setEnabled(false);
         myProfileButton.setEnabled(false);
     }
 
-    public void findViewsAndInitializeStuff() {
+    public void findViewsAndInitialiseDatabase() {
         addPetsButton = findViewById(R.id.addPetsButton);
         myProfileButton = findViewById(R.id.myProfileButton);
         myPetsButton = findViewById(R.id.myPetsButton);

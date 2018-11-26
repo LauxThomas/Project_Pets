@@ -72,16 +72,6 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     private void fillAdapter(final Pets[] pets) {
-        //TODO: extract names from resultArrayfor just showing those in the listView (toString in Pets umschreiben)
-       /* listView.setAdapter(new ArrayAdapter(this, simple_list_item_1, pets));
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startNextActivity(pets[position]);
-            }
-        });*/
-
-
         ArrayList<Pets> petsArrayList= new ArrayList<Pets>();
         for(Pets pet:pets){
             petsArrayList.add(pet);
@@ -93,29 +83,6 @@ public class SearchResultsActivity extends AppCompatActivity {
         listView_tumbnails.setAdapter(petsAdapter);
     }
 
-    /*private void startNextActivity(Pets pet) {
-        Intent intent = new Intent(this, DetailedSearchResult.class);
-        intent.putExtra("age", "" + pet.getAge());
-        intent.putExtra("chipId", "" + pet.getChipId());
-        intent.putExtra("currentOwner", pet.getCurrentOwner());
-        intent.putExtra("description", pet.getDescription());
-        intent.putExtra("disorders", pet.getDisorders());
-        intent.putExtra("family", pet.getFamily());
-        intent.putExtra("image", pet.getImage());
-        intent.putExtra("location", pet.getLocation());
-        intent.putExtra("latitude", ""+pet.getLatitude());
-        intent.putExtra("longitude", ""+pet.getLongitude());
-        intent.putExtra("name", pet.getName());
-        intent.putExtra("numberOfPreviousOwners", "" + pet.getNumberOfPreviousOwners());
-        intent.putExtra("race", pet.getRace());
-        intent.putExtra("randomUUID", pet.getRandomUUID());
-        intent.putExtra("sex", pet.getSex());
-        intent.putExtra("size", pet.getSize());
-        intent.putExtra("wholePet", pet);
-        startActivity(intent);
-    }*/
-
-
     public void readData(final String lookupString, final MyCallback myCallback) {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -126,9 +93,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 
                     Pets pet = ds.getValue(Pets.class);
 
-                    System.out.println("PETSOUTNAME: " + pet.getName());
                     String replace = ds.getValue().toString().replace("=", ":");
-                    //TODO: Image einbinden https://stackoverflow.com/a/39708645
 
                     if (replace.contains(lookupString)) {
                         petsArrayList.add(pet);
@@ -136,10 +101,9 @@ public class SearchResultsActivity extends AppCompatActivity {
                     }
                 }
                 if (index == 0) {
-                    Toast.makeText(SearchResultsActivity.this, "nothing found for your parameters", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SearchResultsActivity.this, "Nothing found for your parameters.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //getCurrentLocation(petsArrayList);
 
                 Pets[] pets = new Pets[petsArrayList.size()];
                 for (int i = 0; i < petsArrayList.size(); i++) {
@@ -156,18 +120,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     private void sortArrayList(ArrayList<Pets> petsArrayList, final Location currentLocation) {
-
-
-       /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Collections.sort(petsArrayList, new Comparator<Pets>() {
-                public int compare(Pets p1, Pets p2) {
-
-                    //return ((p2.getLongitude() - currentLocation.getLongitude()) + (p2.getLatitude() - currentLocation.getLatitude())).compareTo
-                           // ((p1.getLongitude() - currentLocation.getLongitude()) + (p1.getLatitude() - currentLocation.getLatitude()));
-                    return 1;
-                }
-            });
-        }*/
+        //TODO: gucken warums nich von anfang an richtig sortiert ist
         Location petLoc = new Location("dummyProvider");
         for(Pets pet:petsArrayList){
             petLoc.setLatitude(pet.getLatitude());
@@ -191,7 +144,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                 .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location currentLocation) {
-                        // Got last known location. In some rare situations this can be null.
                         if (currentLocation != null) {
                             sortArrayList(petsArrayList, currentLocation);
                         }

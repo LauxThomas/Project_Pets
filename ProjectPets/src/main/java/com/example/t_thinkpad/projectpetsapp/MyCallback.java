@@ -4,6 +4,5 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public interface MyCallback {
-//    void onCallback(LinkedHashMap value);
     void onCallback(Pets[] pets);
 }

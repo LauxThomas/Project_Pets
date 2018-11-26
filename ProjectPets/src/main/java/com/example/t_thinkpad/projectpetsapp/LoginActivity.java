@@ -16,101 +16,91 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
+    Button signinButton;
     EditText mailEditText, passwordEditText;
-    Button registerButton;
-    TextView textViewSignin;
+    TextView userLogin, textViewSignUp;
+    FirebaseAuth firebaseAuth;
+    ProgressDialog progressDialog;
+    DatabaseReference databaseReference;
+    private boolean isAnimalShelter;
 
-    private ProgressDialog progressDialog;
-    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        firebaseAuth = FirebaseAuth.getInstance();
-        findViewsAndInitializeStuff();
+        setContentView(R.layout.activity_second_login);
+        findViewsAndInitialiseDatabase();
         setListeners();
     }
 
-    public void findViewsAndInitializeStuff() {
+    public void findViewsAndInitialiseDatabase() {
+        signinButton = findViewById(R.id.signinButton);
+        mailEditText = findViewById(R.id.mailEditText);
+        passwordEditText = findViewById(R.id.passwordEditText);
+        textViewSignUp = findViewById(R.id.textViewSignUp);
 
-
+        firebaseAuth = FirebaseAuth.getInstance();
         if (firebaseAuth.getCurrentUser() != null) {
             startMainMenuActivity();
         }
-
-
         progressDialog = new ProgressDialog(this);
-        mailEditText = findViewById(R.id.mailEditText);
-        passwordEditText = findViewById(R.id.passwordEditText);
-        registerButton = findViewById(R.id.registerButton);
-        textViewSignin = findViewById(R.id.textViewSignin);
     }
 
     public void setListeners() {
-        registerButton.setOnClickListener(new View.OnClickListener() {
+        signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerUser();
+                userLogin();
             }
         });
-        textViewSignin.setOnClickListener(new View.OnClickListener() {
+        textViewSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //will open login Activity
-                startSecondLoginActivity();
+                startSignupActivity();
             }
         });
     }
 
-    public void registerUser() {
-        String email = mailEditText.getText().toString().trim();
-        String password = passwordEditText.getText().toString().trim();
-        if (TextUtils.isEmpty(email)) {
-            //email is empty
-            Toast.makeText(this, "Enter you Email", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (TextUtils.isEmpty(password)) {
-            //password is empty
-            Toast.makeText(this, "Enter you password", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        progressDialog.setMessage("registering user...");
-        progressDialog.show();
-
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    startMainMenuActivity();
-                } else {
-                    Toast.makeText(LoginActivity.this, "registration failed", Toast.LENGTH_SHORT).show();
-                }
-                progressDialog.dismiss();   //stoppt den ProgressDialog
-            }
-        });
-
-    }
-
-    public void startSecondLoginActivity() {
-        startActivity(new Intent(this, secondLoginActivity.class));
+    public void startSignupActivity() {
+        startActivity(new Intent(this, SignupActivity.class));
         finish();
     }
 
+    private void userLogin() {
+        String email = mailEditText.getText().toString().trim();
+        String password = passwordEditText.getText().toString().trim();
+
+        if (TextUtils.isEmpty(email)) {
+            Toast.makeText(this, "Please enter you Email.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(password)) {
+            Toast.makeText(this, "Please enter you password.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        progressDialog.setMessage("Logging in...");
+        progressDialog.show();
+
+        firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        progressDialog.dismiss();
+                        if (task.isSuccessful()) {
+                            startMainMenuActivity();
+                        } else {
+                            Toast.makeText(LoginActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
     public void startMainMenuActivity() {
-        //TESTWEISE ISTS DIE PROFILE ACTIVITY
         startActivity(new Intent(getApplicationContext(), MainMenu.class));
-//        startActivity(new Intent(getApplicationContext(), MyProfileActivity.class));
         finish();
     }
 }

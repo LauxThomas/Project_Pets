@@ -84,7 +84,7 @@
             android:label="Search results"
             android:parentActivityName=".SearchPetsActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".SignupActivity"
             android:label="Register">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -93,9 +93,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".secondLoginActivity"
+            android:name=".LoginActivity"
             android:label="Log in"
-            android:parentActivityName=".LoginActivity" />
+            android:parentActivityName=".SignupActivity" />
         <activity
             android:name=".MainMenuShelter"
             android:label="ShelterMainMenu" />

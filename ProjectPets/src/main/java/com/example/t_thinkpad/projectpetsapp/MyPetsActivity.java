@@ -24,9 +24,9 @@ public class MyPetsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_pets);
         findViews();
-        ADDMULTIPLEANIMALSFORTESTING();
+        addDummypets();
         searchResultContainer.removeAllViews();
-        ADDMULTIPLEVIEWSFORTESTING();
+        addDummyviews();
     }
 
     public void findViews() {
@@ -41,19 +41,42 @@ public class MyPetsActivity extends AppCompatActivity {
         sexTextView = findViewById(R.id.sexTextView);
         locationTextView = findViewById(R.id.locationTextView);
         dateAddedTextView = findViewById(R.id.dateAddedTextView);
-
     }
 
-    public void ADDMULTIPLEANIMALSFORTESTING() {
-
+    public void addDummypets() {
         pets = new ArrayList<>();
+        Pets pet1 = new Pets();
+        pet1.setImage("");
+        pet1.setName("pet1");
+        pet1.setFamily("Dogs");
+        pet1.setRace("Dalamatian");
+        pet1.setAge(6);
+        pet1.setSex("Male");
+        pet1.setLocation("Here");
+        pet1.setCurrentOwner("Me");
+        pet1.setLatitude(0.0f);
+        pet1.setLongitude(0.0f);
 
+        Pets pet2 = new Pets();
+        pet2.setImage("");
+        pet2.setName("pet1");
+        pet2.setFamily("Dogs");
+        pet2.setRace("Dalamatian");
+        pet2.setAge(6);
+        pet2.setSex("Male");
+        pet2.setLocation("Here");
+        pet2.setCurrentOwner("Me");
+        pet2.setLatitude(0.0f);
+        pet2.setLongitude(0.0f);
+
+
+        pets.add(pet1);
+        pets.add(pet2);
     }
 
-    public void ADDMULTIPLEVIEWSFORTESTING() {
+    public void addDummyviews() {
         for (int i = 0; i < pets.size(); i++) {
             final int index = i;
-            //Linearlayout horizontal petContainer
             LinearLayout petContainer = new LinearLayout(MyPetsActivity.this);
             petContainer.setOrientation(LinearLayout.HORIZONTAL);
             petContainer.setLayoutParams(new LinearLayout.LayoutParams(
@@ -63,11 +86,9 @@ public class MyPetsActivity extends AppCompatActivity {
             petContainer.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    openDetailView(index);
+                    startDetailedSearchResultActivity(pets.get(index));
                 }
             });
-            //ImageView ImageView
-            //TODO: BILDER EINFÜGEN! https://stackoverflow.com/a/39708645
             ImageView imageView = new ImageView(MyPetsActivity.this);
             imageView.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -169,27 +190,26 @@ public class MyPetsActivity extends AppCompatActivity {
         return pets;
     }
 
-    public String generateDescription(){
-        return "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   \n" +
-                "\n" +
-                "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   \n" +
-                "\n" +
-                "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   \n" +
-                "\n" +
-                "Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   \n" +
-                "\n" +
-                "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   \n" +
-                "\n" +
-                "At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero voluptua. est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.   \n" +
-                "\n" +
-                "Consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus.   \n" +
-                "\n" +
-                "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   \n" +
-                "\n" +
-                "Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   \n" +
-                "\n" +
-                "Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   \n" +
-                "\n" +
-                "Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo";
+    private void startDetailedSearchResultActivity(Pets pet){
+        Intent intent = new Intent(this, DetailedSearchResult.class);
+        intent.putExtra("age", "" + pet.getAge());
+        intent.putExtra("chipId", "" + pet.getChipId());
+        intent.putExtra("currentOwner", pet.getCurrentOwner());
+        intent.putExtra("description", pet.getDescription());
+        intent.putExtra("disorders", pet.getDisorders());
+        intent.putExtra("family", pet.getFamily());
+        intent.putExtra("image", pet.getImage());
+        intent.putExtra("location", pet.getLocation());
+        intent.putExtra("latitude", ""+pet.getLatitude());
+        intent.putExtra("longitude", ""+pet.getLongitude());
+        intent.putExtra("distFromUserLocation",""+pet.getDistFromUserLocation());
+        intent.putExtra("name", pet.getName());
+        intent.putExtra("numberOfPreviousOwners", "" + pet.getNumberOfPreviousOwners());
+        intent.putExtra("race", pet.getRace());
+        intent.putExtra("randomUUID", pet.getRandomUUID());
+        intent.putExtra("sex", pet.getSex());
+        intent.putExtra("size", pet.getSize());
+        intent.putExtra("wholePet", pet);
+        this.startActivity(intent);
     }
 }

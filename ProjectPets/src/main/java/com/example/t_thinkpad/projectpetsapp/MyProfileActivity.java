@@ -54,7 +54,7 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     public void startLoginActivity() {
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, SignupActivity.class));
         finish();
     }
 

@@ -9,7 +9,7 @@ public class UserInformation {
     public String mail;
 
     public UserInformation() {
-
+        //NEEDED!!
     }
 
     public UserInformation(String name, String location, String mail, String isLookingFor) {

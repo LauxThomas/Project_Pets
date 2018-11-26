@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SettingsActivity extends AppCompatActivity {
-    public TextView notificationsTextView, deleteSearchHistoryTextView, logoutTextView, emailTextView;
+    public TextView notificationsTextView, logoutTextView, emailTextView;
     public LinearLayout logoutLayout;
     FirebaseAuth firebaseAuth;
 
@@ -21,20 +21,18 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        findViewsAndInitializeStuff();
+        findViewsAndInitialiseDatabase();
         setListeners();
         //TODO: reactivate when functions are working
-        deactivateNotFinishedStuff();
+        deactivateUnfinishedButtons();
     }
 
-    private void deactivateNotFinishedStuff() {
+    private void deactivateUnfinishedButtons() {
         notificationsTextView.setEnabled(false);
-        deleteSearchHistoryTextView.setEnabled(false);
     }
 
-    public void findViewsAndInitializeStuff() {
+    public void findViewsAndInitialiseDatabase() {
         notificationsTextView = findViewById(R.id.notificationsTextView);
-        deleteSearchHistoryTextView = findViewById(R.id.deleteSearchHistoryTextView);
         logoutTextView = findViewById(R.id.logoutTextView);
         emailTextView = findViewById(R.id.emailTextView);
         logoutLayout = findViewById(R.id.logoutLayout);
@@ -48,7 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void startLoginActivity() {
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, SignupActivity.class));
         finish();
     }
 
@@ -65,12 +63,6 @@ public class SettingsActivity extends AppCompatActivity {
                 logOutAlert();
             }
         });
-        deleteSearchHistoryTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDeleteHistoryAlert();
-            }
-        });
     }
 
     public void openNotificationsActivity() {
@@ -79,7 +71,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 
-    //call lagOutAlert(); from listener on Button or sth
     public void logOutAlert() {
         AlertDialog.Builder builder;
         builder = new AlertDialog.Builder(this);
@@ -92,7 +83,6 @@ public class SettingsActivity extends AppCompatActivity {
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
                     }
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -102,34 +92,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void logOut() {
         firebaseAuth.signOut();
         finish();
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, SignupActivity.class));
     }
-
-    public void showDeleteHistoryAlert() {
-
-        AlertDialog.Builder builder;
-        builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete search history")
-                .setMessage("Are you sure you want to delete your search history?")
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        deleteHistory();
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
-
-    }
-
-    public void deleteHistory() {   //TODO: Dafür müsste erstmal ne History angelegt werden. Entfernen?
-        //TODO: History löschen
-        Toast.makeText(this, "History deleted!", Toast.LENGTH_SHORT).show();
-    }
-
 
 }

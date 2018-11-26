@@ -50,18 +50,14 @@ import java.util.UUID;
 public class AddPetsActivity extends AppCompatActivity {
     ImageView imageView;
     AutoCompleteTextView raceAutoComplete;
-    EditText nameEditText,
-
-    sexEditText, locationEditText, currentOwnerEditText, sizeEditText,
-            numberOfPreviousOwnersEditText, descriptionEditText, chipIdEditText, disordersEditText;
+    EditText nameEditText, locationEditText, currentOwnerEditText, sizeEditText,
+            descriptionEditText, chipIdEditText, disordersEditText;
     Spinner sexSpinner, ageSpinner, numOfPreviousOwnersSpinner, familySpinner;
     Button addPetButton, pickLocationButton;
     Uri mImageUri;
     static final int REQUEST_PICK_IMAGE = 1;
-    static final int REQUEST_CAPTURE_IMAGE = 100;
     static final int REQUEST_IMAGE_CAPTURE = 123;
     static final int PLACE_PICKER_REQUEST = 37;
-    private boolean isUploaded = false;
     private final String[] FAMILIES = new String[]{"Dogs", "Cats", "Birds", "Fish", "Small animals", "other"};
     //TODO: erweitern
     private final String[] DOGS = new String[]{"Französische Bulldogge", "Labrador", "Australian Shepherd", "Chihuahua", "Golden Retriever", "Border Collie", "Labradoodle", "Rottweiler", "Beagle", "Mops"};
@@ -75,12 +71,9 @@ public class AddPetsActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private DatabaseReference ref, mDatabaseRef;
     private StorageTask mUploadTask;
-    private StorageReference mStorageRef, fileReference;
-    private String randomUUID;
+    private StorageReference mStorageRef;
+    private String randomUUID, mCurrentPhotoPath;
     private Place place;
-//    private ProgressBar progressBar;
-
-    private String encodedPhoto = "nicht BASE64 decodiert";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +105,6 @@ public class AddPetsActivity extends AppCompatActivity {
         ArrayAdapter<Integer> adapter3 = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, numOfPreviousOwnersSpinnerItems);
         numOfPreviousOwnersSpinner.setAdapter(adapter3);
 
-//        String[] familySpinnerItems = new String[]{"Dogs", "Cats", "Birds", "Fish", "Small animals", "other"};
         ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, FAMILIES);
         familySpinner.setAdapter(adapter4);
         familySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -123,11 +115,11 @@ public class AddPetsActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
             }
 
         });
     }
+
     private void updateRaceSpinnerWithPosition(int position) {
         String[] RACES = new String[]{};
         switch (familySpinner.getSelectedItemPosition()) {
@@ -212,23 +204,14 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
     private void startCameraIntent() {
-        /*Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }*/
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            // Create the File where the photo should go
             File photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File...
 
             }
-            // Continue only if the File was successfully created
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,
                         "com.example.android.fileprovider",
@@ -247,9 +230,7 @@ public class AddPetsActivity extends AppCompatActivity {
 
         try {
             startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
-        } catch (GooglePlayServicesRepairableException e) {
-            e.printStackTrace();
-        } catch (GooglePlayServicesNotAvailableException e) {
+        } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
     }
@@ -260,7 +241,7 @@ public class AddPetsActivity extends AppCompatActivity {
 
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == RESULT_OK) {
             mImageUri = data.getData();
-            Picasso.with(this).load(mImageUri).into(imageView);//TODO: PICASSO!!
+            GlideApp.with(this).load(mImageUri).into(imageView);
             if (mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
             } else {
@@ -268,7 +249,6 @@ public class AddPetsActivity extends AppCompatActivity {
             }
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             System.out.println("test");
-            //Bitmap photo = (Bitmap) data.getExtras().get("data");
             Bitmap photo = null;
             try {
                 photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(new File(mCurrentPhotoPath)));
@@ -276,10 +256,6 @@ public class AddPetsActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             imageView.setImageBitmap(photo);
-            /*String path = MediaStore.Images.Media.insertImage(this.getContentResolver(), photo, null, null);
-            System.out.println("URITEST: " + path);
-            Uri image1 = Uri.parse(path);
-            */
             if (mUploadTask != null && mUploadTask.isInProgress()) {
                 Toast.makeText(this, "Upload in progress", Toast.LENGTH_SHORT).show();
             } else {
@@ -287,19 +263,15 @@ public class AddPetsActivity extends AppCompatActivity {
                 uploadFile();
             }
         } else if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
-            Toast.makeText(this, "Placepicker geht", Toast.LENGTH_SHORT).show();
             place = PlacePicker.getPlace(this, data);
-            //System.out.println("test123" + place.getAddress());
             locationEditText.setText(place.getName());
         } else {
-            Toast.makeText(this, "Irgendetwas ist null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Etwas ist schiefgelaufen", Toast.LENGTH_SHORT).show();
         }
     }
 
-    String mCurrentPhotoPath;
 
     private File createImageFile() throws IOException {
-        // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -309,24 +281,20 @@ public class AddPetsActivity extends AppCompatActivity {
                 storageDir      /* directory */
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
-
+/*
     private String getFileExtention(Uri uri) {
         ContentResolver cR = getContentResolver();
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
-    }
+    }*/
 
     private void uploadFile() {
         if (mImageUri != null) {
             randomUUID = UUID.randomUUID().toString();
-            //TODO: getfileextention methode wieder gerade biegen, sodass keien .null dateien in firebase geraten
-            //StorageReference fileReference = mStorageRef.child(randomUUID + "." +getFileExtention(mImageUri));
-            fileReference = mStorageRef.child(randomUUID + ".jpg");
-
+            StorageReference fileReference = mStorageRef.child(randomUUID + ".jpg");
 
             mUploadTask = fileReference.putFile(mImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -336,7 +304,6 @@ public class AddPetsActivity extends AppCompatActivity {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-//                                    progressBar.setProgress(0);
                                 }
                             }, 2000);
 
@@ -363,19 +330,16 @@ public class AddPetsActivity extends AppCompatActivity {
                         @Override
                         public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
 //                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
-//                            progressBar.setProgress((int)progress);
-
                         }
                     });
         } else {
-            Toast.makeText(this, "no Image selected!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "No Image selected!", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void createNewPet() {
         String name = nameEditText.getText().toString();
         String family = (String) familySpinner.getSelectedItem();
-//        String family = familySpinner.getText().toString();
         String race = raceAutoComplete.getText().toString();
         int age = (int) ageSpinner.getSelectedItem();
         String sex = sexSpinner.getSelectedItem().toString();
@@ -383,11 +347,6 @@ public class AddPetsActivity extends AppCompatActivity {
         String currentOwner = currentOwnerEditText.getText().toString();
         String size = sizeEditText.getText().toString();
         int numberOfPreviousOwners = (int) numOfPreviousOwnersSpinner.getSelectedItem();
-        /*if (numberOfPreviousOwnersEditText.getText().toString().equals("")) {
-            numberOfPreviousOwners = 0;
-        } else {
-            numberOfPreviousOwners = Integer.parseInt(numberOfPreviousOwnersEditText.getText().toString());
-        }*/
         String description = descriptionEditText.getText().toString();
         int chipId;
         if (chipIdEditText.getText().toString().equals("")) {
@@ -396,9 +355,8 @@ public class AddPetsActivity extends AppCompatActivity {
             chipId = Integer.parseInt(chipIdEditText.getText().toString());
         }
         String disorders = disordersEditText.getText().toString();
-        //encodedPhoto could be a BASE64 String
-        Pets newPet = new Pets();   //Lege neues Tier an
-        newPet.setImage(encodedPhoto);
+        Pets newPet = new Pets();
+        newPet.setImage(null);
         newPet.setName(name);
         newPet.setFamily(family);
         newPet.setRace(race);
@@ -408,15 +366,13 @@ public class AddPetsActivity extends AppCompatActivity {
         newPet.setLatitude(place.getLatLng().latitude);
         newPet.setLongitude(place.getLatLng().longitude);
         newPet.setCurrentOwner(currentOwner);
-        System.out.println("BASE64: " + encodedPhoto);
         newPet.setCurrentOwner(newPet.getCurrentOwner());
         newPet.setRandomUUID(randomUUID);
-//        newPet.setEmailOfCreator(firebaseAuth.getCurrentUser().getEmail());   //TODO: Unterminated object at character 172 of...
+        newPet.setEmailOfCreator(firebaseAuth.getCurrentUser().getEmail());   //TODO: Unterminated object at character 172 of...
         //füge Optionals hinzu:
         if (!size.equals("")) {
             newPet.setSize(size);
         }
-        //abfrage redundant
         if (numberOfPreviousOwners != -1) {
             newPet.setNumberOfPreviousOwners(numberOfPreviousOwners);
         }
@@ -429,7 +385,6 @@ public class AddPetsActivity extends AppCompatActivity {
         if (!disorders.equals("")) {
             newPet.setDisorders(disorders);
         }
-        System.out.println("TESTERROR: " + newPet.getName());
         ref.child(newPet.getName() + " @ " + randomUUID).setValue(newPet);
         Toast.makeText(this, name.toString() + " angelegt!", Toast.LENGTH_SHORT).show();
         finish();
@@ -438,15 +393,11 @@ public class AddPetsActivity extends AppCompatActivity {
 
     private void findViews() {
         imageView = findViewById(R.id.imageView);
-//        progressBar = findViewById(R.id.progressBar);
         nameEditText = findViewById(R.id.nameEditText);
         raceAutoComplete = findViewById(R.id.raceAutoComplete);
-        //ageEditText = findViewById(R.id.ageEditText);
-        //sexEditText = findViewById(R.id.sexEditText);
         locationEditText = findViewById(R.id.locationEditText);
         currentOwnerEditText = findViewById(R.id.currentOwnerEditText);
         sizeEditText = findViewById(R.id.sizeEditText);
-        //numberOfPreviousOwnersEditText = findViewById(R.id.numberOfPreviousOwnersEditText);
         descriptionEditText = findViewById(R.id.descriptionEditText);
         chipIdEditText = findViewById(R.id.chipIdEditText);
         disordersEditText = findViewById(R.id.disordersEditText);
