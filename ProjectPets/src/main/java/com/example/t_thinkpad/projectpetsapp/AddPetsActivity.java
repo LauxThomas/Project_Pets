@@ -80,6 +80,26 @@ public class AddPetsActivity extends AppCompatActivity {
         initializeFirebase();
         initializeSpinners();
         setListeners();
+        if (getIntent().getBooleanExtra("isEdit", false)) {
+            fillViews(getIntent());
+        }
+    }
+
+    private void fillViews(Intent intent) {
+        //TODO:IMAGE EINBINDEN!
+        nameEditText.setText(intent.getStringExtra("name"));
+        familySpinner.setSelection(((ArrayAdapter) familySpinner.getAdapter()).getPosition(intent.getStringExtra("family")));
+        raceAutoComplete.setText(intent.getStringExtra("race"));
+        ageSpinner.setSelection(intent.getIntExtra("age", 0));
+        sexSpinner.setSelection(((ArrayAdapter) sexSpinner.getAdapter()).getPosition(intent.getStringExtra("sex")));
+        locationEditText.setText(intent.getStringExtra("location"));
+        currentOwnerEditText.setText(intent.getStringExtra("currentOwner"));
+        sizeEditText.setText(intent.getStringExtra("size"));
+        numOfPreviousOwnersSpinner.setSelection(((ArrayAdapter) numOfPreviousOwnersSpinner.getAdapter()).getPosition(intent.getIntExtra("numberOfPreviousOwners", 0)));
+        descriptionEditText.setText(intent.getStringExtra("description"));
+        chipIdEditText.setText(intent.getStringExtra("chipId"));
+        disordersEditText.setText(intent.getStringExtra("disorders"));
+        //TODO: LOCATION, LATITUDE UND LONGITUDE RICHTIG SETZEN
     }
 
     private void initializeSpinners() {
@@ -335,6 +355,7 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
     private void createNewPet() {
+        System.out.println("SCHNITZELBRÖTCHEN: ich werde nur ausgegeben, wenn die createNewPet Methode betreten wurde.");
         String name = nameEditText.getText().toString();
         String family = (String) familySpinner.getSelectedItem();
         String race = raceAutoComplete.getText().toString();
@@ -360,12 +381,17 @@ public class AddPetsActivity extends AppCompatActivity {
         newPet.setAge(age);
         newPet.setSex(sex);
         newPet.setLocation(location);
-        newPet.setLatitude(place.getLatLng().latitude);
-        newPet.setLongitude(place.getLatLng().longitude);
         newPet.setCurrentOwner(currentOwner);
         newPet.setCurrentOwner(newPet.getCurrentOwner());
-        newPet.setRandomUUID(randomUUID);
-        System.out.println("currentUsersEmail: " + firebaseAuth.getCurrentUser().getEmail());
+        if (getIntent().getBooleanExtra("isEdit", false)) {
+            newPet.setLatitude(Double.parseDouble(getIntent().getStringExtra("latitude")));
+            newPet.setLongitude(Double.parseDouble(getIntent().getStringExtra("longitude")));
+            newPet.setRandomUUID(getIntent().getStringExtra("randomUUID"));
+        } else {
+            newPet.setLatitude(place.getLatLng().latitude);
+            newPet.setLongitude(place.getLatLng().longitude);
+            newPet.setRandomUUID(randomUUID);
+        }
         newPet.setEmailOfCreator(firebaseAuth.getCurrentUser().getEmail());   //TODO: Unterminated object at character 172 of...
         //füge Optionals hinzu:
         if (!size.equals("")) {

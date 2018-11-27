@@ -63,15 +63,16 @@ public class SearchResultsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String lookupString = intent.getStringExtra("lookupString");
         if (intent.getBooleanExtra("isShelter", false)) {
-            handleDatabaseStuff(lookupString, true, false);
+            filterDatabase(lookupString, true, false);
         } else if (intent.getBooleanExtra("showFavorites", false)) {
-            handleDatabaseStuff(lookupString, false, true);
+            filterDatabase(lookupString, false, true);
         } else {
-            handleDatabaseStuff(lookupString, false, false);
+
+            filterDatabase(lookupString, false, false);
         }
     }
 
-    private void handleDatabaseStuff(final String lookupString, boolean isShelter, boolean showFavorites) {
+    private void filterDatabase(final String lookupString, boolean isShelter, boolean showFavorites) {
         readData(showFavorites, isShelter, lookupString, new MyCallback() {
             @Override
             public void onCallback(Pets[] pets) {
