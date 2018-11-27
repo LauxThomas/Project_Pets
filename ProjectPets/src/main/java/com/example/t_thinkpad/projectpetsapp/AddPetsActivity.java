@@ -26,6 +26,8 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -97,9 +99,18 @@ public class AddPetsActivity extends AppCompatActivity {
         sizeEditText.setText(intent.getStringExtra("size"));
         numOfPreviousOwnersSpinner.setSelection(((ArrayAdapter) numOfPreviousOwnersSpinner.getAdapter()).getPosition(intent.getIntExtra("numberOfPreviousOwners", 0)));
         descriptionEditText.setText(intent.getStringExtra("description"));
-        chipIdEditText.setText(intent.getStringExtra("chipId"));
+        chipIdEditText.setText("" + intent.getIntExtra("chipId", 0));
         disordersEditText.setText(intent.getStringExtra("disorders"));
         //TODO: LOCATION, LATITUDE UND LONGITUDE RICHTIG SETZEN
+        addPetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PlacePicker.IntentBuilder place = new PlacePicker.IntentBuilder();
+                place.setLatLngBounds(new LatLngBounds(new LatLng(1, 2), new LatLng(1, 2)));
+
+                createNewPet();
+            }
+        });
     }
 
     private void initializeSpinners() {
@@ -255,6 +266,7 @@ public class AddPetsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("5SCHNITZELBRÖTCHEN");
 
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == RESULT_OK) {
             mImageUri = data.getData();
@@ -289,6 +301,7 @@ public class AddPetsActivity extends AppCompatActivity {
 
 
     private File createImageFile() throws IOException {
+        System.out.println("4SCHNITZELBRÖTCHEN");
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -312,7 +325,7 @@ public class AddPetsActivity extends AppCompatActivity {
         if (mImageUri != null) {
             randomUUID = UUID.randomUUID().toString();
             StorageReference fileReference = mStorageRef.child(randomUUID + ".jpg");
-
+            System.out.println("3SCHNITZELBRÖTCHEN");
             mUploadTask = fileReference.putFile(mImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -329,9 +342,12 @@ public class AddPetsActivity extends AppCompatActivity {
                                     Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getDownloadUrl()).toString()));
                             String uploadId = mDatabaseRef.push().getKey();
                             mDatabaseRef.child(uploadId).setValue(upload.getImageUrl());
+
                             addPetButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
+                                    System.out.println("2SCHNITZELBRÖTCHEN");
+
                                     createNewPet();
                                 }
                             });
@@ -361,7 +377,12 @@ public class AddPetsActivity extends AppCompatActivity {
         String race = raceAutoComplete.getText().toString();
         int age = (int) ageSpinner.getSelectedItem();
         String sex = sexSpinner.getSelectedItem().toString();
-        String location = place.getName().toString();
+        String location;
+        if (getIntent().getBooleanExtra("isEdit", false) && place.getAddress() == null) {
+            location = "";
+        } else {
+            location = place.getAddress().toString();
+        }
         String currentOwner = currentOwnerEditText.getText().toString();
         String size = sizeEditText.getText().toString();
         int numberOfPreviousOwners = (int) numOfPreviousOwnersSpinner.getSelectedItem();
@@ -384,8 +405,8 @@ public class AddPetsActivity extends AppCompatActivity {
         newPet.setCurrentOwner(currentOwner);
         newPet.setCurrentOwner(newPet.getCurrentOwner());
         if (getIntent().getBooleanExtra("isEdit", false)) {
-            newPet.setLatitude(Double.parseDouble(getIntent().getStringExtra("latitude")));
-            newPet.setLongitude(Double.parseDouble(getIntent().getStringExtra("longitude")));
+            newPet.setLatitude(getIntent().getDoubleExtra("latitude", 0.0));
+            newPet.setLongitude(getIntent().getDoubleExtra("longitude", 0.0));
             newPet.setRandomUUID(getIntent().getStringExtra("randomUUID"));
         } else {
             newPet.setLatitude(place.getLatLng().latitude);
@@ -409,7 +430,12 @@ public class AddPetsActivity extends AppCompatActivity {
         if (!disorders.equals("")) {
             newPet.setDisorders(disorders);
         }
-        ref.child(newPet.getName() + " @ " + randomUUID).setValue(newPet);
+        if (getIntent().getBooleanExtra("isEdit", false)) {
+            ref.child(getIntent().getStringExtra("name") + " @ " + newPet.getRandomUUID()).setValue(newPet);
+        } else {
+            ref.child(newPet.getName() + " @ " + newPet.getRandomUUID()).setValue(newPet);
+
+        }
         Toast.makeText(this, name.toString() + " angelegt!", Toast.LENGTH_SHORT).show();
         finish();
     }

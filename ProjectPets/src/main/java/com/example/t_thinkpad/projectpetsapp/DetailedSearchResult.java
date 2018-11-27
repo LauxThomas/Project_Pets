@@ -133,7 +133,7 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         intent.putExtra("isEdit", true);
 
         //TODO: das geht auch bestimmt mit serializable:
-
+        intent.putExtra("originalReference", (pet.getName() + " @ " + pet.getRandomUUID()));
         intent.putExtra("image", pet.getImage());
         intent.putExtra("age", pet.getAge());
         intent.putExtra("chipId", pet.getChipId());
@@ -175,8 +175,23 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
     }
 
     private void deleteCurrentPet() {
-        DatabaseReference petRef = FirebaseDatabase.getInstance().getReference().child("pets");
-        petRef.child(pet.getName() + " @ " + pet.getRandomUUID()).removeValue();
+        final DatabaseReference petRef = FirebaseDatabase.getInstance().getReference().child("pets");
+        petRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.getKey().contains(pet.getRandomUUID())) {
+                        petRef.child(ds.getKey()).removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        //petRef.child(pet.getName() + " @ " + pet.getRandomUUID()).removeValue();
         Toast.makeText(DetailedSearchResult.this, pet.getName() + " removed", Toast.LENGTH_LONG).show();
         restartSearchResultsActivity();
         finish();
