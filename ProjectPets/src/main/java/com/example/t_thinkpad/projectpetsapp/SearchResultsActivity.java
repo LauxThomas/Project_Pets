@@ -116,7 +116,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                     for (int i = 0; i < petsArrayList.size(); i++) {
                         pets[i] = petsArrayList.get(i);
                     }
-                    System.out.println("Burgerbrötchen: " + pets);
                     myCallback.onCallback(pets);
 
 
@@ -125,23 +124,11 @@ public class SearchResultsActivity extends AppCompatActivity {
                     final ArrayList<Pets> arrayListWithActualPets = new ArrayList<>();
                     //iterate over all pets
                     for (final DataSnapshot petDs : petsSnapshot.getChildren()) {
-                        //arrayListWithPets.add(petDs.getValue(Pets.class));
                         arrayListWithPets.add(petDs.getKey());
                         arrayListWithActualPets.add(petDs.getValue(Pets.class));
-
-
-                        /*if (petsArrayList.size() == 0) {
-                            Toast.makeText(SearchResultsActivity.this, "Nothing found for your parameters.", Toast.LENGTH_SHORT).show();
-                            return;
-                        }*/
-                        /*Pets[] pets = new Pets[petsArrayList.size()];
-                        for (int i = 0; i < petsArrayList.size(); i++) {
-                            pets[i] = petsArrayList.get(i);
-                        }*/
-                        //myCallback.onCallback(pets);
-
                     }
                     final ArrayList arraysListWithFavs = new ArrayList<>();
+                    //TODO:FAVREF auf einen einzigen nutzer begrenzen
                     favsRef.addValueEventListener(new ValueEventListener() {
                                                       @Override
                                                       public void onDataChange(DataSnapshot favSnapshot) {
@@ -156,7 +143,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                                                               for (int j = 0; j < arraysListWithFavs.size(); j++) {
                                                                   if (arrayListWithPets.get(i).toString().contains(arraysListWithFavs.get(j).toString())) {
                                                                       pets[counter] = arrayListWithActualPets.get(i);
-                                                                      System.out.println("SCHNAPSPRALINEN: " + pets[counter]);
                                                                       counter++;
                                                                   }
 
@@ -184,19 +170,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                                                   }
 
                     );
-
-
-                    //System.out.println("PetsLengthSchnitzelbrötchen: "+ arrayListWithPets.size());
-                    //System.out.println("FavsLengthSchnitzelbrötchen: "+ arraysListWithFavs.size());
-
-                    //petsArrayList = innerPetsArrayList; //hier ist innerpetsArray leer
-                    //System.out.println("BURGERBRÖTCHEN Diese Elemente werden angezeigt: " + petsArrayList);
-
-
                 } else
-
                 {
-
 
                     for (DataSnapshot ds : petsSnapshot.getChildren()) {
 
