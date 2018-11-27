@@ -163,6 +163,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                                                               }
 
                                                           }
+                                                          //trim length of Array so that PetsAdapter wont throw a nullpointerException
                                                           Pets[] temp = new Pets[pets.length];
                                                           for (int i = 0; i < pets.length; i++) {
                                                               temp[i] = pets[i];
