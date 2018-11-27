@@ -35,9 +35,6 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
             attributeNumberOfPreviousOwnersTextView, attributeCurrentOwnerTextView, labelDescriptionTextView, attributeDescriptionTextView,
             labelChipIdTextView, attributeChipIdTextView, labelDisordersTextView, attributeDisordersTextView, labelDistFromUserLocation, attributeDistFromUserLocation;
     private Pets pet;
-    //TODO: editButton und deleteButton in der actionbar anzeigen https://medium.com/@101/android-toolbar-for-appcompatactivity-671b1d10f354
-    //TODO: fav icon anzeigen, wenn nutzer, die beiden adneren, wenn nicht
-    //private Toolbar mTopToolbar;
 
 
     @Override
@@ -54,7 +51,6 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
-        final boolean isShelter = false;
         final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         ref = ref.child("users");
@@ -66,11 +62,9 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     if (dataSnapshot.child(user.getUid()).child("isAnimalShelter").getValue() != null
                             && dataSnapshot.child(user.getUid()).child("isAnimalShelter").getValue().toString().equals("true")) {
-                        System.out.println("ANGEMELDET ALS SHELTER");
                         MenuItem item = menu.findItem(R.id.action_favorite);
                         item.setVisible(false);
                     } else {
-                        System.out.println("ANGEMELDET ALS PRIVATNUTZER");
                         MenuItem item = menu.findItem(R.id.action_edit);
                         item.setVisible(false);
                         item = menu.findItem(R.id.action_delete);
@@ -84,16 +78,6 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
 
             }
         });
-//        if (isShelter) {
-//            MenuItem item = menu.findItem(R.id.action_favorite);
-//            item.setVisible(false);
-//        } else {
-//            MenuItem item = menu.findItem(R.id.action_edit);
-//            item.setVisible(false);
-//            item = menu.findItem(R.id.action_delete);
-//            item.setVisible(false);
-//        }
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.actionbar_detailed_search_results, menu);
         return true;
     }
@@ -108,6 +92,7 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_favorite) {
             Toast.makeText(DetailedSearchResult.this, "fav clicked", Toast.LENGTH_LONG).show();
+            addPetToFavs(pet.getName() + " @ " + pet.getRandomUUID());
             return true;
         } else if (id == R.id.action_delete) {
             Toast.makeText(DetailedSearchResult.this, "delete clicked", Toast.LENGTH_LONG).show();
@@ -121,6 +106,33 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addPetToFavs(final String s) {
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference finalRef = ref.child("users").child(firebaseAuth.getUid()).child("favs");
+        finalRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean isAlreadyInFavs = false;
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.getValue().equals(s)) {
+                        isAlreadyInFavs = true;
+                        break;
+                    }
+                }
+                if (!isAlreadyInFavs) {
+                    finalRef.child(dataSnapshot.getChildrenCount() + "").setValue(s);
+                }
+                finalRef.removeEventListener(this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

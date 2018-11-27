@@ -20,7 +20,8 @@ public class UserInformation {
         this.location = location;
         this.mail = mail;
         this.isLookingFor = isLookingFor;
-        this.favs = null;
+        this.favs = new ArrayList<>();
+        favs.add("");
     }
 
     public boolean isAnimalShelter() {

@@ -6,7 +6,6 @@
     android:layout_height="10dp"
     tools:context=".DetailedSearchResult">
 
-    <!--TODO: ADD ICON-->
     <item
         android:id="@+id/action_favorite"
         android:icon="@drawable/ic_favorite"
