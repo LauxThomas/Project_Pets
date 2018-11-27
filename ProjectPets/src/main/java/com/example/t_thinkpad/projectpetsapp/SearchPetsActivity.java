@@ -3,7 +3,6 @@ package com.example.t_thinkpad.projectpetsapp;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
@@ -27,7 +26,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -40,7 +38,7 @@ public class SearchPetsActivity extends AppCompatActivity {
             chipIdSearchView, disordersSearchView;
     public Spinner sex_spinner, family_spinner, race_spinner;
 
-    private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=123;
+    private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 123;
     private boolean locationPermissionGranted;
     public LinearLayout animateThis;
     public FloatingActionButton searchButton;
@@ -65,6 +63,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         checkPermission();
 
 
+    }
 
     }
 
@@ -153,7 +152,20 @@ public class SearchPetsActivity extends AppCompatActivity {
         sex_spinner = findViewById(R.id.sex_spinner);
         searchButton = findViewById(R.id.fab);
         generalSearchView = findViewById(R.id.generalSearchSearchView);
-
+        /*
+        nameSeachView = findViewById(R.id.ASDF);
+        familySearchView = findViewById(R.id.ASDF);
+        raceSearchView = findViewById(R.id.ASDF);
+        ageSearchView = findViewById(R.id.ASDF);
+        sexSearchView = findViewById(R.id.ASDF);
+        locationSearchView = findViewById(R.id.ASDF);
+        currentOwnerSearchView = findViewById(R.id.ASDF);
+        sizeSearchView = findViewById(R.id.ASDF);
+        numberOfPreviousOwnersSearchView = findViewById(R.id.ASDF);
+        descriptionSearchView = findViewById(R.id.ASDF);
+        chipIdSearchView = findViewById(R.id.ASDF);
+        disordersSearchView = findViewById(R.id.ASDF);
+*/
     }
 
     public void setListeners() {
@@ -214,13 +226,13 @@ public class SearchPetsActivity extends AppCompatActivity {
 
     }
 
-    public void checkPermission(){
+    public void checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                ){//Can add more as per requirement
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                ) {//Can add more as per requirement
 
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     123);
         }
     }

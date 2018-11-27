@@ -1,7 +1,9 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -94,10 +96,11 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
             addPetToFavs(pet.getName() + " @ " + pet.getRandomUUID());
             return true;
         } else if (id == R.id.action_delete) {
-            Toast.makeText(DetailedSearchResult.this, "delete clicked", Toast.LENGTH_LONG).show();
+            openAlertDialogDelete();
             return true;
         } else if (id == R.id.action_edit) {
             Toast.makeText(DetailedSearchResult.this, "edit clicked", Toast.LENGTH_LONG).show();
+            openAlertDialogEdit();
             return true;
         } else if (item.getItemId() == android.R.id.home) {
             onBackPressed();
@@ -105,6 +108,99 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openAlertDialogEdit() {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Edit Pet")
+                .setMessage("Are you sure you want to edit " + pet.getName() + "?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        editCurrentPet();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    private void editCurrentPet() {
+        Intent intent = new Intent(this, AddPetsActivity.class);
+        intent.putExtra("isEdit", true);
+
+        //TODO: das geht auch bestimmt mit serializable:
+        intent.putExtra("originalReference", (pet.getName() + " @ " + pet.getRandomUUID()));
+        intent.putExtra("image", pet.getImage());
+        intent.putExtra("age", pet.getAge());
+        intent.putExtra("chipId", pet.getChipId());
+        intent.putExtra("currentOwner", pet.getCurrentOwner());
+        intent.putExtra("description", pet.getDescription());
+        intent.putExtra("disorders", pet.getDisorders());
+        intent.putExtra("emailOfCreator", pet.getEmailOfCreator());
+        intent.putExtra("family", pet.getFamily());
+        intent.putExtra("latitude", pet.getLatitude());
+        intent.putExtra("location", pet.getLocation());
+        intent.putExtra("longitude", pet.getLongitude());
+        intent.putExtra("name", pet.getName());
+        intent.putExtra("numberOfPreviousOwners", pet.getNumberOfPreviousOwners());
+        intent.putExtra("race", pet.getRace());
+        intent.putExtra("randomUUID", pet.getRandomUUID());
+        intent.putExtra("sex", pet.getSex());
+        intent.putExtra("size", pet.getSize());
+
+        startActivity(intent);
+
+    }
+
+    private void openAlertDialogDelete() {
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete Pet")
+                .setMessage("Are you sure you want to delete " + pet.getName() + "?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteCurrentPet();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    private void deleteCurrentPet() {
+        final DatabaseReference petRef = FirebaseDatabase.getInstance().getReference().child("pets");
+        petRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    if (ds.getKey().contains(pet.getRandomUUID())) {
+                        petRef.child(ds.getKey()).removeValue();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        //petRef.child(pet.getName() + " @ " + pet.getRandomUUID()).removeValue();
+        Toast.makeText(DetailedSearchResult.this, pet.getName() + " removed", Toast.LENGTH_LONG).show();
+        restartSearchResultsActivity();
+        finish();
+    }
+
+    private void restartSearchResultsActivity() {
+        Intent intent = new Intent(this, SearchResultsActivity.class);
+        intent.putExtra("isShelter", true);
+        startActivity(intent);
     }
 
     private void addPetToFavs(final String s) {

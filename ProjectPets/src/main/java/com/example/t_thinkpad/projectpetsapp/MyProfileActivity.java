@@ -110,7 +110,8 @@ public class MyProfileActivity extends AppCompatActivity {
     }
 
     public void startMyPetsActivity() {
-        Intent intent = new Intent(this, MyPetsActivity.class);
+        Intent intent = new Intent(this, SearchResultsActivity.class);
+        intent.putExtra("showFavorites", true);
         startActivity(intent);
         finish();
     }
@@ -119,7 +120,7 @@ public class MyProfileActivity extends AppCompatActivity {
         String name = nameEditText.getText().toString().trim();
         FirebaseUser user = firebaseAuth.getCurrentUser();
         UserInformation userInformation = new UserInformation(name, "", user.getEmail(), "");
-        databaseReference.child("users").child(user.getUid()).setValue(userInformation); //sollte eignentlich unter root/user/<userid> einen neuen Eintrag mit jeweiligen Attributen für die Getter vorh sind erzeugen
+        //databaseReference.child("users").child(user.getUid()).setValue(userInformation); //sollte eignentlich unter root/user/<userid> einen neuen Eintrag mit jeweiligen Attributen für die Getter vorh sind erzeugen
 
 
         //DEBUGLOGGING:
