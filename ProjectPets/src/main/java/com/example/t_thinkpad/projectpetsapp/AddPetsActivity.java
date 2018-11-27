@@ -266,7 +266,6 @@ public class AddPetsActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("5SCHNITZELBRÖTCHEN");
 
         if (requestCode == REQUEST_PICK_IMAGE && resultCode == RESULT_OK) {
             mImageUri = data.getData();
@@ -277,7 +276,6 @@ public class AddPetsActivity extends AppCompatActivity {
                 uploadFile();
             }
         } else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            System.out.println("test");
             Bitmap photo = null;
             try {
                 photo = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(new File(mCurrentPhotoPath)));
@@ -301,7 +299,6 @@ public class AddPetsActivity extends AppCompatActivity {
 
 
     private File createImageFile() throws IOException {
-        System.out.println("4SCHNITZELBRÖTCHEN");
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -325,7 +322,6 @@ public class AddPetsActivity extends AppCompatActivity {
         if (mImageUri != null) {
             randomUUID = UUID.randomUUID().toString();
             StorageReference fileReference = mStorageRef.child(randomUUID + ".jpg");
-            System.out.println("3SCHNITZELBRÖTCHEN");
             mUploadTask = fileReference.putFile(mImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -346,8 +342,6 @@ public class AddPetsActivity extends AppCompatActivity {
                             addPetButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-                                    System.out.println("2SCHNITZELBRÖTCHEN");
-
                                     createNewPet();
                                 }
                             });
@@ -371,7 +365,6 @@ public class AddPetsActivity extends AppCompatActivity {
     }
 
     private void createNewPet() {
-        System.out.println("SCHNITZELBRÖTCHEN: ich werde nur ausgegeben, wenn die createNewPet Methode betreten wurde.");
         String name = nameEditText.getText().toString();
         String family = (String) familySpinner.getSelectedItem();
         String race = raceAutoComplete.getText().toString();
