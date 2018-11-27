@@ -96,7 +96,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         petsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot petsSnapshot) {
-                ArrayList<Pets> petsArrayList = new ArrayList<Pets>();
+                final ArrayList<Pets> petsArrayList = new ArrayList<Pets>();
                 int index = 0;
                 if (isShelter) {
                     FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
@@ -116,49 +116,85 @@ public class SearchResultsActivity extends AppCompatActivity {
                     for (int i = 0; i < petsArrayList.size(); i++) {
                         pets[i] = petsArrayList.get(i);
                     }
+                    System.out.println("Burgerbrötchen: " + pets);
                     myCallback.onCallback(pets);
 
 
                 } else if (showFavorites) {
+                    final ArrayList arrayListWithPets = new ArrayList<>();
+                    final ArrayList<Pets> arrayListWithActualPets = new ArrayList<>();
                     //iterate over all pets
                     for (final DataSnapshot petDs : petsSnapshot.getChildren()) {
-                        final ArrayList<Pets> innerPetsArrayList = new ArrayList<Pets>();
-                        favsRef.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot favSnapshot) {
-                                //iterate over all favs
-                                for (DataSnapshot favDs : favSnapshot.getChildren()) {
-                                    System.out.println("--------");
-                                    //find matches of both iterations
-                                    if (favDs.getValue().equals(petDs.getKey())) {
-                                        innerPetsArrayList.add(petDs.getValue(Pets.class));
-                                        System.out.println("SCHNITZELBRÖTCHEN Diese Elemente sollen angezeigt werden: " + innerPetsArrayList);
-                                        //TODO: warum wird Burgerbrötchen zuerst ausgeführt, 2 mal, und dann ein mal Schnitzelbrötchen??
-                                    }
-                                }
-                            }
+                        //arrayListWithPets.add(petDs.getValue(Pets.class));
+                        arrayListWithPets.add(petDs.getKey());
+                        arrayListWithActualPets.add(petDs.getValue(Pets.class));
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        });
-                        petsArrayList = innerPetsArrayList; //hier ist innerpetsArray leer
-                        System.out.println("BURGERBRÖTCHEN Diese Elemente werden angezeigt: " + petsArrayList);
+                        /*if (petsArrayList.size() == 0) {
+                            Toast.makeText(SearchResultsActivity.this, "Nothing found for your parameters.", Toast.LENGTH_SHORT).show();
+                            return;
+                        }*/
+                        /*Pets[] pets = new Pets[petsArrayList.size()];
+                        for (int i = 0; i < petsArrayList.size(); i++) {
+                            pets[i] = petsArrayList.get(i);
+                        }*/
+                        //myCallback.onCallback(pets);
 
                     }
-                    if (petsArrayList.size() == 0) {
-                        Toast.makeText(SearchResultsActivity.this, "Nothing found for your parameters.", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Pets[] pets = new Pets[petsArrayList.size()];
-                    for (int i = 0; i < petsArrayList.size(); i++) {
-                        pets[i] = petsArrayList.get(i);
-                    }
-                    myCallback.onCallback(pets);
+                    final ArrayList arraysListWithFavs = new ArrayList<>();
+                    favsRef.addValueEventListener(new ValueEventListener() {
+                                                      @Override
+                                                      public void onDataChange(DataSnapshot favSnapshot) {
+                                                          //iterate over all favs
+                                                          for (DataSnapshot favDs : favSnapshot.getChildren()) {
+                                                              arraysListWithFavs.add(favDs.getValue()); //HIER ERROR?
+
+                                                          }
+                                                          Pets[] pets = new Pets[arrayListWithPets.size() + 1];
+                                                          int counter = 0;
+                                                          for (int i = 0; i < arrayListWithPets.size(); i++) {
+                                                              for (int j = 0; j < arraysListWithFavs.size(); j++) {
+                                                                  if (arrayListWithPets.get(i).toString().contains(arraysListWithFavs.get(j).toString())) {
+                                                                      pets[counter] = arrayListWithActualPets.get(i);
+                                                                      System.out.println("SCHNAPSPRALINEN: " + pets[counter]);
+                                                                      counter++;
+                                                                  }
+
+                                                              }
+
+                                                          }
+                                                          Pets[] temp = new Pets[pets.length];
+                                                          for (int i = 0; i < pets.length; i++) {
+                                                              temp[i] = pets[i];
+                                                          }
+                                                          pets = new Pets[counter];
+                                                          for (int k = 0; k < counter; k++) {
+                                                              pets[k] = temp[k];
+                                                          }
+                                                          if (pets.length > 0 && pets[0] != null) {
+                                                              myCallback.onCallback(pets);
+                                                          }
+                                                      }
+
+                                                      @Override
+                                                      public void onCancelled(DatabaseError databaseError) {
+
+                                                      }
+                                                  }
+
+                    );
 
 
-                } else {
+                    //System.out.println("PetsLengthSchnitzelbrötchen: "+ arrayListWithPets.size());
+                    //System.out.println("FavsLengthSchnitzelbrötchen: "+ arraysListWithFavs.size());
+
+                    //petsArrayList = innerPetsArrayList; //hier ist innerpetsArray leer
+                    //System.out.println("BURGERBRÖTCHEN Diese Elemente werden angezeigt: " + petsArrayList);
+
+
+                } else
+
+                {
 
 
                     for (DataSnapshot ds : petsSnapshot.getChildren()) {
