@@ -102,6 +102,7 @@ public class AddPetsActivity extends AppCompatActivity {
         chipIdEditText.setText("" + intent.getIntExtra("chipId", 0));
         disordersEditText.setText(intent.getStringExtra("disorders"));
         //TODO: LOCATION, LATITUDE UND LONGITUDE RICHTIG SETZEN
+        addPetButton.setOnClickListener(null);
         addPetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -198,6 +199,12 @@ public class AddPetsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startPickLocationIntent();
+            }
+        });
+        addPetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(AddPetsActivity.this, "Please add an image to your pet :)", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -338,7 +345,7 @@ public class AddPetsActivity extends AppCompatActivity {
                                     Objects.requireNonNull(Objects.requireNonNull(taskSnapshot.getDownloadUrl()).toString()));
                             String uploadId = mDatabaseRef.push().getKey();
                             mDatabaseRef.child(uploadId).setValue(upload.getImageUrl());
-
+                            addPetButton.setOnClickListener(null);
                             addPetButton.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -371,7 +378,7 @@ public class AddPetsActivity extends AppCompatActivity {
         int age = (int) ageSpinner.getSelectedItem();
         String sex = sexSpinner.getSelectedItem().toString();
         String location;
-        if (getIntent().getBooleanExtra("isEdit", false) && place.getAddress() == null) {
+        if (getIntent().getBooleanExtra("isEdit", false) || place == null || !place.getAddress().toString().isEmpty()) {
             location = "";
         } else {
             location = place.getAddress().toString();
@@ -397,10 +404,14 @@ public class AddPetsActivity extends AppCompatActivity {
         newPet.setLocation(location);
         newPet.setCurrentOwner(currentOwner);
         newPet.setCurrentOwner(newPet.getCurrentOwner());
-        if (getIntent().getBooleanExtra("isEdit", false)) {
+        if (getIntent().getBooleanExtra("isEdit", false) || location.equals("")) {
             newPet.setLatitude(getIntent().getDoubleExtra("latitude", 0.0));
             newPet.setLongitude(getIntent().getDoubleExtra("longitude", 0.0));
-            newPet.setRandomUUID(getIntent().getStringExtra("randomUUID"));
+            if (getIntent().getStringExtra("randomUUID") != null) {
+                newPet.setRandomUUID(getIntent().getStringExtra("randomUUID"));
+            } else {
+                newPet.setRandomUUID(randomUUID);
+            }
         } else {
             newPet.setLatitude(place.getLatLng().latitude);
             newPet.setLongitude(place.getLatLng().longitude);
