@@ -91,7 +91,6 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_favorite) {
-            Toast.makeText(DetailedSearchResult.this, "fav clicked", Toast.LENGTH_LONG).show();
             addPetToFavs(pet.getName() + " @ " + pet.getRandomUUID());
             return true;
         } else if (id == R.id.action_delete) {

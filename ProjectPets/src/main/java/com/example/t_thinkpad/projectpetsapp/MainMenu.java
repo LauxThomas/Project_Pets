@@ -122,7 +122,8 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public void startMyPetsActivity() {
-        Intent intent = new Intent(this, MyPetsActivity.class);
+        Intent intent = new Intent(this, SearchResultsActivity.class);
+        intent.putExtra("showFavorites", true);
         startActivity(intent);
 
     }
