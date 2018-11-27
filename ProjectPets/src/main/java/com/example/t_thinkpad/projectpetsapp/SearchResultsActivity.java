@@ -62,17 +62,18 @@ public class SearchResultsActivity extends AppCompatActivity {
     public void handleIntent() {
         Intent intent = getIntent();
         String lookupString = intent.getStringExtra("lookupString");
+        String searchParams[] = {intent.getStringExtra("family"),intent.getStringExtra("race"),intent.getStringExtra("sex")};
         if (intent.getBooleanExtra("isShelter", false)) {
-            handleDatabaseStuff(lookupString, true, false);
+            handleDatabaseStuff(lookupString, searchParams, true, false);
         } else if (intent.getBooleanExtra("showFavorites", false)) {
-            handleDatabaseStuff(lookupString, false, true);
+            handleDatabaseStuff(lookupString, searchParams, false, true);
         } else {
-            handleDatabaseStuff(lookupString, false, false);
+            handleDatabaseStuff(lookupString, searchParams, false, false);
         }
     }
 
-    private void handleDatabaseStuff(final String lookupString, boolean isShelter, boolean showFavorites) {
-        readData(showFavorites, isShelter, lookupString, new MyCallback() {
+    private void handleDatabaseStuff(final String lookupString, final String[] searchParams, boolean isShelter, boolean showFavorites) {
+        readData(showFavorites, isShelter, lookupString, searchParams, new MyCallback() {
             @Override
             public void onCallback(Pets[] pets) {
                 fillAdapter(pets);
@@ -92,7 +93,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         listView_tumbnails.setAdapter(petsAdapter);
     }
 
-    public void readData(final boolean showFavorites, final boolean isShelter, final String lookupString, final MyCallback myCallback) {
+    public void readData(final boolean showFavorites, final boolean isShelter, final String lookupString, final String[] searchParams, final MyCallback myCallback) {
         petsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot petsSnapshot) {
@@ -170,8 +171,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                                                   }
 
                     );
-                } else
-                {
+                } else {
 
                     for (DataSnapshot ds : petsSnapshot.getChildren()) {
 
@@ -180,8 +180,16 @@ public class SearchResultsActivity extends AppCompatActivity {
                         String replace = ds.getValue().toString().replace("=", ":");
 
                         if (replace.contains(lookupString)) {
-                            petsArrayList.add(pet);
-                            index++;
+                            if(searchParams[0]==null || replace.contains(searchParams[0])){
+                                if(searchParams[1]==null ||replace.contains(searchParams[1])){
+                                    if(searchParams[2]==null ||replace.contains((searchParams[2]))){
+                                        petsArrayList.add(pet);
+                                        index++;
+                                    }
+                                }
+                            }
+                            //petsArrayList.add(pet);
+                            //index++;
                         }
                     }
                     if (index == 0) {

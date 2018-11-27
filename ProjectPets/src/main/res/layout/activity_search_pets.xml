@@ -6,13 +6,78 @@
     android:layout_height="match_parent"
     tools:context=".SearchPetsActivity">
 
-    <SearchView
-        android:id="@+id/generalSearchSearchView"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:queryHint="what are you looking for?">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </SearchView>
+        <SearchView
+            android:id="@+id/generalSearchSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:queryHint="what are you looking for?">
+
+        </SearchView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="147dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Family" />
+
+            <Spinner
+                android:id="@+id/family_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="147dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Race" />
+
+            <Spinner
+                android:id="@+id/race_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="147dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sex" />
+
+            <Spinner
+                android:id="@+id/sex_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -26,12 +91,6 @@
         android:elevation="0dp"
 
         android:src="@android:drawable/ic_search_category_default" />
-
-    <TextView
-        android:id="@+id/fABTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
 
 
 </RelativeLayout>

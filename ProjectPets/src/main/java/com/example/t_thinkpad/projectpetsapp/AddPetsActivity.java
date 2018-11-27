@@ -49,20 +49,22 @@ public class AddPetsActivity extends AppCompatActivity {
     AutoCompleteTextView raceAutoComplete;
     EditText nameEditText, locationEditText, currentOwnerEditText, sizeEditText,
             descriptionEditText, chipIdEditText, disordersEditText;
-    Spinner sexSpinner, ageSpinner, numOfPreviousOwnersSpinner, familySpinner;
+    Spinner sexSpinner, ageSpinner, numOfPreviousOwnersSpinner, familySpinner, raceSpinner;
     Button addPetButton, pickLocationButton;
     Uri mImageUri;
     static final int REQUEST_PICK_IMAGE = 1;
     static final int REQUEST_IMAGE_CAPTURE = 123;
     static final int PLACE_PICKER_REQUEST = 37;
-    private final String[] FAMILIES = new String[]{"Dogs", "Cats", "Birds", "Fish", "Small animals", "other"};
+    //private final String[] FAMILIES = new String[]{"Dogs", "Cats", "Birds", "Fish", "Small animals", "other"};
     //TODO: erweitern
+    /*
     private final String[] DOGS = new String[]{"Französische Bulldogge", "Labrador", "Australian Shepherd", "Chihuahua", "Golden Retriever", "Border Collie", "Labradoodle", "Rottweiler", "Beagle", "Mops"};
     private final String[] CATS = new String[]{"Maine Coon", "Norwegische Waldkatze", "Bengalkatze", "Britisch Kurzhaar", "Siamkatze", "Ragdoll", "Savannah Katze", "Perserkatze", "Heilige Birma", "Hauskatze"};
     private final String[] BIRDS = new String[]{"Amadinen", "Bergsittich", "Felsensittich", "Gelbbrustara", "Goldnackenara", "Kanarienvogel", "Königssittich", "Nymphensittich", "Weißhaubenkakadu", "Wellensittich"};
     private final String[] FISH = new String[]{"Guppy", "Neonfisch", "Platy", "Kardinalfisch", "Black Molly", "Panzerwels", "Antennenwels", "Blauer Fadenfisch", "Koi", "Hammerhai"};
     private final String[] SMALL_ANIMALS = new String[]{"Kaninchen", "Ratte", "Maus", "Hamster", "Chinchilla", "Hase", "Meerschweinchen", "Wüstenspringmaus"};
     private final String[] OTHER = new String[]{"Känguru", "Spinne", "Schlange", "Schildkröte", "Bartagame", "Gecko", "Schwein", "Kuh", "Schaf", "Ziege"};
+    */
 
 
     private FirebaseAuth firebaseAuth;
@@ -102,7 +104,7 @@ public class AddPetsActivity extends AppCompatActivity {
         ArrayAdapter<Integer> adapter3 = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, numOfPreviousOwnersSpinnerItems);
         numOfPreviousOwnersSpinner.setAdapter(adapter3);
 
-        ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, FAMILIES);
+        ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, GeneralPetsData.getFamilies());
         familySpinner.setAdapter(adapter4);
         familySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -121,31 +123,33 @@ public class AddPetsActivity extends AppCompatActivity {
         String[] RACES = new String[]{};
         switch (familySpinner.getSelectedItemPosition()) {
             case 0:
-                RACES = DOGS;
+                RACES = GeneralPetsData.getDogs();
                 break;
             case 1:
-                RACES = CATS;
+                RACES =  GeneralPetsData.getCats();;
                 break;
             case 2:
-                RACES = BIRDS;
+                RACES =  GeneralPetsData.getBirds();;
                 break;
             case 3:
-                RACES = FISH;
+                RACES = GeneralPetsData.getFish();
                 break;
             case 4:
-                RACES = SMALL_ANIMALS;
+                RACES = GeneralPetsData.getSmallAnimals();
                 break;
             case 5:
-                RACES = OTHER;
+                RACES = GeneralPetsData.getOther();
                 break;
             default:
                 break;
         }
-        AutoCompleteTextView raceAutoCompleteTextView = (AutoCompleteTextView)
+        /*AutoCompleteTextView raceAutoCompleteTextView = (AutoCompleteTextView)
                 findViewById(R.id.raceAutoComplete);
         ArrayAdapter<String> raceAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, RACES);
-        raceAutoCompleteTextView.setAdapter(raceAdapter);
+        raceAutoCompleteTextView.setAdapter(raceAdapter);*/
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, RACES);
+        raceSpinner.setAdapter(adapter);
     }
 
     private void initializeFirebase() {
@@ -337,7 +341,7 @@ public class AddPetsActivity extends AppCompatActivity {
     private void createNewPet() {
         String name = nameEditText.getText().toString();
         String family = (String) familySpinner.getSelectedItem();
-        String race = raceAutoComplete.getText().toString();
+        String race = (String) raceSpinner.getSelectedItem();
         int age = (int) ageSpinner.getSelectedItem();
         String sex = sexSpinner.getSelectedItem().toString();
         String location = place.getName().toString();
@@ -392,7 +396,6 @@ public class AddPetsActivity extends AppCompatActivity {
     private void findViews() {
         imageView = findViewById(R.id.imageView);
         nameEditText = findViewById(R.id.nameEditText);
-        raceAutoComplete = findViewById(R.id.raceAutoComplete);
         locationEditText = findViewById(R.id.locationEditText);
         currentOwnerEditText = findViewById(R.id.currentOwnerEditText);
         sizeEditText = findViewById(R.id.sizeEditText);
@@ -403,6 +406,7 @@ public class AddPetsActivity extends AppCompatActivity {
         sexSpinner = findViewById(R.id.spinner_sex);
         ageSpinner = findViewById(R.id.spinner_age);
         familySpinner = findViewById(R.id.spinner_family);
+        raceSpinner = findViewById(R.id.spinner_race);
         numOfPreviousOwnersSpinner = findViewById(R.id.spinner_numOfPreviousOwners);
         pickLocationButton = findViewById(R.id.button_location_picker);
     }

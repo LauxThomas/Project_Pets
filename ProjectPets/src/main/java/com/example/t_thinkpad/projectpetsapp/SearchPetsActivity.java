@@ -11,8 +11,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +38,7 @@ public class SearchPetsActivity extends AppCompatActivity {
             sexSearchView, locationSearchView, currentOwnerSearchView, sizeSearchView,
             numberOfPreviousOwnersSearchView, descriptionSearchView,
             chipIdSearchView, disordersSearchView;
+    public Spinner sex_spinner, family_spinner, race_spinner;
 
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION=123;
     private boolean locationPermissionGranted;
@@ -54,6 +59,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         findViews();
         initiateDatabase();
+        initialiseSpinners();
         setListeners();
 
         checkPermission();
@@ -61,6 +67,63 @@ public class SearchPetsActivity extends AppCompatActivity {
 
 
     }
+
+    private void initialiseSpinners() {
+        String[] sexSpinnerItems = new String[]{"", "männlich", "weiblich"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, sexSpinnerItems);
+        sex_spinner.setAdapter(adapter);
+
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, GeneralPetsData.getFamilies());
+        family_spinner.setAdapter(adapter2);
+        family_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                updateRaceSpinnerWithPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+            }
+
+        });
+    }
+
+    private void updateRaceSpinnerWithPosition(int position) {
+        String[] RACES = new String[]{};
+        switch (family_spinner.getSelectedItemPosition()) {
+            case 0:
+                break;
+            case 1:
+                RACES = GeneralPetsData.getDogs();
+                break;
+            case 2:
+                RACES =  GeneralPetsData.getCats();;
+                break;
+            case 3:
+                RACES =  GeneralPetsData.getBirds();;
+                break;
+            case 4:
+                RACES = GeneralPetsData.getFish();
+                break;
+            case 5:
+                RACES = GeneralPetsData.getSmallAnimals();
+                break;
+            case 6:
+                RACES = GeneralPetsData.getOther();
+                break;
+            default:
+                break;
+        }
+        /*
+        AutoCompleteTextView raceAutoCompleteTextView = (AutoCompleteTextView)
+                findViewById(R.id.race_autoCompleteTextView);
+        ArrayAdapter<String> raceAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, RACES);
+        raceAutoCompleteTextView.setAdapter(raceAdapter);*/
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, RACES);
+        race_spinner.setAdapter(adapter);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -84,7 +147,10 @@ public class SearchPetsActivity extends AppCompatActivity {
 
 
     public void findViews() {
-        fABText = findViewById(R.id.fABTextView);
+        //fABText = findViewById(R.id.fABTextView);
+        family_spinner = findViewById(R.id.family_spinner);
+        race_spinner = findViewById(R.id.race_spinner);
+        sex_spinner = findViewById(R.id.sex_spinner);
         searchButton = findViewById(R.id.fab);
         generalSearchView = findViewById(R.id.generalSearchSearchView);
 
@@ -112,6 +178,9 @@ public class SearchPetsActivity extends AppCompatActivity {
         Intent intent = new Intent(this, SearchResultsActivity.class);
         //String arrayString = createArrayString(arrayList);
         intent.putExtra("lookupString", lookupString);
+        intent.putExtra("family", (String) family_spinner.getSelectedItem());
+        intent.putExtra("race", (String) race_spinner.getSelectedItem());
+        intent.putExtra("sex", (String) sex_spinner.getSelectedItem());
         //intent.putExtra("arrayString", arrayString);
         startActivity(intent);
     }
