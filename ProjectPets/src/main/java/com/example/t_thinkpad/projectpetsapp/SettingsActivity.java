@@ -2,13 +2,12 @@ package com.example.t_thinkpad.projectpetsapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -24,15 +23,15 @@ public class SettingsActivity extends AppCompatActivity {
         findViewsAndInitialiseDatabase();
         setListeners();
         //TODO: reactivate when functions are working
-        deactivateUnfinishedButtons();
+        //deactivateUnfinishedButtons();
     }
 
     private void deactivateUnfinishedButtons() {
-        notificationsTextView.setEnabled(false);
+        //notificationsTextView.setEnabled(false);
     }
 
     public void findViewsAndInitialiseDatabase() {
-        notificationsTextView = findViewById(R.id.notificationsTextView);
+        //notificationsTextView = findViewById(R.id.notificationsTextView);
         logoutTextView = findViewById(R.id.logoutTextView);
         emailTextView = findViewById(R.id.emailTextView);
         logoutLayout = findViewById(R.id.logoutLayout);
@@ -51,12 +50,12 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void setListeners() {
-        notificationsTextView.setOnClickListener(new View.OnClickListener() {
+        /*notificationsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openNotificationsActivity();
             }
-        });
+        });*/
         logoutLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
