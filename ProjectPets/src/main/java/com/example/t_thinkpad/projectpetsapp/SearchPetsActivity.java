@@ -65,7 +65,7 @@ public class SearchPetsActivity extends AppCompatActivity {
 
     }
 
-    }
+
 
     private void initialiseSpinners() {
         String[] sexSpinnerItems = new String[]{"", "männlich", "weiblich"};

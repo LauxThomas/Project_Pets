@@ -155,21 +155,23 @@ public class AddPetsActivity extends AppCompatActivity {
         String[] RACES = new String[]{};
         switch (familySpinner.getSelectedItemPosition()) {
             case 0:
-                RACES = GeneralPetsData.getDogs();
                 break;
             case 1:
-                RACES =  GeneralPetsData.getCats();;
+                RACES = GeneralPetsData.getDogs();
                 break;
             case 2:
-                RACES =  GeneralPetsData.getBirds();;
+                RACES =  GeneralPetsData.getCats();;
                 break;
             case 3:
-                RACES = GeneralPetsData.getFish();
+                RACES =  GeneralPetsData.getBirds();;
                 break;
             case 4:
-                RACES = GeneralPetsData.getSmallAnimals();
+                RACES = GeneralPetsData.getFish();
                 break;
             case 5:
+                RACES = GeneralPetsData.getSmallAnimals();
+                break;
+            case 6:
                 RACES = GeneralPetsData.getOther();
                 break;
             default:
@@ -177,6 +179,7 @@ public class AddPetsActivity extends AppCompatActivity {
         }
         /*AutoCompleteTextView raceAutoCompleteTextView = (AutoCompleteTextView)
                 findViewById(R.id.raceAutoComplete);
+        //umshreiben sodass getter der neuen klasse aufrufbar sind
         ArrayAdapter<String> raceAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, RACES);
         raceAutoCompleteTextView.setAdapter(raceAdapter);*/
