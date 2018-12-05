@@ -93,7 +93,11 @@ public class AddPetsActivity extends AppCompatActivity {
         //TODO:IMAGE EINBINDEN!
         nameEditText.setText(intent.getStringExtra("name"));
         familySpinner.setSelection(((ArrayAdapter) familySpinner.getAdapter()).getPosition(intent.getStringExtra("family")));
-        raceAutoComplete.setText(intent.getStringExtra("race"));
+        updateRaceSpinnerWithPosition(((ArrayAdapter) familySpinner.getAdapter()).getPosition(intent.getStringExtra("family")));
+        System.out.println("SCHNITZELBRÖTCHEN: " + intent.getStringExtra("race"));
+        System.out.println("SCHNITZELBRÖTCHEN: " +raceSpinner);
+        System.out.println("SCHNITZELBRÖTCHENPOSITION: " +((ArrayAdapter) raceSpinner.getAdapter()).getPosition(intent.getStringExtra("race")));
+        raceSpinner.setSelection(((ArrayAdapter) raceSpinner.getAdapter()).getPosition(intent.getStringExtra("race")));
         ageSpinner.setSelection(intent.getIntExtra("age", 0));
         sexSpinner.setSelection(((ArrayAdapter) sexSpinner.getAdapter()).getPosition(intent.getStringExtra("sex")));
         locationEditText.setText(intent.getStringExtra("location"));
@@ -135,6 +139,7 @@ public class AddPetsActivity extends AppCompatActivity {
         }
         ArrayAdapter<Integer> adapter3 = new ArrayAdapter<Integer>(this, android.R.layout.simple_spinner_dropdown_item, numOfPreviousOwnersSpinnerItems);
         numOfPreviousOwnersSpinner.setAdapter(adapter3);
+
 
         ArrayAdapter<String> adapter4 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, GeneralPetsData.getFamilies());
         familySpinner.setAdapter(adapter4);
