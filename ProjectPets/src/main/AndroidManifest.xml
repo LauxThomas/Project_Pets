@@ -85,7 +85,7 @@
             android:parentActivityName=".SearchPetsActivity" />
         <activity
             android:name=".SignupActivity"
-            android:label="Register">
+            android:label="ProjectPets">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
