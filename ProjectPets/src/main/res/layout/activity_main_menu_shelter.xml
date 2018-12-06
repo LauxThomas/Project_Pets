@@ -34,7 +34,7 @@
             android:id="@+id/myPetsButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="myPets" />
+            android:text="my pets" />
 
         <Button
             android:id="@+id/settingsButton"
