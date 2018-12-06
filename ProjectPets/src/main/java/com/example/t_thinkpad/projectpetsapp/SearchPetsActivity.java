@@ -54,6 +54,7 @@ public class SearchPetsActivity extends AppCompatActivity {
     }
 
 
+
     private void initialiseSpinners() {
         String[] sexSpinnerItems = new String[]{"", "männlich", "weiblich"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, sexSpinnerItems);
