@@ -177,7 +177,7 @@ public class Pets implements Serializable {
     @Override
     public String toString() {
         String petString;
-        petString = "name: " + getName() + "\nfamily: " + getFamily() + "\nrace: " + getRace() + "\nage: " + getAge() + "\nsize: " + getSize() + "\nsex: " + getSex() + "\ndescription: " + getDescription();
+        petString = "Name: " + getName() + "\nFamily: " + getFamily() + "\nRace: " + getRace() + "\nAge: " + getAge() + "\nSize: " + getSize() + "\nSex: " + getSex() + "\nDescription: " + getDescription();
         return petString;
     }
 

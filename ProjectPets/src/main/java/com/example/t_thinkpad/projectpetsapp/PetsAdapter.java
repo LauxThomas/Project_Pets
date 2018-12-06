@@ -43,28 +43,26 @@ public class PetsAdapter extends ArrayAdapter<Pets> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
         final Pets pet = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
-        ViewHolder viewHolder; // view lookup cache stored in tag
+
+        ViewHolder viewHolder;
         if (/*convertView == null*/true) {
-            // If there's no view to re-use, inflate a brand new view for row
+
             viewHolder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
             convertView = inflater.inflate(R.layout.item_pets, parent, false);
             viewHolder.thumbnail = (ImageView) convertView.findViewById(R.id.thumbnailImageView);
             viewHolder.description = (TextView) convertView.findViewById(R.id.textView5);
             viewHolder.dist = (TextView) convertView.findViewById(R.id.textView6);
-            // Cache the viewHolder object inside the fresh view
+
             convertView.setTag(viewHolder);
         } else {
-            // View is being recycled, retrieve the viewHolder object from tag
+
             viewHolder = (ViewHolder) convertView.getTag();
             viewHolder.description.setText(null);
             viewHolder.thumbnail.setImageBitmap(null);
         }
-        // Populate the data from the data object via the viewHolder object
-        // into the template view.
+
         try {
             fileReference = mStorageRef.child("thumb_" + pet.getRandomUUID() + ".jpg");
             GlideApp.with(getContext()).load(fileReference).into(viewHolder.thumbnail);
@@ -77,7 +75,7 @@ public class PetsAdapter extends ArrayAdapter<Pets> {
         }
 
         viewHolder.description.setText(pet.toString());
-        viewHolder.dist.setText("dist: "+(int)pet.getDistFromUserLocation()+"m");
+        viewHolder.dist.setText("dist: "+ pet.getDistFromUserLocation()+" km");
 
         viewHolder.description.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,9 +83,15 @@ public class PetsAdapter extends ArrayAdapter<Pets> {
                 startDetailedSearchResultActivity(pet);
             }
         });
+        viewHolder.thumbnail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startDetailedSearchResultActivity(pet);
+            }
+        });
 
 
-        // Return the completed view to render on screen
+
         return convertView;
     }
 

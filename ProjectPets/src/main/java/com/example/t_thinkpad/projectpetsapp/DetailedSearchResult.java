@@ -293,7 +293,7 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         labelCurrentOwnerTextView.setText("Current owner: ");
         attributeCurrentOwnerTextView.setText(pet.getCurrentOwner());
         labelDistFromUserLocation.setText("Distance From User: ");
-        attributeDistFromUserLocation.setText(pet.getDistFromUserLocation() + "");
+        attributeDistFromUserLocation.setText(pet.getDistFromUserLocation() + " km");
 
         setOptionalViews(pet);
 
@@ -346,7 +346,7 @@ public class DetailedSearchResult extends AppCompatActivity implements OnMapRead
         }
 
         if (pet.getChipId() != -1) {
-            labelChipIdTextView.setText("Chip ID: ");
+            labelChipIdTextView.setText("Chip-ID: ");
             attributeChipIdTextView.setText(pet.getChipId() + "");
         } else {
             labelChipIdTextView.setText("");

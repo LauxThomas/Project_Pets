@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class SearchResultsActivity extends AppCompatActivity {
-    private ListView listView_tumbnails;
+    private ListView listView_pets;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference petsRef, favsRef;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -56,7 +56,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     public void findViews() {
-        listView_tumbnails = findViewById(R.id.listView_thumbnails);
+        listView_pets = findViewById(R.id.listView_pets);
     }
 
     public void handleIntent() {
@@ -90,7 +90,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         getCurrentLocation(petsArrayList);
 
         PetsAdapter petsAdapter = new PetsAdapter(this, petsArrayList);
-        listView_tumbnails.setAdapter(petsAdapter);
+        listView_pets.setAdapter(petsAdapter);
     }
 
     public void readData(final boolean showFavorites, final boolean isShelter, final String lookupString, final String[] searchParams, final MyCallback myCallback) {
@@ -218,7 +218,11 @@ public class SearchResultsActivity extends AppCompatActivity {
         for (Pets pet : petsArrayList) {
             petLoc.setLatitude(pet.getLatitude());
             petLoc.setLongitude(pet.getLongitude());
-            pet.setDistFromUserLocation(currentLocation.distanceTo(petLoc));
+
+            //umrechnung damit nur eine nachkommastelle erscheint und die angabe in kilometern ist
+            int distFromUserLocation = (int)(10 * currentLocation.distanceTo(petLoc));
+            distFromUserLocation /= 10;
+            pet.setDistFromUserLocation(((double)distFromUserLocation)/1000);
         }
 
         Collections.sort(petsArrayList, new Comparator<Pets>() {
@@ -227,7 +231,6 @@ public class SearchResultsActivity extends AppCompatActivity {
                 return (int) (p1.getDistFromUserLocation() - p2.getDistFromUserLocation());
             }
         });
-
 
     }
 

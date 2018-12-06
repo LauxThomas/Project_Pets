@@ -27,8 +27,10 @@ public class SearchPetsActivity extends AppCompatActivity {
     public SearchView generalSearchView;
     public Spinner sex_spinner, family_spinner, race_spinner;
 
+    /*
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 123;
     private boolean locationPermissionGranted;
+    */
     public FloatingActionButton searchButton;
 
     private FirebaseDatabase mFirebaseDatabase;
@@ -46,7 +48,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         initialiseSpinners();
         setListeners();
 
-        checkPermission();
+        //checkPermission();
 
 
     }
@@ -102,6 +104,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         race_spinner.setAdapter(adapter);
     }
 
+    /*
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
@@ -116,7 +119,7 @@ public class SearchPetsActivity extends AppCompatActivity {
                 return;
             }
         }
-    }
+    }*/
 
     private void initiateDatabase() {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
@@ -150,6 +153,7 @@ public class SearchPetsActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /*
     public void checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -159,6 +163,6 @@ public class SearchPetsActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                     123);
         }
-    }
+    }*/
 
 }

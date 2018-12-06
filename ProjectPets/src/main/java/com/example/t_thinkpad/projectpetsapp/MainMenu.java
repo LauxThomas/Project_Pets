@@ -1,7 +1,11 @@
 package com.example.t_thinkpad.projectpetsapp;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +25,9 @@ public class MainMenu extends AppCompatActivity {
     private DatabaseReference ref;
     private boolean isAnimalShelter;
 
+    private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 123;
+    private boolean locationPermissionGranted;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,11 +35,17 @@ public class MainMenu extends AppCompatActivity {
         findViewsAndInitialiseDatabase();
         setListeners();
         //deactivateUnfinishedButtons();
+        checkPermission();
     }
 
     private void deactivateUnfinishedButtons() {
         myPets.setEnabled(false);
         myProfile.setEnabled(false);
+    }
+
+    private void deactivateButtonsThatRequirePermissions() {
+        myPets.setEnabled(false);
+        searchPets.setEnabled(false);
     }
 
     public void findViewsAndInitialiseDatabase() {
@@ -145,4 +158,32 @@ public class MainMenu extends AppCompatActivity {
         Toast.makeText(this, "You're a shelter. You'll be redirected to the Shelterversion :)", Toast.LENGTH_SHORT).show();
     }
 
+    public void checkPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                ) {//Can add more as per requirement
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    123);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationPermissionGranted = true;
+                } else {
+                    locationPermissionGranted = false;
+                    deactivateButtonsThatRequirePermissions();
+                    Toast.makeText(this, "Please consider allowing location permissions for full functionality. App restart may be required.", Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
 }

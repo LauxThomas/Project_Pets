@@ -12,7 +12,7 @@
         android:orientation="horizontal">
 
         <ListView
-            android:id="@+id/listView_thumbnails"
+            android:id="@+id/listView_pets"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
