@@ -26,6 +26,7 @@ public class MyProfileActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private DatabaseReference ref;
     private boolean isLoaded = false;
+    private boolean isShelter = false;
 
 
     @Override
@@ -69,6 +70,8 @@ public class MyProfileActivity extends AppCompatActivity {
                             dataSnapshot.child(user.getUid()).child("isLookingFor").getValue() != null) {
                         String name = dataSnapshot.child(user.getUid()).child("name").getValue().toString();
                         nameEditText.setText(name);
+                        isShelter = (boolean)dataSnapshot.child(user.getUid()).child("isAnimalShelter").getValue();
+                        System.out.println("SCHNITZELBRÖTCHEN: "+isShelter);
                     }
                     isLoaded = true;
                 }
@@ -111,7 +114,12 @@ public class MyProfileActivity extends AppCompatActivity {
 
     public void startMyPetsActivity() {
         Intent intent = new Intent(this, SearchResultsActivity.class);
-        intent.putExtra("showFavorites", true);
+        if (isShelter){
+            intent.putExtra("isShelter", true);
+        }
+        else{
+            intent.putExtra("showFavorites", true);
+        }
         startActivity(intent);
         finish();
     }

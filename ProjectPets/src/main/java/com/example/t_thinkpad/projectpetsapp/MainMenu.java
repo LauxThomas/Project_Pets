@@ -156,6 +156,7 @@ public class MainMenu extends AppCompatActivity {
     public void startMainMenuShelter() {
         startActivity(new Intent(this, MainMenuShelter.class));
         Toast.makeText(this, "You're a shelter. You'll be redirected to the Shelterversion :)", Toast.LENGTH_SHORT).show();
+        //finish();
     }
 
     public void checkPermission() {
